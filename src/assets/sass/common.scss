@@ -1,0 +1,68 @@
+/*common*/
+@charset "urf-8";
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	font-family: "Hiragino Sans GB W3", "Hiragino Sans GB", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "SimHei", "ST Heiti", "WenQuanYi Zen Hei Sharp", "Sans";
+};
+
+a {
+	text-decoration: none;
+	&:visited {
+		color: #232425;
+  }
+	&:hover {
+		color: #070809;
+  }
+}
+
+i {
+	font-style: normal;
+}
+
+ul, ol, li {
+	list-style-type: none;
+}
+
+input, input:invalid , textarea, textarea:invalid {
+	border-color: #b2e5d5;
+	background: none;
+}
+
+input:hover, textarea:hover, input:focus, textarea:focus, textarea:focus, input[type="submit"]:hover, input[type="reset"]:hover {
+	background: rgba(211, 233, 211, 0.2);
+}
+
+input:active, textarea:active, input[type="submit"], input[type="reset"] {
+	background: rgba(211, 233, 211, 0.4);
+}
+
+input[type="submit"]:active, input[type="reset"]:active {
+	background: rgba(211, 233, 211, 0.9);
+}
+
+*:after, *:before {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.clearfix {
+	clear: both;
+}
+
+html, body {
+	box-sizing: border-box;
+	width: 100%;
+	height: auto;
+}
+
+@font-face {
+	font-family: "fontawesome";
+	font-weight: normal;
+	font-style: normal;
+	src: url("../fonts/fontawesome/fontawesome-webfontf77b.eot");
+	src: url("../fonts/fontawesome/fontawesome-webfontf77b.woff") format("woff"), url("../fonts/fontawesome/fontawesome-webfontf77b.ttf") format("truetype"), url("../fonts/fontawesome/fontawesome-webfont.svg") format("svg");
+}
