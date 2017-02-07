@@ -2,7 +2,7 @@
   "name": "ice-player",
   "version": "0.0.1",
   "description": "A barrage video player,use React & Redux.",
-  "main": "index.js",
+  "main": "src/IcePlayer.js",
   "scripts": {
     "start": "concurrently --raw --kill-others \"webpack-dev-server --port 3000\"",
     "build": "cross-env NODE_ENV=production gulp",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://git.coding.net/Cononico/Cno-Blog.git"
+    "url": "https://github.com/IceEnd/icePlayer.git"
   },
   "keywords": [
     "barrage video player",
@@ -19,7 +19,7 @@
     "Redux"
   ],
   "author": "Cononico",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "dependencies": {
     "babel-polyfill": "^6.22.0",
     "fastclick": "^1.0.6",
