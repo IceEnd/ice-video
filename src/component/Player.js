@@ -8,6 +8,9 @@ export default class Player extends Component {
   static propTypes = {
     children: PropTypes.any,
     style: PropTypes.object.isRequired,
+    showLoading: PropTypes.bool,
+    playerStatus: PropTypes.number,
+
     video: PropTypes.shape({
       loop: PropTypes.bool,
       autoPlay: PropTypes.bool,
@@ -16,6 +19,8 @@ export default class Player extends Component {
     }),
     controls: PropTypes.bool,
     playerStatus: PropTypes.number,
+
+    dispatch: PropTypes.func,
   };
 
   static defaultProps = {
@@ -27,17 +32,24 @@ export default class Player extends Component {
     playerStatus: 0,
   };
 
+  renderLoading() {
+    return (
+      <div style={{ display: `${this.props.showLoading ? '' : 'none'}` }}>Loading...</div>
+    );
+  }
+
   render() {
     return (
       <div
         className="player-container video-react-container"
         style={{ ...this.props.style }}
       >
-        <div style={{ display: 'none' }}>Loading...</div>
+        {this.renderLoading()}
         <div style={{ display: 'none' }}>Shortcut</div>
         <Video
           key="video"
           {...this.props.video}
+          dispatch={this.props.dispatch}
         >
           {this.props.children}
         </Video>

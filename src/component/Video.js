@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
+import { videoLoading, videoLoadingComplete } from '../action/loading';
+
 export default class Video extends Component {
   static displayName = 'Video';
 
@@ -9,6 +11,8 @@ export default class Video extends Component {
     autoPlay: PropTypes.bool,
     preload: PropTypes.string,
     volume: PropTypes.number,
+
+    dispatch: PropTypes.func,
   };
 
   static defaultProps = {
@@ -19,6 +23,15 @@ export default class Video extends Component {
     controls: true,
   };
 
+  constructor(props) {
+    super(props);
+    this.video = null;
+  }
+
+  componentWillMount() {
+    this.props.dispatch(videoLoading());
+  }
+
   render() {
     return (
       <video
@@ -27,6 +40,7 @@ export default class Video extends Component {
         autoPlay={this.props.autoPlay}
         preload={this.props.preload}
         volume={this.props.volume}
+        ref={node => (this.video = node)}
       >
         {this.props.children}
         Your browser does not support the video.

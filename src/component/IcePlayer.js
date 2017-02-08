@@ -24,6 +24,8 @@ class IcePlayer extends Component {
     postBarrageUrl: PropTypes.string.isRequired,
     controls: PropTypes.bool,
     scale: PropTypes.string,
+
+    dispatch: PropTypes.func,
   };
 
   static defaultProps = {
@@ -79,6 +81,7 @@ class IcePlayer extends Component {
           showLoading={this.props.showLoading}
           controls={this.props.controls}
           playerStatus={this.props.playerStatus}
+          dispatch={this.props.dispatch}
         >
           {this.props.children}
         </Player>
@@ -92,7 +95,7 @@ function mapStateToProps(state) {
   const {
     showLoading,
     playerStatus,
-  } = state;
+  } = state.loading;
   return {
     showLoading,
     playerStatus,
