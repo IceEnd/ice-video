@@ -2,24 +2,26 @@ import 'babel-polyfill';
 import path from 'path';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import IcePlayer from '../src/IcePlayer';
+import IcePlayer from '../src/App';
 
 const render = () => {
   const settings = {
-    src: path.resolve('vedio.mp4'),
-    width: 800,
-    height: 600,
+    // width: 800,
+    // height: 600,
     loop: true,
     autoPlay: false,
+    preload: 'auto',
     volume: 0.5,
     getBarrageUrl: '',
     postBarrageUrl: '',
     controls: true,
-    sacle: '4:3',
+    scale: '16:9',
   };
   ReactDOM.render(
     <div>
-      <IcePlayer {...settings} />
+      <IcePlayer {...settings} >
+        <source src={path.resolve('vedio.mp4')} type="video/mp4" />
+      </IcePlayer>
     </div>,
     document.querySelector('#root')
   );
@@ -28,8 +30,8 @@ const render = () => {
 render(IcePlayer);
 
 if (module.hot) {
-  module.hot.accept('../src/IcePlayer', () => {
-    const newApp = require('../src/IcePlayer').default;
+  module.hot.accept('../src/App', () => {
+    const newApp = require('../src/App').default;
     render(newApp);
   });
 }

@@ -1,29 +1,39 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import Player from './Player';
 
-export default class IcePlayer extends Component {
+import '../assets/sass/player.scss';
+
+class IcePlayer extends Component {
   static displayName = 'IcePlayer';
 
   static propTypes = {
-    src: PropTypes.string.isRequired,
+    children: PropTypes.any,
+    showLoading: PropTypes.bool,
+    playerStatus: PropTypes.number,
+
     width: PropTypes.number,
     height: PropTypes.number,
+
     loop: PropTypes.bool,
     autoPlay: PropTypes.bool,
+    preload: PropTypes.oneOf(['auto', 'metadata', 'none']),
     volume: PropTypes.number,
+
     getBarrageUrl: PropTypes.string.isRequired,
     postBarrageUrl: PropTypes.string.isRequired,
     controls: PropTypes.bool,
-    fluid: PropTypes.bool.isRequired,
     scale: PropTypes.string,
   };
 
   static defaultProps = {
     autoPlay: false,
+    preload: 'auto',
     loop: false,
     volume: 0.8,
     controls: true,
-    fluid: true,
     scale: '16:9',
+    playerStatus: 0,
   };
 
   getStyle = () => {
@@ -34,6 +44,9 @@ export default class IcePlayer extends Component {
     } else {
       styles.width = '100%';
       switch (this.props.scale) {
+        case '1:1':
+          styles.paddingTop = '100%';
+          break;
         case '4:3':
           styles.paddingTop = '75%';
           break;
@@ -48,30 +61,42 @@ export default class IcePlayer extends Component {
 
   render() {
     const styles = this.getStyle();
+    const video = {
+      loop: this.props.loop,
+      autoPlay: this.props.autoPlay,
+      preload: this.props.preload,
+      volume: this.props.volume,
+    };
     return (
       <div
+        className="ice-player-container"
         width={styles.width}
       >
-        <div
-          width={styles.width}
+        <Player
+          style={{ paddingTop: styles.paddingTop }}
           paddingTop={styles.paddingTop}
+          video={{ ...video }}
+          showLoading={this.props.showLoading}
+          controls={this.props.controls}
+          playerStatus={this.props.playerStatus}
         >
-          <div>Loading...</div>
-          <div>Shortcut</div>
-          <video
-            src={this.props.src}
-            width={this.props.width}
-            height={this.props.height}
-            loop={this.props.loop}
-            autoPlay={this.props.autoPlay}
-          >
-            Your browser does not support the video.
-          </video>
-          <div>dammu</div>
-          <div>controls</div>
-        </div>
+          {this.props.children}
+        </Player>
         <div>Bar</div>
       </div>
     );
   }
 }
+
+function mapStateToProps(state) {
+  const {
+    showLoading,
+    playerStatus,
+  } = state;
+  return {
+    showLoading,
+    playerStatus,
+  };
+}
+
+export default connect(mapStateToProps)(IcePlayer);
