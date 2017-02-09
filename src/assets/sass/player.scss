@@ -91,6 +91,7 @@ html, body {
 		-ms-user-select: none;
 
 		.react-video {
+			z-index: 998;
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -105,9 +106,26 @@ html, body {
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background-color: #fff;
-			color: #000;
+			background-color: rgba(0, 0, 0, 0.5);
+			color: #fff;
 			display: none;
+
+			.loading-icon {
+				position: absolute;
+				top: 44%;
+				left: 44%;
+				opacity: .8;
+				width: 12%;
+				height: 12%;
+			}
+
+			.loading-tips-container {
+				position: absolute;
+				bottom: 5%;
+				font-size: 12px;
+				left: 1em;
+				opacity: .8;
+			}
 		}
 	}
 }

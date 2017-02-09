@@ -11,6 +11,7 @@ const render = () => {
     loop: true,
     autoPlay: false,
     preload: 'auto',
+    poster: '',
     volume: 0.5,
     getBarrageUrl: '',
     postBarrageUrl: '',
@@ -20,7 +21,7 @@ const render = () => {
   ReactDOM.render(
     <div>
       <IcePlayer {...settings} >
-        <source src={path.resolve('vedio.mp4')} type="video/mp4" />
+        <source src="/video.mp4" type="video/mp4" />
       </IcePlayer>
     </div>,
     document.querySelector('#root')
@@ -35,3 +36,4 @@ if (module.hot) {
     render(newApp);
   });
 }
+//  https://media.w3.org/2010/05/sintel/trailer_hd.mp4 http://static.hdslb.com/miniloader.swf https://video-react.github.io/assets/poster.png
