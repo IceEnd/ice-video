@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
-import { videoLoading, videoLoadingComplete } from '../action/loading';
-
 export default class Video extends Component {
-  static displayName = 'Video';
+  static displayName = 'IcePlayerVideo';
 
   static propTypes = {
     children: PropTypes.any,
@@ -12,7 +10,7 @@ export default class Video extends Component {
     preload: PropTypes.string,
     volume: PropTypes.number,
 
-    dispatch: PropTypes.func,
+    handleOnCanPaly: PropTypes.func,
   };
 
   static defaultProps = {
@@ -29,7 +27,12 @@ export default class Video extends Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(videoLoading());
+    console.log(1);
+  }
+
+  onCanPlay = () => {
+    const duration = this.video.duration;
+    this.props.handleOnCanPaly(duration);
   }
 
   render() {
@@ -41,6 +44,7 @@ export default class Video extends Component {
         preload={this.props.preload}
         volume={this.props.volume}
         ref={node => (this.video = node)}
+        onClick={this.onCanPlay}
       >
         {this.props.children}
         Your browser does not support the video.

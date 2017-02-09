@@ -1,16 +1,14 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import Player from './Player';
+import Video from './component/Video';
+import Loading from './component/Loading';
 
-import '../assets/sass/player.scss';
+import './assets/sass/player.scss';
 
-class IcePlayer extends Component {
+export default class IcePlayer extends Component {
   static displayName = 'IcePlayer';
 
   static propTypes = {
     children: PropTypes.any,
-    showLoading: PropTypes.bool,
-    playerStatus: PropTypes.number,
 
     width: PropTypes.number,
     height: PropTypes.number,
@@ -24,8 +22,6 @@ class IcePlayer extends Component {
     postBarrageUrl: PropTypes.string.isRequired,
     controls: PropTypes.bool,
     scale: PropTypes.string,
-
-    dispatch: PropTypes.func,
   };
 
   static defaultProps = {
@@ -37,6 +33,16 @@ class IcePlayer extends Component {
     scale: '16:9',
     playerStatus: 0,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: {
+        showLoading: true,
+        playerStatus: 0,
+      },
+    };
+  }
 
   getStyle = () => {
     const styles = {};
@@ -61,45 +67,57 @@ class IcePlayer extends Component {
     return styles;
   }
 
-  render() {
-    const styles = this.getStyle();
+  handleOnCanPaly = (time) => {
+    this.setState({ duration: time });
+  }
+
+  renderLoading = () => {
+    const { showLoading, playerStatus } = this.state;
+    return (
+      <Loading showLoading={showLoading} playerStatus={playerStatus} />
+    );
+  }
+
+  renderPalyer = (styles) => {
     const video = {
       loop: this.props.loop,
       autoPlay: this.props.autoPlay,
       preload: this.props.preload,
       volume: this.props.volume,
     };
+    const videoFunc = {
+      handleOnCanPaly: this.handleOnCanPaly,
+    };
+    return (
+      <div
+        className="player-container video-react-container"
+        style={{ paddingTop: styles.paddingTop }}
+      >
+        {this.renderLoading()}
+        <div style={{ display: 'none' }}>Shortcut</div>
+        <Video
+          key="video"
+          {...video}
+          {...videoFunc}
+        >
+          {this.props.children}
+        </Video>
+        <div>dammu</div>
+        <div>controls</div>
+      </div>
+    );
+  }
+
+  render() {
+    const styles = this.getStyle();
     return (
       <div
         className="ice-player-container"
         width={styles.width}
       >
-        <Player
-          style={{ paddingTop: styles.paddingTop }}
-          paddingTop={styles.paddingTop}
-          video={{ ...video }}
-          showLoading={this.props.showLoading}
-          controls={this.props.controls}
-          playerStatus={this.props.playerStatus}
-          dispatch={this.props.dispatch}
-        >
-          {this.props.children}
-        </Player>
+        {this.renderPalyer(styles)}
         <div>Bar</div>
       </div>
     );
   }
 }
-
-function mapStateToProps(state) {
-  const {
-    showLoading,
-    playerStatus,
-  } = state.loading;
-  return {
-    showLoading,
-    playerStatus,
-  };
-}
-
-export default connect(mapStateToProps)(IcePlayer);

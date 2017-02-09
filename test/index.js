@@ -2,7 +2,7 @@ import 'babel-polyfill';
 import path from 'path';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import IcePlayer from '../src/App';
+import IcePlayer from '../src/IcePlayer';
 
 const render = () => {
   const settings = {
@@ -30,8 +30,8 @@ const render = () => {
 render(IcePlayer);
 
 if (module.hot) {
-  module.hot.accept('../src/App', () => {
-    const newApp = require('../src/App').default;
+  module.hot.accept('../src/IcePlayer', () => {
+    const newApp = require('../src/IcePlayer').default;
     render(newApp);
   });
 }
