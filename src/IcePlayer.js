@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import SVG from './component/SVG';
 import Video from './component/Video';
 import StartLoading from './component/StartLoading';
 import Controller from './component/Controller';
@@ -24,7 +25,7 @@ export default class IcePlayer extends Component {
 
     // getBarrageUrl: PropTypes.string.isRequired,
     // postBarrageUrl: PropTypes.string.isRequired,
-    // controls: PropTypes.bool,
+    controls: PropTypes.bool,
     scale: PropTypes.string,
   };
 
@@ -54,9 +55,12 @@ export default class IcePlayer extends Component {
       *    2:   设置控制台
       *    3:   完成加载
       *    4:   就绪
-      *    5:   启动运行
+      *    5:   播放
       */
       playerStatus: 0,
+      controller: {
+        volume: this.props.volume,
+      },
     };
   }
 
@@ -128,9 +132,15 @@ export default class IcePlayer extends Component {
 
   handleOnError = (error) => {
     this.setState({
-      playerStatus: 4,
+      playerStatus: -1,
       playerLoadingStatus: Object.assign({}, this.state.playerTips, { vide: 2 }),
       message: error,
+    });
+  }
+
+  handlePlay() {
+    this.setState({
+      playerStatus: 5,
     });
   }
 
@@ -151,7 +161,7 @@ export default class IcePlayer extends Component {
       return null;
     }
     return (
-      <button className="play-button">
+      <button className="play-button" onClick={() => this.handlePlay(true)} >
         <img alt="播放" src={loadingStart} />
       </button>
     );
@@ -164,6 +174,7 @@ export default class IcePlayer extends Component {
       preload: this.props.preload,
       volume: this.props.volume,
       poster: this.props.poster,
+      playerStatus: this.state.playerStatus,
     };
     const videoFunc = {
       handleOnLoadStart: this.handleOnLoadStart,
@@ -188,7 +199,12 @@ export default class IcePlayer extends Component {
           {this.props.children}
         </Video>
         <div>dammu</div>
-        <Controller />
+        <Controller
+          duration={this.state.duration}
+          volume={this.state.volume}
+          controls={this.props.controls}
+          playerLoadingStatus={this.state.playerLoadingStatus}
+        />
       </div>
     );
   }
@@ -200,6 +216,7 @@ export default class IcePlayer extends Component {
         className="ice-player-container"
         width={styles.width}
       >
+        <SVG />
         {this.renderPalyer(styles)}
         <div>Bar</div>
       </div>

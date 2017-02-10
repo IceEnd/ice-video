@@ -97,7 +97,7 @@ html, body {
 		}
 
 		.react-video {
-			z-index: 998;
+			z-index: 997;
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -157,6 +157,30 @@ html, body {
 				height: 70%;
 				top: 15%;
 				left: 23%;
+			}
+		}
+
+		.react-video-control-bar {
+			z-index: 998;
+			position: absolute;
+			width: 100%;
+			background-color: rgba(43, 51, 63, 0.4);
+			height: 44px;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			display: flex;
+			display: -webkit-flex;
+			flex-flow: row nowrap;
+			justify-content: flex-start;
+			align-items: center;
+
+			.react-video-control-item {
+				height: 100%;
+			}
+
+			.react-video-control-btn {
+				cursor: pointer;
 			}
 		}
 	}

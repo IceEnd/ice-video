@@ -10,6 +10,7 @@ export default class Video extends Component {
     preload: PropTypes.string,
     volume: PropTypes.number,
     poster: PropTypes.string,
+    playerStatus: PropTypes.string,
 
     handleOnLoadStart: PropTypes.func,
     handleOnLoadedMetadata: PropTypes.func,
@@ -29,6 +30,14 @@ export default class Video extends Component {
   constructor(props) {
     super(props);
     this.video = null;
+  }
+
+  componentDidMount() {
+    this.videoControll();
+  }
+
+  componentDidUpdate() {
+    this.videoControll();
   }
 
   onLoadStart = () => {
@@ -51,6 +60,13 @@ export default class Video extends Component {
   onError = () => {
     const error = this.video.error;
     this.props.handleOnError(error);
+  }
+
+  videoControll = () => {
+    const { playerStatus } = this.props;
+    if (playerStatus === 5) {
+      this.video.play();
+    }
   }
 
   render() {
