@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import Video from './component/Video';
-import Loading from './component/Loading';
+import StartLoading from './component/StartLoading';
+import Controller from './component/Controller';
+
+import loadingStart from './assets/images/icon/play-icon-white.svg';
 
 import './assets/sass/player.scss';
 
@@ -39,11 +42,20 @@ export default class IcePlayer extends Component {
     super(props);
     this.state = {
       showLoading: true,
-      playerTips: {
-        videoTip: '',
-        barrageTip: '',
-        controlTip: '',
+      playerLoadingStatus: {
+        video: 0,    // 0 未开始 1 完成  2 失败
+        barrage: 0,
+        controller: 0,
       },
+      /**
+      *    -1:  加载失败
+      *    0:   加载视屏
+      *    1:   加载弹幕
+      *    2:   设置控制台
+      *    3:   完成加载
+      *    4:   就绪
+      *    5:   启动运行
+      */
       playerStatus: 0,
     };
   }
@@ -84,7 +96,8 @@ export default class IcePlayer extends Component {
   }
 
   handleOnLoadedData = () => {
-    this.setState({ playerTips: Object.assign({}, this.state.playerTips, { videoTip: '[完成]' }) });
+    this.setState({ playerLoadingStatus: Object.assign({}, this.state.playerLoadingStatus,
+      { video: 1 }) });
   }
 
   handleOnCanPaly = () => {
@@ -94,32 +107,53 @@ export default class IcePlayer extends Component {
     setTimeout(() => {
       this.setState({
         playerStatus: 2,
-        playerTips: Object.assign({}, this.state.playerTips, { videoTip: '[完成]', barrageTip: '[失败]' }),
+        playerLoadingStatus: Object.assign({}, this.state.playerLoadingStatus,
+          { video: 1, barrage: 2 }),
       });
     }, 500);
     setTimeout(() => {
       this.setState({
         playerStatus: 3,
-        playerTips: Object.assign({}, this.state.playerTips, { videoTip: '[完成]', barrageTip: '[失败]', controlTip: '[成功]' }),
+        playerLoadingStatus: Object.assign({}, this.state.playerLoadingStatus,
+          { video: 1, barrage: 2, controller: 1 }),
       });
     }, 1000);
     setTimeout(() => {
-      this.setState({ showLoading: false });
+      this.setState({
+        showLoading: false,
+        playerStatus: 4,
+      });
     }, 1500);
   }
 
   handleOnError = (error) => {
     this.setState({
       playerStatus: 4,
-      playerTips: Object.assign({}, this.state.playerTips, { videoTip: '[失败]' }),
+      playerLoadingStatus: Object.assign({}, this.state.playerTips, { vide: 2 }),
       message: error,
     });
   }
 
-  renderLoading = () => {
-    const { showLoading, playerStatus, playerTips } = this.state;
+  renderStartLoading = () => {
+    const { showLoading, playerStatus, playerLoadingStatus } = this.state;
     return (
-      <Loading showLoading={showLoading} playerStatus={playerStatus} playerTips={playerTips} />
+      <StartLoading
+        showLoading={showLoading}
+        playerStatus={playerStatus}
+        playerLoadingStatus={playerLoadingStatus}
+      />
+    );
+  }
+
+  renderPlay = () => {
+    const { playerStatus } = this.state;
+    if (playerStatus !== 4) {
+      return null;
+    }
+    return (
+      <button className="play-button">
+        <img alt="播放" src={loadingStart} />
+      </button>
     );
   }
 
@@ -143,7 +177,8 @@ export default class IcePlayer extends Component {
         className="player-container video-react-container"
         style={{ paddingTop: styles.paddingTop }}
       >
-        {this.renderLoading()}
+        {this.renderStartLoading()}
+        {this.renderPlay()}
         <div style={{ display: 'none' }}>Shortcut</div>
         <Video
           key="video"
@@ -153,7 +188,7 @@ export default class IcePlayer extends Component {
           {this.props.children}
         </Video>
         <div>dammu</div>
-        <div>controls</div>
+        <Controller />
       </div>
     );
   }

@@ -90,6 +90,12 @@ html, body {
 		-moz-user-select: none;
 		-ms-user-select: none;
 
+		&:hover {
+			.play-button {
+				background-color: #2b333f;
+			}
+		}
+
 		.react-video {
 			z-index: 998;
 			position: absolute;
@@ -100,7 +106,7 @@ html, body {
 		}
 
 		.player-loading {
-			z-index: 999;
+			z-index: 1000;
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -125,6 +131,32 @@ html, body {
 				font-size: 12px;
 				left: 1em;
 				opacity: .8;
+			}
+		}
+
+		.play-button {
+			z-index: 999;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 80px;
+			height: 80px;
+			margin-top: -40px;
+			margin-left: -40px;
+			border: #fff 2px solid;
+			border-radius: 100%;
+			background-color: rgba(43, 51, 63, 0.7);
+			transition: all linear 0.4s;
+			-webkit-transition: all linear 0.4s;
+			-ms-transition: all linear 0.4s;
+			cursor: pointer;
+
+			img {
+				position: absolute;
+				width: 70%;
+				height: 70%;
+				top: 15%;
+				left: 23%;
 			}
 		}
 	}
