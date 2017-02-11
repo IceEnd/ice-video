@@ -66,6 +66,8 @@ export default class Video extends Component {
     const { playerStatus } = this.props;
     if (playerStatus === 5) {
       this.video.play();
+    } else if (playerStatus === 6) {
+      this.video.pause();
     }
   }
 

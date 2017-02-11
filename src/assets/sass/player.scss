@@ -6,6 +6,7 @@
 	border: 0;
 	background: transparent;
 	font-family: "Hiragino Sans GB W3", "Hiragino Sans GB", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "SimHei", "ST Heiti", "WenQuanYi Zen Hei Sharp", "Sans";
+	outline: none;
 };
 
 a {
@@ -164,7 +165,11 @@ html, body {
 			z-index: 998;
 			position: absolute;
 			width: 100%;
-			background-color: rgba(43, 51, 63, 0.4);
+			background: linear-gradient(bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 75%);
+			background: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 75%);
+			background: -o-linear-gradient(bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 75%);
+			background: -ms-linear-gradient(bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 75%);
+			background: -moz-linear-gradient(bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 75%);
 			height: 44px;
 			bottom: 0;
 			left: 0;
@@ -182,6 +187,96 @@ html, body {
 			.react-video-control-btn {
 				cursor: pointer;
 			}
+
+			.video-btn-play {
+				.react-video-svg {
+					display: block;
+					width: 36px;
+					height: 36px;
+					margin: auto;
+					fill: white;
+					transition: all linear 0.2s;
+					-webkit-transition: all linear 0.2s;
+					-ms-transition: all linear 0.2s;
+				}
+
+				.video-svg-symbol {
+					visibility: hidden;
+					opacity: 0;
+				}
+
+				&[data-status="pause"] {
+					.video-svg-pause {
+						visibility: visible;
+						opacity: 1;
+						animation: video_svg_rotate .3s ease both;
+						-moz-animation: none;
+					}
+				}
+
+				&[data-status="play"] {
+					.video-svg-play {
+						visibility: visible;
+						opacity: 1;
+						animation: video_svg_rotate_2 .3s ease both;
+						-moz-animation: none;
+					}
+				}
+
+				&:hover {
+					.react-video-svg {
+						fill: #ff8e00;
+					}
+				}
+			}
 		}
+
+		.react-video-control-bar-hidden {
+			opacity: 0;
+			visibility: hidden;
+		}
+	}
+}
+
+.player-user-inactivity {
+	.react-video-control-bar {
+		visibility: visible;
+		opacity: 0;
+		-webkit-transition: visibility 1s, opacity 1s;
+		-moz-transition: visibility 1s, opacity 1s;
+		-o-transition: visibility 1s, opacity 1s;
+		transition: visibility 1s, opacity 1s;
+	}
+}
+
+.player-user-activity {
+	.react-video-control-bar {
+		visibility: visible;
+		opacity: 1;
+		-webkit-transition: visibility 0.1s, opacity 0.1s;
+		-moz-transition: visibility 0.1s, opacity 0.1s;
+		-o-transition: visibility 0.1s, opacity 0.1s;
+		transition: visibility 0.1s, opacity 0.1s;
+	}
+}
+
+@keyframes video_svg_rotate {
+	0% {
+		transform: rotate(90deg) translateZ(0);
+		transform-origin: center center;
+	}
+	100% {
+		transform: rotate(0deg) translateZ(0);
+		transform-origin: center center;
+	}
+}
+@keyframes video_svg_rotate_2 {
+	0% {
+		transform: rotate(-90deg) translateZ(0);
+		transform-origin: center center;
+	}
+	100% {
+		transform: rotate(0deg) translateZ(0);
+		transform-origin: center center;
 	}
 }

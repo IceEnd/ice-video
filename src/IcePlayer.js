@@ -56,11 +56,15 @@ export default class IcePlayer extends Component {
       *    3:   完成加载
       *    4:   就绪
       *    5:   播放
+      *    6:   暂停
       */
       playerStatus: 0,
       controller: {
+        show: false,
         volume: this.props.volume,
       },
+      times: 0,    // 播放次数
+      userActivity: true,
     };
   }
 
@@ -123,9 +127,13 @@ export default class IcePlayer extends Component {
       });
     }, 1000);
     setTimeout(() => {
+      if (this.state.times > 0) {
+        this.setState({ playerStatus: 5 });
+      } else {
+        this.setState({ playerStatus: 4 });
+      }
       this.setState({
         showLoading: false,
-        playerStatus: 4,
       });
     }, 1500);
   }
@@ -138,10 +146,38 @@ export default class IcePlayer extends Component {
     });
   }
 
-  handlePlay() {
+  handlePlay = (start) => {
+    if (start) {
+      this.setState({
+        times: 1,
+        playerStatus: 5,
+        controller: Object.assign({}, this.state.playerTips, { show: true }),
+      });
+    } else {
+      this.setState({ playerStatus: 5 });
+    }
+  }
+
+  handlePause = () => {
     this.setState({
-      playerStatus: 5,
+      playerStatus: 6,
     });
+  }
+
+  handleOnMouseMove = () => {
+    this.startControlsTimer();
+  }
+
+  startControlsTimer = () => {
+    this.setState({
+      userActivity: true,
+    });
+    clearTimeout(this.controlsHideTimer);
+    this.controlsHideTimer = setTimeout(() => {
+      this.setState({
+        userActivity: false,
+      });
+    }, 3000);
   }
 
   renderStartLoading = () => {
@@ -175,6 +211,7 @@ export default class IcePlayer extends Component {
       volume: this.props.volume,
       poster: this.props.poster,
       playerStatus: this.state.playerStatus,
+      times: this.state.times,
     };
     const videoFunc = {
       handleOnLoadStart: this.handleOnLoadStart,
@@ -182,6 +219,11 @@ export default class IcePlayer extends Component {
       handleOnLoadedData: this.handleOnLoadedData,
       handleOnCanPaly: this.handleOnCanPaly,
       handleOnError: this.handleOnError,
+    };
+    const controllerFunc = {
+      handlePause: this.handlePause,
+      handlePlay: this.handlePlay,
+      startControlsTimer: this.startControlsTimer,
     };
     return (
       <div
@@ -203,7 +245,9 @@ export default class IcePlayer extends Component {
           duration={this.state.duration}
           volume={this.state.volume}
           controls={this.props.controls}
-          playerLoadingStatus={this.state.playerLoadingStatus}
+          playerStatus={this.state.playerStatus}
+          {...this.state.controller}
+          {...controllerFunc}
         />
       </div>
     );
@@ -213,8 +257,9 @@ export default class IcePlayer extends Component {
     const styles = this.getStyle();
     return (
       <div
-        className="ice-player-container"
+        className={`ice-player-container ${this.state.userActivity ? 'player-user-activity' : 'player-user-inactivity'}`}
         width={styles.width}
+        onMouseMove={this.handleOnMouseMove}
       >
         <SVG />
         {this.renderPalyer(styles)}
