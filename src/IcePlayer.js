@@ -4,8 +4,6 @@ import Video from './component/Video';
 import StartLoading from './component/StartLoading';
 import Controller from './component/Controller';
 
-import loadingStart from './assets/images/icon/play-icon-white.svg';
-
 import './assets/sass/player.scss';
 
 export default class IcePlayer extends Component {
@@ -196,9 +194,10 @@ export default class IcePlayer extends Component {
     if (playerStatus !== 4) {
       return null;
     }
+    const svgHtml = '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#play_icon" />';
     return (
       <button className="play-button" onClick={() => this.handlePlay(true)} >
-        <img alt="播放" src={loadingStart} />
+        <svg className="play-svg" version="1.1" fill="white" dangerouslySetInnerHTML={{ __html: svgHtml }} />
       </button>
     );
   }
