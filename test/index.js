@@ -2,7 +2,7 @@ import 'babel-polyfill';
 import path from 'path';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import IcePlayer from '../src/IcePlayer';
+import IcePlayer from '../src/index';
 
 const render = () => {
   const settings = {

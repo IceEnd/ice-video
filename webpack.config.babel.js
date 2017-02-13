@@ -64,7 +64,7 @@ export default {
         loaders: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
-        test: /\.(woff|woff2|svg|eot|ttf)$/,
+        test: /\.(woff|woff2|eot|ttf|svg)$/,
         loader: 'file-loader?name=fonts/[name].[ext]',
       },
       {

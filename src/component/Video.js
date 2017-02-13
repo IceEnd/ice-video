@@ -11,12 +11,15 @@ export default class Video extends Component {
     volume: PropTypes.number,
     poster: PropTypes.string,
     playerStatus: PropTypes.string,
+    bufferedLength: PropTypes.number,
 
-    handleOnLoadStart: PropTypes.func,
-    handleOnLoadedMetadata: PropTypes.func,
-    handleOnLoadedData: PropTypes.func,
-    handleOnCanPaly: PropTypes.func,
-    handleOnError: PropTypes.func,
+    handleOnLoadStart: PropTypes.func.isRequired,
+    handleOnLoadedMetadata: PropTypes.func.isRequired,
+    handleOnLoadedData: PropTypes.func.isRequired,
+    handleOnCanPaly: PropTypes.func.isRequired,
+    handleOnError: PropTypes.func.isRequired,
+    getCurrentTime: PropTypes.func.isRequired,
+    getBuffered: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -32,12 +35,12 @@ export default class Video extends Component {
     this.video = null;
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     this.videoControll();
   }
 
-  componentDidUpdate() {
-    this.videoControll();
+  componentWillUnmount() {
+    this.clearTimer();
   }
 
   onLoadStart = () => {
@@ -62,12 +65,49 @@ export default class Video extends Component {
     this.props.handleOnError(error);
   }
 
+  startCurrentTimer = () => {
+    if (this.processTimer) {
+      return;
+    }
+    this.processTimer = setInterval(() => {
+      const currentTime = this.video.currentTime;
+      this.props.getCurrentTime(currentTime);
+    }, 1000);
+  }
+
+  startBufferedTimer = () => {
+    if (this.bufferedTimer) {
+      return;
+    }
+    this.bufferedTimer = setInterval(() => {
+      const buffered = this.video.buffered;
+      this.props.getBuffered(buffered.length);
+    }, 100);
+  }
+
+  clearCurrentTimer = () => {
+    clearInterval(this.processTimer);
+    this.processTimer = null;
+  }
+
+  clearBufferedTimer = () => {
+    clearInterval(this.bufferedTimer);
+    this.bufferedTimer = null;
+  }
+
   videoControll = () => {
-    const { playerStatus } = this.props;
+    const { playerStatus, bufferedLength } = this.props;
     if (playerStatus === 5) {
       this.video.play();
+      this.startCurrentTimer();
     } else if (playerStatus === 6) {
       this.video.pause();
+      this.clearCurrentTimer();
+    }
+    if (bufferedLength < 1) {
+      this.startBufferedTimer();
+    } else {
+      this.clearBufferedTimer();
     }
   }
 

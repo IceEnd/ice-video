@@ -1,19 +1,38 @@
 import React, { Component, PropTypes } from 'react';
 
+import formatTime from '../util/compute';
+
 export default class Controller extends Component {
   static displayName = 'IcePlayerController';
 
   static propTypes = {
-    // duration: PropTypes.number.isRequired,
     // volume: PropTypes.number.isRequired,
     controls: PropTypes.bool.isRequired,
     playerStatus: PropTypes.number.isRequired,
     show: PropTypes.bool.isRequired,
+    video: PropTypes.shape({
+      playTimes: PropTypes.number.isRequired,
+      duration: PropTypes.number.isRequired,
+      currentTime: PropTypes.number.isRequired,
+      fullScreen: PropTypes.number.isRequired,
+      bufferedLength: PropTypes.number.isRequired,
+    }),
 
     handlePause: PropTypes.func.isRequired,
     handlePlay: PropTypes.func.isRequired,
     startControlsTimer: PropTypes.func.isRequired,
+    handleControlSucess: PropTypes.func.isRequired,
   };
+
+  componentDidUpdate() {
+    this.updateSuccess();
+  }
+
+  updateSuccess = () => {
+    if (this.props.playerStatus === 2) {
+      this.props.handleControlSucess();
+    }
+  }
 
   handlePlayIcon = () => {
     const { playerStatus, startControlsTimer } = this.props;
@@ -26,11 +45,14 @@ export default class Controller extends Component {
   }
 
   render() {
-    const { controls, playerStatus, show } = this.props;
+    const { controls, playerStatus, show, video } = this.props;
     if (!controls) {
       return null;
     }
-    const pauseIcon = '<use class="video-svg-play video-svg-symbol" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_play" /><use class="video-svg-pause video-svg-symbol" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_pause" />';
+    const playHtml = '<use class="video-svg-play video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_play" /><use class="video-svg-pause video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_pause" />';
+    const settingHtml = '<use class="" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_setting" />';
+    const volumeHtml = '<use class="video-svg-volume video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume" /><use class="video-svg-volume-damping video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume_damping" />';
+    const fullScreenHtml = '<use class="video-svg-fullscreen video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_fullscreen" /><use class="video-svg-fullscreen-true video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_fullscreen_true" />';
     let playStatus = '';
     if (playerStatus === 5) {
       playStatus = 'pause';
@@ -44,10 +66,59 @@ export default class Controller extends Component {
         <button
           className="react-video-control-btn react-video-control-item video-btn-play"
           data-status={playStatus}
+          aria-label="播放/暂停"
           onClick={this.handlePlayIcon}
         >
-          <svg className="react-video-svg" version="1.1" viewBox="0 0 36 36" dangerouslySetInnerHTML={{ __html: pauseIcon }} />
+          <svg className="react-video-svg" version="1.1" viewBox="0 0 36 36" dangerouslySetInnerHTML={{ __html: playHtml }} />
         </button>
+        <div
+          className="react-video-control-btn react-video-control-item video-current-time-display"
+        >
+          <span className="video-current-time">{formatTime(video.currentTime)}</span>
+        </div>
+        <div
+          className="react-video-control-btn react-video-control-item video-process-control"
+          aria-label="进度条"
+        >
+          <div className="video-process-list">
+            <div
+              className="video-process-load"
+              style={{ width: `${video.bufferedLength * 100}%` }}
+            />
+            <div
+              className="video-process-play"
+              style={{ width: `${(video.currentTime / video.duration) * 100}%` }}
+            />
+          </div>
+        </div>
+        <div
+          className="react-video-control-btn react-video-control-item video-current-time-display"
+        >
+          <span className="video-current-time">{formatTime(video.duration)}</span>
+        </div>
+        <div className="react-video-control-bar-right">
+          <button
+            className="react-video-control-btn react-video-control-item video-btn-volume"
+            aria-label="音量"
+            data-status={`${video.volume > 0 ? 'normal' : 'mute'}`}
+          >
+            <svg className="react-video-svg" version="1.1" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: volumeHtml }} />
+          </button>
+          <button
+            className="react-video-control-btn react-video-control-item video-btn-setting"
+            aria-label="设置"
+            data-status={playStatus}
+          >
+            <svg className="react-video-svg" version="1.1" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: settingHtml }} />
+          </button>
+          <button
+            className="react-video-control-btn react-video-control-item video-btn-fullscreen"
+            aria-label="全屏"
+            data-status={video.fullScreen}
+          >
+            <svg className="react-video-svg" version="1.1" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: fullScreenHtml }} />
+          </button>
+        </div>
       </div>
     );
   }

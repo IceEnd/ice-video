@@ -15,9 +15,9 @@ gulp.task('js', () =>
   gulp.src('src/index.js')
     .pipe(webpack(webpackConfig))
     .pipe(gulpRev())
-    .pipe(gulp.dest('dist/static/'))
+    .pipe(gulp.dest('lib/static/'))
     .pipe(gulpRev.manifest())
-    .pipe(gulp.dest('dist/')),
+    .pipe(gulp.dest('lib/')),
 );
 
 gulp.task('build', ['clean', 'webpack:build']);
@@ -44,7 +44,7 @@ gulp.task('html', ['build'], () =>
         'static/': '',
       },
     }))
-    .pipe(gulp.dest('dist/')),
+    .pipe(gulp.dest('lib/')),
 );
 
 gulp.task('default', ['build', 'html']);

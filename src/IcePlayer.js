@@ -50,7 +50,7 @@ export default class IcePlayer extends Component {
       *    -1:  加载失败
       *    0:   加载视屏
       *    1:   加载弹幕
-      *    2:   设置控制台
+      *    2:   设置播放器
       *    3:   完成加载
       *    4:   就绪
       *    5:   播放
@@ -61,8 +61,14 @@ export default class IcePlayer extends Component {
         show: false,
         volume: this.props.volume,
       },
-      times: 0,    // 播放次数
       userActivity: true,
+      video: {
+        playTimes: 0,             // 播放次数
+        duration: 0,              // 时长
+        currentTime: 0,           // 当前播放时间(s)
+        fullScreen: false,        // 全屏幕
+        bufferedLength: 0,        // 缓冲状态
+      },
     };
   }
 
@@ -89,51 +95,56 @@ export default class IcePlayer extends Component {
     return styles;
   }
 
-  handleOnLoadStart = () => {
+  getCurrentTime = (time) => {
+    this.setState({ video: Object.assign(this.state.video, { currentTime: time }) });
+  }
+
+  getBuffered = (length) => {
     this.setState({
-      playerStatus: 0,
+      video: Object.assign(this.state.video, { bufferedLength: length }),
     });
+  }
+
+  handleOnLoadStart = () => {
+    if (this.state.video.playTimes === 0) {
+      this.setState({
+        playerStatus: 0,
+      });
+    } else {
+      this.setState({
+        video: Object.assign(this.state.video, { palyTimes: this.state.video.playTimes + 1 }),
+      });
+    }
   }
 
   handleOnLoadedMetadata = (time) => {
-    this.setState({
-      duration: time,
-    });
+    if (this.state.video.playTimes === 0) {
+      this.setState({
+        video: Object.assign({}, this.state.video, { duration: time }),
+      });
+    }
   }
 
   handleOnLoadedData = () => {
-    this.setState({ playerLoadingStatus: Object.assign({}, this.state.playerLoadingStatus,
-      { video: 1 }) });
+    if (this.state.video.playTimes === 0) {
+      this.setState({ playerLoadingStatus: Object.assign({}, this.state.playerLoadingStatus,
+        { video: 1 }) });
+    }
   }
 
   handleOnCanPaly = () => {
-    this.setState({
-      playerStatus: 1,
-    });
-    setTimeout(() => {
+    if (this.state.video.playTimes === 0) {
       this.setState({
-        playerStatus: 2,
-        playerLoadingStatus: Object.assign({}, this.state.playerLoadingStatus,
-          { video: 1, barrage: 2 }),
+        playerStatus: 1,
       });
-    }, 500);
-    setTimeout(() => {
-      this.setState({
-        playerStatus: 3,
-        playerLoadingStatus: Object.assign({}, this.state.playerLoadingStatus,
-          { video: 1, barrage: 2, controller: 1 }),
-      });
-    }, 1000);
-    setTimeout(() => {
-      if (this.state.times > 0) {
-        this.setState({ playerStatus: 5 });
-      } else {
-        this.setState({ playerStatus: 4 });
-      }
-      this.setState({
-        showLoading: false,
-      });
-    }, 1500);
+      setTimeout(() => {
+        this.setState({
+          playerStatus: 2,
+          playerLoadingStatus: Object.assign({}, this.state.playerLoadingStatus,
+            { video: 1, barrage: 2 }),
+        });
+      }, 500);
+    }
   }
 
   handleOnError = (error) => {
@@ -144,10 +155,28 @@ export default class IcePlayer extends Component {
     });
   }
 
+  handleControlSucess = () => {
+    this.setState({
+      playerStatus: 3,
+      playerLoadingStatus: Object.assign({}, this.state.playerLoadingStatus,
+        { video: 1, barrage: 2, controller: 1 }),
+    });
+    setTimeout(() => {
+      if (this.state.video.playTimes > 0) {
+        this.setState({ playerStatus: 5 });
+      } else {
+        this.setState({ playerStatus: 4 });
+      }
+      this.setState({
+        showLoading: false,
+      });
+    }, 500);
+  }
+
   handlePlay = (start) => {
     if (start) {
       this.setState({
-        times: 1,
+        video: Object.assign(this.state.video, { playTimes: 1 }),
         playerStatus: 5,
         controller: Object.assign({}, this.state.playerTips, { show: true }),
       });
@@ -210,7 +239,8 @@ export default class IcePlayer extends Component {
       volume: this.props.volume,
       poster: this.props.poster,
       playerStatus: this.state.playerStatus,
-      times: this.state.times,
+      palyTimes: this.state.video.playTimes,
+      bufferedLength: this.state.video.bufferedLength,
     };
     const videoFunc = {
       handleOnLoadStart: this.handleOnLoadStart,
@@ -218,11 +248,16 @@ export default class IcePlayer extends Component {
       handleOnLoadedData: this.handleOnLoadedData,
       handleOnCanPaly: this.handleOnCanPaly,
       handleOnError: this.handleOnError,
+      getCurrentTime: this.getCurrentTime,
+      getBuffered: this.getBuffered,
     };
     const controllerFunc = {
       handlePause: this.handlePause,
       handlePlay: this.handlePlay,
       startControlsTimer: this.startControlsTimer,
+      handleProcess: this.handleProcess,
+      handleStopProcess: this.handleStopProcess,
+      handleControlSucess: this.handleControlSucess,
     };
     return (
       <div
@@ -241,7 +276,7 @@ export default class IcePlayer extends Component {
         </Video>
         <div>dammu</div>
         <Controller
-          duration={this.state.duration}
+          video={this.state.video}
           volume={this.state.volume}
           controls={this.props.controls}
           playerStatus={this.state.playerStatus}
