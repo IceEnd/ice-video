@@ -16,6 +16,7 @@ export default class Controller extends Component {
       currentTime: PropTypes.number.isRequired,
       fullScreen: PropTypes.number.isRequired,
       bufferedLength: PropTypes.number.isRequired,
+      volume: PropTypes.number.isRequired,
     }),
 
     handlePause: PropTypes.func.isRequired,
@@ -51,13 +52,21 @@ export default class Controller extends Component {
     }
     const playHtml = '<use class="video-svg-play video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_play" /><use class="video-svg-pause video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_pause" />';
     const settingHtml = '<use class="" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_setting" />';
-    const volumeHtml = '<use class="video-svg-volume video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume" /><use class="video-svg-volume-damping video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume_damping" />';
+    const volumeHtml = '<use class="video-svg-volume video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume" /><use class="video-svg-volume-damping video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume_damping" /><use class="video-svg-volume-mute video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume_damping" />';
     const fullScreenHtml = '<use class="video-svg-fullscreen video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_fullscreen" /><use class="video-svg-fullscreen-true video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_fullscreen_true" />';
     let playStatus = '';
     if (playerStatus === 5) {
       playStatus = 'pause';
     } else {
       playStatus = 'play';
+    }
+    let volumeStatus = '';
+    if (video.volume >= 0.5) {
+      volumeStatus = 'normal';
+    } else if (video.volume < 0.5 && video.volume > 0) {
+      volumeStatus = 'damping';
+    } else {
+      volumeStatus = 'mute';
     }
     return (
       <div
@@ -100,7 +109,7 @@ export default class Controller extends Component {
           <button
             className="react-video-control-btn react-video-control-item video-btn-volume"
             aria-label="音量"
-            data-status={`${video.volume > 0 ? 'normal' : 'mute'}`}
+            data-status={volumeStatus}
           >
             <svg className="react-video-svg" version="1.1" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: volumeHtml }} />
           </button>

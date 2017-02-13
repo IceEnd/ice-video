@@ -57,10 +57,7 @@ export default class IcePlayer extends Component {
       *    6:   暂停
       */
       playerStatus: 0,
-      controller: {
-        show: false,
-        volume: this.props.volume,
-      },
+      controllerShow: false,
       userActivity: true,
       video: {
         playTimes: 0,             // 播放次数
@@ -68,6 +65,7 @@ export default class IcePlayer extends Component {
         currentTime: 0,           // 当前播放时间(s)
         fullScreen: false,        // 全屏幕
         bufferedLength: 0,        // 缓冲状态
+        volume: this.props.volume,
       },
     };
   }
@@ -178,7 +176,7 @@ export default class IcePlayer extends Component {
       this.setState({
         video: Object.assign(this.state.video, { playTimes: 1 }),
         playerStatus: 5,
-        controller: Object.assign({}, this.state.playerTips, { show: true }),
+        controllerShow: true,
       });
     } else {
       this.setState({ playerStatus: 5 });
@@ -280,7 +278,7 @@ export default class IcePlayer extends Component {
           volume={this.state.volume}
           controls={this.props.controls}
           playerStatus={this.state.playerStatus}
-          {...this.state.controller}
+          show={this.state.controllerShow}
           {...controllerFunc}
         />
       </div>

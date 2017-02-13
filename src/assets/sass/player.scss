@@ -266,8 +266,14 @@ html, body {
 							opacity: 1;
 						}
 					}
-					&[data-status="mute"] {
+					&[data-status="damping"] {
 						.video-svg-volume-damping {
+							visibility: visible;;
+							opacity: 1;
+						}
+					}
+					&[data-status="mute"] {
+						.video-svg-volume-mute {
 							visibility: visible;;
 							opacity: 1;
 						}
