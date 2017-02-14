@@ -171,6 +171,7 @@ html, body {
 			flex-flow: row nowrap;
 			justify-content: flex-start;
 			align-items: center;
+			padding: 0 0.3em;
 			box-sizing: border-box;
 
 			.react-video-control-item {
@@ -234,13 +235,13 @@ html, body {
 				flex-flow: row nowrap;
 				justify-content: flex-end;
 				align-items: center;
-				padding-right: 1em;
 				box-sizing: border-box;
 
-				.video-btn-volume, .video-btn-setting, .video-btn-fullscreen {
+				.video-div-volume, .video-btn-setting, .video-btn-fullscreen {
 					text-align: center;
 					align-items: center;
 					margin: 0 .5em;
+					height: 24px;
 
 					.react-video-svg {
 						display: block;
@@ -257,9 +258,14 @@ html, body {
 						visibility: hidden;
 						opacity: 0;
 					}
+
+					.btn {
+						width: 24px;
+						height: 24px;
+					}
 				}
 
-				.video-btn-volume {
+				.video-div-volume {
 					&[data-status="normal"] {
 						.video-svg-volume {
 							visibility: visible;;
@@ -318,19 +324,17 @@ html, body {
 
 			.video-current-time-display {
 				flex: 1;
-				line-height: 3em;
 
 				.video-current-time {
 					display: block;
 					width: 4em;
 					font-size: .5em;
-					height: 36px;
-					line-height: 36px;
+					height: 44px;
+					line-height: 44px;
 					margin: auto;
 					text-align: right;
 					float: right;
 					margin-right: 2em;
-					margin-top: 6px;
 				}
 			}
 
@@ -340,40 +344,69 @@ html, body {
 
 				.video-process-list {
 					position: absolute;
-					top: 52%;
+					top: 50%;
 					width: 100%;
 					height: 3px;
+					margin-top: -1.5px;
+					cursor: pointer;
 					background-color: rgba(168, 168, 168, 0.6);
-					transition: all .25s cubic-bezier(0.0, .0, .2, 1);
-					-webkit-transition: all .25s cubic-bezier(0.0, .0, .2, 1);
-					-ms-transition: all .25s cubic-bezier(0.0, .0, .2, 1);
+					transition: all .2s cubic-bezier(0.0, .0, .2, 1);
+					-webkit-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
+					-ms-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
 
 					.video-process-load {
 						position: absolute;
 						width: 0;
-						width: 0;
+						top: 0;
+						left: 0;
 						height: 100%;
+						cursor: pointer;
 						background-color: rgba(255, 255, 255, 0.6);
-						transition: all .25s cubic-bezier(0.0, .0, .2, 1);
-						-webkit-transition: all .25s cubic-bezier(0.0, .0, .2, 1);
-						-ms-transition: all .25s cubic-bezier(0.0, .0, .2, 1);
+						transition: all .2s cubic-bezier(0.0, .0, .2, 1);
+						-webkit-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
+						-ms-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
 					}
 					.video-process-play {
 						position: absolute;
 						width: 0;
-						height: 100%;
 						top: 0;
+						left: 0;
+						height: 100%;
+						cursor: pointer;
 						background-color: rgba(255, 120, 0, 0.6);
-						transition: all .25s cubic-bezier(0.0, .0, .2, 1);
-						-webkit-transition: all .25s cubic-bezier(0.0, .0, .2, 1);
-						-ms-transition: all .25s cubic-bezier(0.0, .0, .2, 1);
+						transition: all .2s cubic-bezier(0.0, .0, .2, 1);
+						-webkit-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
+						-ms-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
 					}
+				}
+
+				.video-process-scrubber-indicator {
+					position: absolute;
+					top: 50%;
+					margin-top: -6px;
+					left: 100%;
+					margin-left: -6px;
+					width: 12px;
+					height: 12px;
+					border-radius: 100%;
+					background-color: #fff;
+					cursor: pointer;
+					transition: all .2s cubic-bezier(0.0, .0, .2, 1);
+					-webkit-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
+					-ms-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
+					visibility: hidden;;
+					opacity: 0;
+					box-shadow: 0 0 5px #017cc3;
 				}
 
 				&:hover {
 					.video-process-list {
 						height: 5px;
-						margin-top: -1px;
+						margin-top: -2.5px;
+					}
+					.video-process-scrubber-indicator {
+						visibility: visible;
+						opacity: 1;
 					}
 				}
 			}

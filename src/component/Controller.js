@@ -89,7 +89,7 @@ export default class Controller extends Component {
           className="react-video-control-btn react-video-control-item video-process-control"
           aria-label="进度条"
         >
-          <div className="video-process-list">
+          <span className="video-process-list">
             <div
               className="video-process-load"
               style={{ width: `${video.bufferedLength * 100}%` }}
@@ -97,8 +97,10 @@ export default class Controller extends Component {
             <div
               className="video-process-play"
               style={{ width: `${(video.currentTime / video.duration) * 100}%` }}
-            />
-          </div>
+            >
+              <button className="video-process-scrubber-indicator" />
+            </div>
+          </span>
         </div>
         <div
           className="react-video-control-btn react-video-control-item video-current-time-display"
@@ -106,13 +108,15 @@ export default class Controller extends Component {
           <span className="video-current-time">{formatTime(video.duration)}</span>
         </div>
         <div className="react-video-control-bar-right">
-          <button
-            className="react-video-control-btn react-video-control-item video-btn-volume"
+          <div
+            className="react-video-control-btn react-video-control-item video-div-volume"
             aria-label="音量"
             data-status={volumeStatus}
           >
-            <svg className="react-video-svg" version="1.1" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: volumeHtml }} />
-          </button>
+            <button className="btn">
+              <svg className="react-video-svg" version="1.1" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: volumeHtml }} />
+            </button>
+          </div>
           <button
             className="react-video-control-btn react-video-control-item video-btn-setting"
             aria-label="设置"
