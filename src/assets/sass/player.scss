@@ -236,12 +236,14 @@ html, body {
 				justify-content: flex-end;
 				align-items: center;
 				box-sizing: border-box;
+				height: 100%;
 
-				.video-div-volume, .video-btn-setting, .video-btn-fullscreen {
+				.video-btn-volume, .video-btn-setting, .video-btn-fullscreen {
 					text-align: center;
 					align-items: center;
 					margin: 0 .5em;
-					height: 24px;
+					height: 100%;
+					overflow: hidden;
 
 					.react-video-svg {
 						display: block;
@@ -258,14 +260,60 @@ html, body {
 						visibility: hidden;
 						opacity: 0;
 					}
-
-					.btn {
-						width: 24px;
-						height: 24px;
-					}
 				}
 
-				.video-div-volume {
+				.video-btn-volume {
+					position: relative;
+					width: 24px;
+					transition: all linear 0.2s;
+					-webkit-transition: all linear 0.2s;
+					-ms-transition: all linear 0.2s;
+
+					.react-video-svg {
+						position: absolute;
+						top: 10px;
+						&:hover {
+							fill: #ff8e00;
+						}
+					}
+					.video-btn-volume-bar {
+						width: 60px;
+						position: absolute;
+						left: 28px;
+						height: 4px;
+						top: 50%;
+						margin-top: -2px;
+						background-color: rgba(115, 133, 159, 0.3);
+						visibility: hidden;
+						opacity: 0;
+						cursor: pointer;
+						transition: all linear 0.2s;
+						-webkit-transition: all linear 0.2s;
+						-ms-transition: all linear 0.2s;
+
+						.video-btn-volume-bar-level {
+							position: relative;
+							width: 0;
+							top: 0;
+							left: 0;
+							height: 100%;
+							cursor: pointer;
+							background-color: rgba(255, 255, 255, 0.6);
+
+							.video-btn-volume-bar-indicator {
+								position: absolute;
+								width: 10px;
+								height: 10px;
+								border-radius: 100%;
+								top: 50%;
+								left: 100%;
+								margin-top: -5px;
+								margin-left: -5px;
+								background-color: #fff;
+								cursor: pointer;
+							}
+						}
+					}
 					&[data-status="normal"] {
 						.video-svg-volume {
 							visibility: visible;;
@@ -285,8 +333,10 @@ html, body {
 						}
 					}
 					&:hover {
-						.react-video-svg {
-							fill: #ff8e00;
+						width: 93px;
+						.video-btn-volume-bar {
+							opacity: 1;
+							visibility: visible;
 						}
 					}
 				}
@@ -324,17 +374,17 @@ html, body {
 
 			.video-current-time-display {
 				flex: 1;
+				transition: all linear 0.2s;
+				-webkit-transition: all linear 0.2s;
+				-ms-transition: all linear 0.2s;
 
 				.video-current-time {
 					display: block;
-					width: 4em;
-					font-size: .5em;
+					font-size: .6em;
 					height: 44px;
 					line-height: 44px;
 					margin: auto;
-					text-align: right;
-					float: right;
-					margin-right: 2em;
+					text-align: center;
 				}
 			}
 
@@ -343,6 +393,7 @@ html, body {
 				flex: 6;
 
 				.video-process-list {
+					z-index: 1;
 					position: absolute;
 					top: 50%;
 					width: 100%;
@@ -355,6 +406,7 @@ html, body {
 					-ms-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
 
 					.video-process-load {
+						z-index: 2;
 						position: absolute;
 						width: 0;
 						top: 0;
@@ -362,11 +414,9 @@ html, body {
 						height: 100%;
 						cursor: pointer;
 						background-color: rgba(255, 255, 255, 0.6);
-						transition: all .2s cubic-bezier(0.0, .0, .2, 1);
-						-webkit-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
-						-ms-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
 					}
 					.video-process-play {
+						z-index: 3;
 						position: absolute;
 						width: 0;
 						top: 0;
@@ -374,13 +424,33 @@ html, body {
 						height: 100%;
 						cursor: pointer;
 						background-color: rgba(255, 120, 0, 0.6);
-						transition: all .2s cubic-bezier(0.0, .0, .2, 1);
-						-webkit-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
-						-ms-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
+					}
+					.video-process-mouse-display {
+						z-index: 3;
+						position: absolute;
+						display: block;
+						width: 1px;
+						height: 100%;
+						visibility: hidden;
+						opacity: 0;
+						background-color: rgba(0, 0, 0, .7);
+
+						&::before {
+							position: absolute;
+							content: attr(data-time);
+							font-size: 0.5em;
+							top: -2em;
+							left: -1em;
+						}
+					}
+					.video-process-mouse-display-show {
+						opacity: 1;
+						visibility: visible;
 					}
 				}
 
 				.video-process-scrubber-indicator {
+					z-index: 3;
 					position: absolute;
 					top: 50%;
 					margin-top: -6px;

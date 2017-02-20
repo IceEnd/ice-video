@@ -4,6 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import IcePlayer from '../src/index';
 
+import '../src/assets/sass/player.scss';
+
 const render = () => {
   const settings = {
     // width: 800,
@@ -12,7 +14,7 @@ const render = () => {
     autoPlay: false,
     preload: 'auto',
     poster: '',
-    volume: 0.5,
+    volume: 0.2,
     getBarrageUrl: '',
     postBarrageUrl: '',
     controls: true,

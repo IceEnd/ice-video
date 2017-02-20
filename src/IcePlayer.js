@@ -4,8 +4,6 @@ import Video from './component/Video';
 import StartLoading from './component/StartLoading';
 import Controller from './component/Controller';
 
-import './assets/sass/player.scss';
-
 export default class IcePlayer extends Component {
   static displayName = 'IcePlayer';
 
@@ -55,6 +53,7 @@ export default class IcePlayer extends Component {
       *    4:   就绪
       *    5:   播放
       *    6:   暂停
+      *    7:   拖放前进
       */
       playerStatus: 0,
       controllerShow: false,
@@ -66,6 +65,7 @@ export default class IcePlayer extends Component {
         fullScreen: false,        // 全屏幕
         bufferedLength: 0,        // 缓冲状态
         volume: this.props.volume,
+        locationTime: false,      // 是否拖动进度条
       },
     };
   }
@@ -95,6 +95,18 @@ export default class IcePlayer extends Component {
 
   getCurrentTime = (time) => {
     this.setState({ video: Object.assign(this.state.video, { currentTime: time }) });
+  }
+
+  setCurrentTime = (time) => {
+    this.setState({
+      video: Object.assign(this.state.video, { currentTime: time, locationTime: true }),
+    });
+  }
+
+  setCurrentTimeComplete = () => {
+    this.setState({
+      video: Object.assign(this.state.video, { locationTime: false }),
+    });
   }
 
   getBuffered = (length) => {
@@ -186,6 +198,7 @@ export default class IcePlayer extends Component {
   handlePause = () => {
     this.setState({
       playerStatus: 6,
+      video: Object.assign(this.state.video, { playTimes: 1 }),
     });
   }
 
@@ -239,6 +252,8 @@ export default class IcePlayer extends Component {
       playerStatus: this.state.playerStatus,
       palyTimes: this.state.video.playTimes,
       bufferedLength: this.state.video.bufferedLength,
+      timing: this.state.video.currentTime,
+      locationTime: this.state.video.locationTime,
     };
     const videoFunc = {
       handleOnLoadStart: this.handleOnLoadStart,
@@ -248,6 +263,7 @@ export default class IcePlayer extends Component {
       handleOnError: this.handleOnError,
       getCurrentTime: this.getCurrentTime,
       getBuffered: this.getBuffered,
+      setCurrentTimeComplete: this.setCurrentTimeComplete,
     };
     const controllerFunc = {
       handlePause: this.handlePause,
@@ -256,6 +272,7 @@ export default class IcePlayer extends Component {
       handleProcess: this.handleProcess,
       handleStopProcess: this.handleStopProcess,
       handleControlSucess: this.handleControlSucess,
+      setCurrentTime: this.setCurrentTime,
     };
     return (
       <div

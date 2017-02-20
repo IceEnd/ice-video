@@ -23,10 +23,24 @@ export default class Controller extends Component {
     handlePlay: PropTypes.func.isRequired,
     startControlsTimer: PropTypes.func.isRequired,
     handleControlSucess: PropTypes.func.isRequired,
+    setCurrentTime: PropTypes.func.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      processMouseLeft: 0,
+      processMouseDispaly: false,
+      dragProcess: false,
+    };
+  }
 
   componentDidUpdate() {
     this.updateSuccess();
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.hideProcessMouseTimer);
   }
 
   updateSuccess = () => {
@@ -45,8 +59,100 @@ export default class Controller extends Component {
     }
   }
 
+  processMouseMove = (e) => {
+    e.preventDefault();
+    const { offsetLeft, offsetWidth } = this.processBar;
+    const leftX = this.computeLeftX(e.clientX, offsetLeft, offsetWidth);
+    this.setState({
+      processMouseLeft: leftX,
+      processMouseDispaly: true,
+    });
+    if (this.state.dragProcess) {
+      this.setState({
+        dragWidth: (leftX / offsetWidth) * 100,
+      });
+    }
+    this.hideProcessMouse();
+  }
+
+  processMouseUp = (e) => {
+    e.preventDefault();
+    if (this.state.dragProcess) {
+      const time = (this.state.dragWidth / 100) * this.props.video.duration;
+      this.props.setCurrentTime(time);
+      this.setState({
+        dragProcess: false,
+      });
+    }
+  }
+
+  processMouseLeave = () => {
+    clearTimeout(this.hideProcessMouseTimer);
+    this.setState({
+      processMouseDispaly: false,
+      dragProcess: false,
+    });
+    if (this.state.dragProcess) {
+      const time = (this.state.dragWidth / 100) * this.props.video.duration;
+      this.props.setCurrentTime(time);
+      this.setState({
+        dragProcess: false,
+      });
+    }
+  }
+
+  processScrubberMoveDown = (e) => {
+    e.preventDefault();
+    const { offsetLeft, offsetWidth } = this.processBar;
+    this.setState({
+      dragProcess: true,
+      dragWidth: (this.computeLeftX(e.clientX, offsetLeft, offsetWidth) / offsetWidth) * 100,
+    });
+  }
+
+  processBarMouseDown = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  processBarMouseUp = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  processBarClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { offsetLeft, offsetWidth } = this.processBar;
+    const time = (this.computeLeftX(e.clientX, offsetLeft, offsetWidth) / offsetWidth)
+    * this.props.video.duration;
+    this.props.setCurrentTime(time);
+  }
+
+
+  hideProcessMouse = () => {
+    clearTimeout(this.hideProcessMouseTimer);
+    this.hideProcessMouseTimer = setTimeout(() => {
+      this.setState({
+        processMouseDispaly: false,
+      });
+    }, 1500);
+  }
+
+  computeLeftX = (X, offsetLeft, offsetWidth) => {
+    let leftX;
+    if (X < offsetLeft) {
+      leftX = 0;
+    } else if (X > offsetLeft + offsetWidth) {
+      leftX = offsetWidth;
+    } else {
+      leftX = X - offsetLeft;
+    }
+    return leftX;
+  }
+
   render() {
     const { controls, playerStatus, show, video } = this.props;
+    const { processMouseLeft, processMouseDispaly } = this.state;
     if (!controls) {
       return null;
     }
@@ -57,7 +163,7 @@ export default class Controller extends Component {
     let playStatus = '';
     if (playerStatus === 5) {
       playStatus = 'pause';
-    } else {
+    } else if (playerStatus === 6) {
       playStatus = 'play';
     }
     let volumeStatus = '';
@@ -88,17 +194,35 @@ export default class Controller extends Component {
         <div
           className="react-video-control-btn react-video-control-item video-process-control"
           aria-label="进度条"
+          ref={node => (this.processBar = node)}
+          onMouseMove={this.processMouseMove}
+          onMouseLeave={this.processMouseLeave}
+          onMouseUp={this.processMouseUp}
         >
-          <span className="video-process-list">
+          <span
+            className="video-process-list"
+            onClick={this.processBarClick}
+            onMouseDown={this.processBarMouseDown}
+            onMouseUp={this.processBarMouseUp}
+          >
             <div
               className="video-process-load"
               style={{ width: `${video.bufferedLength * 100}%` }}
             />
+            <span
+              className={`video-process-mouse-display ${processMouseDispaly ? 'video-process-mouse-display-show' : ''}`}
+              data-time={`${processMouseDispaly ? formatTime((processMouseLeft / this.processBar.offsetWidth) * video.duration) : 0}`}
+              style={{ left: `${processMouseLeft}px` }}
+            />
             <div
               className="video-process-play"
-              style={{ width: `${(video.currentTime / video.duration) * 100}%` }}
+              style={{ width: `${this.state.dragProcess ? this.state.dragWidth : (video.currentTime / video.duration) * 100}%` }}
             >
-              <button className="video-process-scrubber-indicator" />
+              <button
+                className="video-process-scrubber-indicator"
+                onMouseDown={this.processScrubberMoveDown}
+                onMouseUp={this.processMouseUp}
+              />
             </div>
           </span>
         </div>
@@ -109,13 +233,19 @@ export default class Controller extends Component {
         </div>
         <div className="react-video-control-bar-right">
           <div
-            className="react-video-control-btn react-video-control-item video-div-volume"
+            className="react-video-control-btn react-video-control-item video-btn-volume"
             aria-label="音量"
             data-status={volumeStatus}
           >
-            <button className="btn">
-              <svg className="react-video-svg" version="1.1" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: volumeHtml }} />
-            </button>
+            <svg className="react-video-svg" version="1.1" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: volumeHtml }} />
+            <div className="video-btn-volume-bar">
+              <div
+                className="video-btn-volume-bar-level"
+                style={{ width: `${video.volume * 100}%` }}
+              >
+                <button className="video-btn-volume-bar-indicator" />
+              </div>
+            </div>
           </div>
           <button
             className="react-video-control-btn react-video-control-item video-btn-setting"

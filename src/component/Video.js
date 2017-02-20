@@ -12,6 +12,8 @@ export default class Video extends Component {
     poster: PropTypes.string,
     playerStatus: PropTypes.string,
     bufferedLength: PropTypes.number,
+    timing: PropTypes.number,
+    locationTime: PropTypes.bool,
 
     handleOnLoadStart: PropTypes.func.isRequired,
     handleOnLoadedMetadata: PropTypes.func.isRequired,
@@ -20,6 +22,7 @@ export default class Video extends Component {
     handleOnError: PropTypes.func.isRequired,
     getCurrentTime: PropTypes.func.isRequired,
     getBuffered: PropTypes.func.isRequired,
+    setCurrentTimeComplete: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -96,13 +99,17 @@ export default class Video extends Component {
   }
 
   videoControll = () => {
-    const { playerStatus, bufferedLength } = this.props;
+    const { playerStatus, bufferedLength, timing, locationTime } = this.props;
     if (playerStatus === 5) {
       this.video.play();
       this.startCurrentTimer();
     } else if (playerStatus === 6) {
       this.video.pause();
       this.clearCurrentTimer();
+    }
+    if (locationTime) {
+      this.video.currentTime = timing;
+      this.props.setCurrentTimeComplete();
     }
     if (bufferedLength < 1) {
       this.startBufferedTimer();
