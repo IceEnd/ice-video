@@ -17,6 +17,7 @@ export default class Controller extends Component {
       fullScreen: PropTypes.number.isRequired,
       bufferedLength: PropTypes.number.isRequired,
       volume: PropTypes.number.isRequired,
+      muted: PropTypes.bool.isRequired,
     }),
 
     handlePause: PropTypes.func.isRequired,
@@ -172,6 +173,9 @@ export default class Controller extends Component {
     } else if (video.volume < 0.5 && video.volume > 0) {
       volumeStatus = 'damping';
     } else {
+      volumeStatus = 'mute';
+    }
+    if (video.muted) {
       volumeStatus = 'mute';
     }
     return (

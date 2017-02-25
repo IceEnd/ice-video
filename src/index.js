@@ -1,1 +1,1 @@
-module.exports = require('./IcePlayer');
+module.exports = require('./IceVideo');

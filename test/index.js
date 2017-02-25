@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import IcePlayer from '../src/index';
 
-import '../src/assets/sass/player.scss';
+import '../src/assets/sass/video.scss';
 
 const render = () => {
   const settings = {

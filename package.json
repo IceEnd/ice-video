@@ -1,8 +1,8 @@
 {
-  "name": "ice-player",
+  "name": "ice-video",
   "version": "0.0.1",
-  "description": "A barrage video player,use React & Redux.",
-  "main": "src/index.js",
+  "description": "A danmaku video player,use React & Redux.",
+  "main": "dist/ice-video.js",
   "scripts": {
     "start": "concurrently --raw --kill-others \"webpack-dev-server --port 3000\"",
     "build": "cross-env NODE_ENV=production gulp",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/IceEnd/icePlayer.git"
+    "url": "https://github.com/IceEnd/ice-video"
   },
   "keywords": [
-    "barrage video player",
+    "danmaku video player",
     "React",
     "html5"
   ],
-  "author": "Cononico",
+  "author": "cononico",
   "license": "MIT",
   "dependencies": {
     "babel-polyfill": "^6.22.0",
@@ -47,6 +47,7 @@
     "css-loader": "^0.26.1",
     "concurrently": "^3.1.0",
     "cross-env": "^3.1.3",
+    "del": "2.2.2",
     "eslint": "^3.14.0",
     "eslint-config-airbnb": "^14.0.0",
     "eslint-plugin-import": "^2.2.0",
@@ -54,14 +55,10 @@
     "eslint-plugin-react": "^6.9.0",
     "file-loader": "^0.9.0",
     "gulp": "^3.9.1",
-    "gulp-md5": "^0.1.2",
-    "gulp-clean": "^0.3.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-cssshrink": "^0.1.6",
-    "gulp-rev": "^7.1.2",
-    "gulp-rev-collector": "^1.1.1",
-    "gulp-uglify": "^2.0.0",
-    "gulp-util": "^3.0.7",
+    "gulp-clean-css": "^3.0.3",
+    "gulp-rename": "1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-util": "^3.0.8",
     "gulp-webpack": "^1.5.0",
     "node-sass": "^4.1.1",
     "pre-commit": "1.2.2",

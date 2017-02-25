@@ -66,6 +66,7 @@ export default class IcePlayer extends Component {
         bufferedLength: 0,        // 缓冲状态
         volume: this.props.volume,
         locationTime: false,      // 是否拖动进度条
+        muted: false,             // 是否关闭声音
       },
     };
   }
