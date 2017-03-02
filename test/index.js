@@ -2,7 +2,7 @@ import 'babel-polyfill';
 import path from 'path';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import IcePlayer from '../src/index';
+import IceVideo from '../src/index';
 
 import '../src/assets/sass/video.scss';
 
@@ -22,20 +22,21 @@ const render = () => {
   };
   ReactDOM.render(
     <div>
-      <IcePlayer {...settings} >
-        <source src="/video.mp4" type="video/mp4" />
-      </IcePlayer>
+      <IceVideo {...settings} >
+        <source src="/video.mp4" />
+      </IceVideo>
     </div>,
     document.querySelector('#root')
   );
 };
 
-render(IcePlayer);
+render(IceVideo);
 
 if (module.hot) {
-  module.hot.accept('../src/IcePlayer', () => {
-    const newApp = require('../src/IcePlayer').default;
+  module.hot.accept('../src/IceVideo', () => {
+    const newApp = require('../src/IceVideo').default;
     render(newApp);
   });
 }
-//  https://media.w3.org/2010/05/sintel/trailer_hd.mp4 http://static.hdslb.com/miniloader.swf https://video-react.github.io/assets/poster.png
+/*
+*/

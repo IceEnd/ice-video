@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import SVG from './component/SVG';
 import Video from './component/Video';
-import StartLoading from './component/StartLoading';
+import Start from './component/Start';
 import Controller from './component/Controller';
 
 export default class IcePlayer extends Component {
-  static displayName = 'IcePlayer';
+  static displayName = 'IceVideo';
 
   static propTypes = {
     children: PropTypes.any,
@@ -19,8 +19,8 @@ export default class IcePlayer extends Component {
     volume: PropTypes.number,
     poster: PropTypes.string,
 
-    // getBarrageUrl: PropTypes.string.isRequired,
-    // postBarrageUrl: PropTypes.string.isRequired,
+    // getdanmukuUrl: PropTypes.string.isRequired,
+    // postdanmukuUrl: PropTypes.string.isRequired,
     controls: PropTypes.bool,
     scale: PropTypes.string,
   };
@@ -38,34 +38,30 @@ export default class IcePlayer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showLoading: true,
-      playerLoadingStatus: {
-        video: 0,    // 0 未开始 1 完成  2 失败
-        barrage: 0,
+      showStart: true,
+      startStatus: {
+        video: 0,    // 0 未开始 1 正在加载 2 完成  3 失败
+        danmuku: 0,
         controller: 0,
       },
       /**
       *    -1:  加载失败
-      *    0:   加载视屏
-      *    1:   加载弹幕
-      *    2:   设置播放器
-      *    3:   完成加载
-      *    4:   就绪
-      *    5:   播放
-      *    6:   暂停
-      *    7:   拖放前进
+      *    0:   加载中
+      *    1:   加载完成
+      *    2:   运行中
       */
       playerStatus: 0,
+      playerAction: 0,       // 0: 等待  1: 播放 2: 暂停  3: 拖放前进
       controllerShow: false,
       userActivity: true,
+      loading: false,
       video: {
         playTimes: 0,             // 播放次数
         duration: 0,              // 时长
         currentTime: 0,           // 当前播放时间(s)
         fullScreen: false,        // 全屏幕
-        bufferedLength: 0,        // 缓冲状态
+        bufferedTime: 0,        // 缓冲状态
         volume: this.props.volume,
-        locationTime: false,      // 是否拖动进度条
         muted: false,             // 是否关闭声音
       },
     };
@@ -100,19 +96,21 @@ export default class IcePlayer extends Component {
 
   setCurrentTime = (time) => {
     this.setState({
-      video: Object.assign(this.state.video, { currentTime: time, locationTime: true }),
+      playerAction: 3,
+      video: Object.assign(this.state.video, { currentTime: time }),
     });
   }
 
   setCurrentTimeComplete = () => {
     this.setState({
+      playerAction: 1,
       video: Object.assign(this.state.video, { locationTime: false }),
     });
   }
 
-  getBuffered = (length) => {
+  getBuffered = (time) => {
     this.setState({
-      video: Object.assign(this.state.video, { bufferedLength: length }),
+      video: Object.assign(this.state.video, { bufferedTime: time }),
     });
   }
 
@@ -131,76 +129,74 @@ export default class IcePlayer extends Component {
   handleOnLoadedMetadata = (time) => {
     if (this.state.video.playTimes === 0) {
       this.setState({
-        video: Object.assign({}, this.state.video, { duration: time }),
+        video: Object.assign(this.state.video, { duration: time }),
       });
     }
   }
 
   handleOnLoadedData = () => {
     if (this.state.video.playTimes === 0) {
-      this.setState({ playerLoadingStatus: Object.assign({}, this.state.playerLoadingStatus,
-        { video: 1 }) });
+      this.setState({ startStatus: Object.assign(this.state.startStatus, { video: 1 }) });
     }
   }
 
   handleOnCanPaly = () => {
     if (this.state.video.playTimes === 0) {
       this.setState({
-        playerStatus: 1,
+        startStatus: Object.assign(this.state.startStatus, { video: 2, danmuku: 1 }),
       });
       setTimeout(() => {
         this.setState({
-          playerStatus: 2,
-          playerLoadingStatus: Object.assign({}, this.state.playerLoadingStatus,
-            { video: 1, barrage: 2 }),
+          startStatus: Object.assign(this.state.startStatus, { danmuku: 2, controller: 1 }),
         });
       }, 500);
+      setTimeout(() => {
+        this.setState({
+          startStatus: Object.assign(this.state.startStatus, { controller: 2 }),
+        });
+      }, 1000);
+      setTimeout(() => {
+        this.setState({
+          playerStatus: this.state.startStatus.video === 2 ? 1 : -1,
+          showStart: false,
+        });
+      }, 1500);
     }
   }
 
   handleOnError = (error) => {
     this.setState({
       playerStatus: -1,
-      playerLoadingStatus: Object.assign({}, this.state.playerTips, { vide: 2 }),
+      startStatus: Object.assign({}, this.state.playerTips, { video: 3 }),
       message: error,
     });
   }
 
-  handleControlSucess = () => {
+  handleOnWaiting = () => {
     this.setState({
-      playerStatus: 3,
-      playerLoadingStatus: Object.assign({}, this.state.playerLoadingStatus,
-        { video: 1, barrage: 2, controller: 1 }),
+      loading: true,
     });
-    setTimeout(() => {
-      if (this.state.video.playTimes > 0) {
-        this.setState({ playerStatus: 5 });
-      } else {
-        this.setState({ playerStatus: 4 });
-      }
-      this.setState({
-        showLoading: false,
-      });
-    }, 500);
+  }
+
+  handleControlSucess = () => {
   }
 
   handlePlay = (start) => {
+    const { video } = this.state;
     if (start) {
       this.setState({
-        video: Object.assign(this.state.video, { playTimes: 1 }),
-        playerStatus: 5,
+        video: Object.assign(video, { playTimes: 1 }),
+        playerStatus: 2,
+        playerAction: 1,
         controllerShow: true,
       });
     } else {
-      this.setState({ playerStatus: 5 });
+      this.setState({ playerAction: 1 });
     }
   }
 
   handlePause = () => {
-    this.setState({
-      playerStatus: 6,
-      video: Object.assign(this.state.video, { playTimes: 1 }),
-    });
+    this.setState({ playerAction: 2 });
   }
 
   handleOnMouseMove = () => {
@@ -219,20 +215,19 @@ export default class IcePlayer extends Component {
     }, 3000);
   }
 
-  renderStartLoading = () => {
-    const { showLoading, playerStatus, playerLoadingStatus } = this.state;
+  renderStart = () => {
+    const { showStart, startStatus } = this.state;
     return (
-      <StartLoading
-        showLoading={showLoading}
-        playerStatus={playerStatus}
-        playerLoadingStatus={playerLoadingStatus}
+      <Start
+        showStart={showStart}
+        startStatus={startStatus}
       />
     );
   }
 
   renderPlay = () => {
     const { playerStatus } = this.state;
-    if (playerStatus !== 4) {
+    if (playerStatus !== 1) {
       return null;
     }
     const svgHtml = '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#play_icon" />';
@@ -250,11 +245,10 @@ export default class IcePlayer extends Component {
       preload: this.props.preload,
       volume: this.props.volume,
       poster: this.props.poster,
-      playerStatus: this.state.playerStatus,
+      playerAction: this.state.playerAction,
       palyTimes: this.state.video.playTimes,
-      bufferedLength: this.state.video.bufferedLength,
       timing: this.state.video.currentTime,
-      locationTime: this.state.video.locationTime,
+      loading: this.state.loading,
     };
     const videoFunc = {
       handleOnLoadStart: this.handleOnLoadStart,
@@ -265,6 +259,7 @@ export default class IcePlayer extends Component {
       getCurrentTime: this.getCurrentTime,
       getBuffered: this.getBuffered,
       setCurrentTimeComplete: this.setCurrentTimeComplete,
+      handleOnWaiting: this.handleOnWaiting,
     };
     const controllerFunc = {
       handlePause: this.handlePause,
@@ -280,9 +275,9 @@ export default class IcePlayer extends Component {
         className="player-container video-react-container"
         style={{ paddingTop: styles.paddingTop }}
       >
-        {this.renderStartLoading()}
+        {this.renderStart()}
         {this.renderPlay()}
-        <div style={{ display: 'none' }}>Shortcut</div>
+        <div style={{ display: `${this.state.playerStatus === -1 ? 'block' : 'none'}` }}>Error</div>
         <Video
           key="video"
           {...video}
@@ -290,12 +285,12 @@ export default class IcePlayer extends Component {
         >
           {this.props.children}
         </Video>
-        <div>dammu</div>
+        <div>dammuku</div>
         <Controller
           video={this.state.video}
           volume={this.state.volume}
           controls={this.props.controls}
-          playerStatus={this.state.playerStatus}
+          playerAction={this.state.playerAction}
           show={this.state.controllerShow}
           {...controllerFunc}
         />
@@ -313,7 +308,6 @@ export default class IcePlayer extends Component {
       >
         <SVG />
         {this.renderPalyer(styles)}
-        <div>Bar</div>
       </div>
     );
   }

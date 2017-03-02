@@ -10,10 +10,9 @@ export default class Video extends Component {
     preload: PropTypes.string,
     volume: PropTypes.number,
     poster: PropTypes.string,
-    playerStatus: PropTypes.string,
-    bufferedLength: PropTypes.number,
+    playerAction: PropTypes.string,
     timing: PropTypes.number,
-    locationTime: PropTypes.bool,
+    // loading: PropTypes.bool,
 
     handleOnLoadStart: PropTypes.func.isRequired,
     handleOnLoadedMetadata: PropTypes.func.isRequired,
@@ -23,6 +22,7 @@ export default class Video extends Component {
     getCurrentTime: PropTypes.func.isRequired,
     getBuffered: PropTypes.func.isRequired,
     setCurrentTimeComplete: PropTypes.func.isRequired,
+    // handleOnWaiting: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -59,13 +59,49 @@ export default class Video extends Component {
     this.props.handleOnLoadedData();
   }
 
+  onWaiting = () => {
+    // this.props.handleOnWaiting();
+  }
+
   onCanPlay = () => {
-    this.props.handleOnCanPaly();
+    if (this.props.playerAction === 0) {
+      this.props.handleOnCanPaly();
+    } else if (this.props.playerAction === 2) {
+      this.video.pause();
+    } else if (this.props.playerAction === 1) {
+      this.video.play();
+    }
   }
 
   onError = () => {
     const error = this.video.error;
     this.props.handleOnError(error);
+  }
+
+  getBufferedEnd = (buffered) => {
+    let end = 0;
+    try {
+      end = buffered.end(0) || 0;
+      end = parseInt((end * 1000) + 1, 10) / 1000;
+    } catch (e) {
+      // continue regardless of error
+    }
+    return end;
+  }
+
+  startBufferedTimer = () => {
+    if (this.bufferedTimer) {
+      return;
+    }
+    this.bufferedTimer = setInterval(() => {
+      const { buffered, duration } = this.video;
+      const end = this.getBufferedEnd(buffered);
+      if (end < duration) {
+        this.props.getBuffered((end));
+        return;
+      }
+      this.clearBufferedTimer();
+    }, 1000);
   }
 
   startCurrentTimer = () => {
@@ -76,16 +112,6 @@ export default class Video extends Component {
       const currentTime = this.video.currentTime;
       this.props.getCurrentTime(currentTime);
     }, 1000);
-  }
-
-  startBufferedTimer = () => {
-    if (this.bufferedTimer) {
-      return;
-    }
-    this.bufferedTimer = setInterval(() => {
-      const buffered = this.video.buffered;
-      this.props.getBuffered(buffered.length);
-    }, 100);
   }
 
   clearCurrentTimer = () => {
@@ -99,22 +125,17 @@ export default class Video extends Component {
   }
 
   videoControll = () => {
-    const { playerStatus, bufferedLength, timing, locationTime } = this.props;
-    if (playerStatus === 5) {
+    const { playerAction, timing } = this.props;
+    this.startBufferedTimer();
+    if (playerAction === 1) {
       this.video.play();
       this.startCurrentTimer();
-    } else if (playerStatus === 6) {
+    } else if (playerAction === 2) {
       this.video.pause();
       this.clearCurrentTimer();
-    }
-    if (locationTime) {
+    } else if (playerAction === 3) {
       this.video.currentTime = timing;
       this.props.setCurrentTimeComplete();
-    }
-    if (bufferedLength < 1) {
-      this.startBufferedTimer();
-    } else {
-      this.clearBufferedTimer();
     }
   }
 
@@ -134,6 +155,9 @@ export default class Video extends Component {
         onLoadStart={this.onLoadStart}
         onLoadedMetadata={this.onLoadedMetaData}
         onLoadedData={this.onLoadedData}
+        onWaiting={this.onWaiting}
+        onProgress={this.onProgress}
+        onPlay={this.onPlay}
       >
         {this.props.children}
         Your browser does not support the video.
