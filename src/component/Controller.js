@@ -208,16 +208,19 @@ export default class Controller extends Component {
         </div>
         <div className="video-control-bar">
           <button
-            className="react-video-control-btn video-control-item video-btn-play"
+            className="video-control-item video-btn-play"
             data-status={playStatus}
             aria-label="播放/暂停"
             onClick={this.handlePlayIcon}
           >
             <svg className="video-svg" version="1.1" viewBox="0 0 36 36" dangerouslySetInnerHTML={{ __html: playHtml }} />
           </button>
+          <div className="video-control-item video-control-input">
+            <input className="video-danmuku-input" type="text" placeholder="发个弹幕吐槽吧..." />
+          </div>
           <div className="video-control-bar-right">
             <div
-              className="react-video-control-btn video-control-item video-btn-volume"
+              className="video-control-item video-btn-volume"
               aria-label="音量"
               data-status={volumeStatus}
             >
@@ -232,14 +235,14 @@ export default class Controller extends Component {
               </div>
             </div>
             <button
-              className="react-video-control-btn video-control-item video-btn-setting"
+              className="video-control-item video-btn-setting"
               aria-label="设置"
               data-status={playStatus}
             >
               <svg className="video-svg" version="1.1" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: settingHtml }} />
             </button>
             <button
-              className="react-video-control-btn video-control-item video-btn-fullscreen"
+              className="video-control-item video-btn-fullscreen"
               aria-label="全屏"
               data-status={video.fullScreen}
             >
