@@ -107,10 +107,6 @@ export default class Video extends Component {
     this.bufferedTimer = setInterval(() => {
       const { buffered, duration } = this.video;
       const end = this.getBufferedEnd(buffered);
-      console.log('--------------');
-      console.log(end);
-      console.log(duration);
-      console.log('--------------');
       if (end < duration) {
         this.props.getBuffered((end));
       } else {
