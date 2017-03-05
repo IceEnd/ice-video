@@ -46,6 +46,7 @@ export default class Video extends Component {
 
   componentDidMount() {
     this.video.volume = this.props.volume;
+    this.startBufferedTimer();
   }
 
   componentDidUpdate() {
@@ -106,11 +107,16 @@ export default class Video extends Component {
     this.bufferedTimer = setInterval(() => {
       const { buffered, duration } = this.video;
       const end = this.getBufferedEnd(buffered);
+      console.log('--------------');
+      console.log(end);
+      console.log(duration);
+      console.log('--------------');
       if (end < duration) {
         this.props.getBuffered((end));
-        return;
+      } else {
+        this.props.getBuffered((end));
+        this.clearBufferedTimer();
       }
-      this.clearBufferedTimer();
     }, 1000);
   }
 
@@ -136,7 +142,6 @@ export default class Video extends Component {
 
   videoControll = () => {
     const { playerAction, volumeAction, timing } = this.props;
-    this.startBufferedTimer();
     if (playerAction === 1) {
       this.video.play();
       this.startCurrentTimer();
