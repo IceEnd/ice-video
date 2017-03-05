@@ -161,11 +161,11 @@ html, body {
 			bottom: 0;
 			left: 0;
 			right: 0;
-			background: linear-gradient(bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 60%);
-			background: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 60%);
-			background: -o-linear-gradient(bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 60%);
-			background: -ms-linear-gradient(bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 60%);
-			background: -moz-linear-gradient(bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 60%);
+			background: linear-gradient(bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 70%);
+			background: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 70%);
+			background: -o-linear-gradient(bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 70%);
+			background: -ms-linear-gradient(bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 70%);
+			background: -moz-linear-gradient(bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 70%);
 
 			.video-progress {
 				width: 100%;
@@ -205,7 +205,7 @@ html, body {
 						height: 3px;
 						margin-top: -1.5px;
 						cursor: pointer;
-						background-color: rgba(168, 168, 168, 0.6);
+						background-color: rgba(196, 196, 196, 0.6);
 						transition: all .2s cubic-bezier(0.0, .0, .2, 1);
 						-webkit-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
 						-ms-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
@@ -291,7 +291,7 @@ html, body {
 				display: flex;
 				display: -webkit-flex;
 				display: -ms-flexbox;
-				padding: 0 1em;
+				padding: 0 .5em;
 				height: 36px;
 
 				.video-control-item {
@@ -299,12 +299,13 @@ html, body {
 			  }
 
 				.video-btn-play {
-					flex: auto;
+					// flex: auto;
+					flex: 1;
 					max-width: 60px;
 
 					.video-svg {
 						display: block;
-						float: left;
+						// float: left;
 						margin-left: .5em;
 						width: 36px;
 						height: 36px;
@@ -346,27 +347,42 @@ html, body {
 				}
 
 				.video-control-input {
-					flex: auto;
+					// flex: auto;
+					flex: 10;
 					position: relative;
 					text-align: left;
 
 					.video-danmuku-input {
 						width: 90%;
-						max-width: 250px;
+						max-width: 500px;
 						min-width: 150px;
 						box-sizing: border-box;
 						height: 24px;
 						margin-top: 4px;
 						box-sizing: border-box;
 						padding: 0.1em 1em;
-						background: rgba(230, 222, 222, 0.6);
-						border-radius: 12px;
-						color: #666;
+						background: rgba(212, 212, 212, 0.5);
+						border-radius: 5px;
+						color: #fff;
+
+						&::-webkit-input-placeholder {
+							color: rgba(255, 255, 255, 0.8);
+							text-align: center;
+						}
+						&::-moz-input-placeholder {
+							color: rgba(255, 255, 255, 0.8);
+							text-align: center;
+						}
+						&::-ms-input-placeholder {
+							color: rgba(255, 255, 255, 0.8);
+							text-align: center;
+						}
 					}
 				}
 
 				.video-control-bar-right {
-					flex: auto;
+					// flex: auto;
+					flex: 2;
 					// float: right;
 					position: relative;
 					height: 100%;
@@ -421,7 +437,7 @@ html, body {
 						.video-btn-volume-bar {
 							width: 60px;
 							position: absolute;
-							left: 28px;
+							left: 32px;
 							height: 4px;
 							top: 50%;
 							margin-top: -2px;
@@ -479,7 +495,7 @@ html, body {
 			      }
 
 						&:hover {
-							width: 93px;
+							width: 102px;
 							.video-btn-volume-bar {
 								opacity: 1;
 								visibility: visible;
@@ -527,27 +543,27 @@ html, body {
 	}
 }
 
-/* .player-user-inactivity {
-	.video-control-main {
-		visibility: visible;
-		opacity: 0;
-		-webkit-transition: visibility 1s, opacity 1s;
-		-moz-transition: visibility 1s, opacity 1s;
-		-o-transition: visibility 1s, opacity 1s;
-		transition: visibility 1s, opacity 1s;
-	}
-} */
+// .player-user-inactivity {
+// 	.video-control-main {
+// 		visibility: visible;
+// 		opacity: 0;
+// 		-webkit-transition: visibility 1s, opacity 1s;
+// 		-moz-transition: visibility 1s, opacity 1s;
+// 		-o-transition: visibility 1s, opacity 1s;
+// 		transition: visibility 1s, opacity 1s;
+// 	}
+// }
 
-/* .player-user-activity {
-	.video-control-main {
-		visibility: visible;
-		opacity: 1;
-		-webkit-transition: visibility 0.1s, opacity 0.1s;
-		-moz-transition: visibility 0.1s, opacity 0.1s;
-		-o-transition: visibility 0.1s, opacity 0.1s;
-		transition: visibility 0.1s, opacity 0.1s;
-	}
-} */
+// .player-user-activity {
+// 	.video-control-main {
+// 		visibility: visible;
+// 		opacity: 1;
+// 		-webkit-transition: visibility 0.1s, opacity 0.1s;
+// 		-moz-transition: visibility 0.1s, opacity 0.1s;
+// 		-o-transition: visibility 0.1s, opacity 0.1s;
+// 		transition: visibility 0.1s, opacity 0.1s;
+// 	}
+// }
 
 @keyframes video_svg_rotate {
 	0% {

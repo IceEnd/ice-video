@@ -52,6 +52,7 @@ export default class IcePlayer extends Component {
       */
       playerStatus: 0,
       playerAction: 0,       // 0: 等待  1: 播放 2: 暂停  3: 拖放前进
+      volumeAction: 0,       // 0: 无指令 1: 调整 2: 静音/取消静音
       controllerShow: false,
       userActivity: true,
       loading: false,
@@ -106,6 +107,24 @@ export default class IcePlayer extends Component {
       playerAction: 1,
       video: Object.assign(this.state.video, { locationTime: false }),
     });
+  }
+
+  setVolume = (num) => {
+    this.setState({
+      volumeAction: 1,
+      video: Object.assign(this.state.video, { volume: num / 100 }),
+    });
+  }
+
+  setMuted = (noOff) => {
+    this.setState({
+      volumeAction: 2,
+      video: Object.assign(this.state.video, { muted: noOff }),
+    });
+  }
+
+  setVolumeComplete = () => {
+    this.setState({ volumeAction: 0 });
   }
 
   getBuffered = (time) => {
@@ -203,6 +222,17 @@ export default class IcePlayer extends Component {
     this.startControlsTimer();
   }
 
+  showControls = () => {
+    clearTimeout(this.controlsHideTimer);
+    this.setState({
+      userActivity: true,
+    });
+  }
+
+  hideControls = () => {
+    this.startControlsTimer();
+  }
+
   startControlsTimer = () => {
     this.setState({
       userActivity: true,
@@ -243,12 +273,14 @@ export default class IcePlayer extends Component {
       loop: this.props.loop,
       autoPlay: this.props.autoPlay,
       preload: this.props.preload,
-      volume: this.props.volume,
+      volume: this.state.video.volume,
       poster: this.props.poster,
       playerAction: this.state.playerAction,
+      volumeAction: this.state.volumeAction,
       palyTimes: this.state.video.playTimes,
       timing: this.state.video.currentTime,
       loading: this.state.loading,
+      video: this.state.video,
     };
     const videoFunc = {
       handleOnLoadStart: this.handleOnLoadStart,
@@ -260,6 +292,7 @@ export default class IcePlayer extends Component {
       getBuffered: this.getBuffered,
       setCurrentTimeComplete: this.setCurrentTimeComplete,
       handleOnWaiting: this.handleOnWaiting,
+      setVolumeComplete: this.setVolumeComplete,
     };
     const controllerFunc = {
       handlePause: this.handlePause,
@@ -269,6 +302,10 @@ export default class IcePlayer extends Component {
       handleStopProcess: this.handleStopProcess,
       handleControlSucess: this.handleControlSucess,
       setCurrentTime: this.setCurrentTime,
+      showControls: this.showControls,
+      hideControls: this.hideControls,
+      setVolume: this.setVolume,
+      setMuted: this.setMuted,
     };
     return (
       <div

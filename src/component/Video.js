@@ -10,8 +10,13 @@ export default class Video extends Component {
     preload: PropTypes.string,
     volume: PropTypes.number,
     poster: PropTypes.string,
-    playerAction: PropTypes.string,
+    playerAction: PropTypes.number,
+    volumeAction: PropTypes.number,
     timing: PropTypes.number,
+    video: PropTypes.shape({
+      volume: PropTypes.number,
+      muted: PropTypes.bool,
+    }),
     // loading: PropTypes.bool,
 
     handleOnLoadStart: PropTypes.func.isRequired,
@@ -22,6 +27,7 @@ export default class Video extends Component {
     getCurrentTime: PropTypes.func.isRequired,
     getBuffered: PropTypes.func.isRequired,
     setCurrentTimeComplete: PropTypes.func.isRequired,
+    setVolumeComplete: PropTypes.func.isRequired,
     // handleOnWaiting: PropTypes.func.isRequired,
   };
 
@@ -36,6 +42,10 @@ export default class Video extends Component {
   constructor(props) {
     super(props);
     this.video = null;
+  }
+
+  componentDidMount() {
+    this.video.volume = this.props.volume;
   }
 
   componentDidUpdate() {
@@ -125,7 +135,7 @@ export default class Video extends Component {
   }
 
   videoControll = () => {
-    const { playerAction, timing } = this.props;
+    const { playerAction, volumeAction, timing } = this.props;
     this.startBufferedTimer();
     if (playerAction === 1) {
       this.video.play();
@@ -137,6 +147,21 @@ export default class Video extends Component {
       this.video.currentTime = timing;
       this.props.setCurrentTimeComplete();
     }
+    const { volume, muted } = this.props.video;
+    switch (volumeAction) {
+      case 0:
+        break;
+      case 1:
+        this.video.volume = volume;
+        this.props.setVolumeComplete();
+        break;
+      case 2:
+        this.video.muted = muted;
+        this.props.setVolumeComplete();
+        break;
+      default:
+        break;
+    }
   }
 
   render() {
@@ -146,7 +171,6 @@ export default class Video extends Component {
         loop={this.props.loop}
         autoPlay={this.props.autoPlay}
         preload={this.props.preload}
-        volume={this.props.volume}
         poster={this.props.poster}
         ref={node => (this.video = node)}
 

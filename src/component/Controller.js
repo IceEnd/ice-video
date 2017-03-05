@@ -24,6 +24,10 @@ export default class Controller extends Component {
     handlePlay: PropTypes.func.isRequired,
     startControlsTimer: PropTypes.func.isRequired,
     setCurrentTime: PropTypes.func.isRequired,
+    showControls: PropTypes.func.isRequired,
+    hideControls: PropTypes.func.isRequired,
+    setVolume: PropTypes.func.isRequired,
+    setMuted: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -31,12 +35,32 @@ export default class Controller extends Component {
     this.state = {
       processMouseLeft: 0,
       processMouseDispaly: false,
-      dragProcess: false,
+      dragProgress: false,
+      dragProgressWidth: 0,
+      dragVolume: false,
+      dragVolumeWidth: 0,
     };
   }
 
   componentWillUnmount() {
     clearTimeout(this.hideProcessMouseTimer);
+  }
+
+  getLeft = (element) => {
+    let left = element.offsetLeft;
+    if (element.offsetParent !== null) {
+      left += this.getLeft(element.offsetParent);
+    }
+    return left;
+  }
+
+  setVolume = (e) => {
+    e.preventDefault();
+    if (this.state.dragVolume) {
+      this.setState({
+        dragVolume: false,
+      });
+    }
   }
 
   handlePlayIcon = () => {
@@ -57,9 +81,9 @@ export default class Controller extends Component {
       processMouseLeft: leftX,
       processMouseDispaly: true,
     });
-    if (this.state.dragProcess) {
+    if (this.state.dragProgress) {
       this.setState({
-        dragWidth: (leftX / offsetWidth) * 100,
+        dragProgressWidth: (leftX / offsetWidth) * 100,
       });
     }
     this.hideProcessMouse();
@@ -67,11 +91,11 @@ export default class Controller extends Component {
 
   processMouseUp = (e) => {
     e.preventDefault();
-    if (this.state.dragProcess) {
-      const time = (this.state.dragWidth / 100) * this.props.video.duration;
+    if (this.state.dragProgress) {
+      const time = (this.state.dragProgressWidth / 100) * this.props.video.duration;
       this.props.setCurrentTime(time);
       this.setState({
-        dragProcess: false,
+        dragProgress: false,
       });
     }
   }
@@ -80,13 +104,13 @@ export default class Controller extends Component {
     clearTimeout(this.hideProcessMouseTimer);
     this.setState({
       processMouseDispaly: false,
-      dragProcess: false,
+      dragProgress: false,
     });
-    if (this.state.dragProcess) {
-      const time = (this.state.dragWidth / 100) * this.props.video.duration;
+    if (this.state.dragProgress) {
+      const time = (this.state.dragProgressWidth / 100) * this.props.video.duration;
       this.props.setCurrentTime(time);
       this.setState({
-        dragProcess: false,
+        dragProgress: false,
       });
     }
   }
@@ -95,8 +119,9 @@ export default class Controller extends Component {
     e.preventDefault();
     const { offsetLeft, offsetWidth } = this.processBar;
     this.setState({
-      dragProcess: true,
-      dragWidth: (this.computeLeftX(e.clientX, offsetLeft, offsetWidth) / offsetWidth) * 100,
+      dragProgress: true,
+      dragProgressWidth:
+        (this.computeLeftX(e.clientX, offsetLeft, offsetWidth) / offsetWidth) * 100,
     });
   }
 
@@ -128,6 +153,59 @@ export default class Controller extends Component {
     }, 1500);
   }
 
+  handleOnInputFocus = () => {
+    this.props.showControls();
+  }
+
+  handleOnInputBlur = () => {
+    this.props.hideControls();
+  }
+
+  handleOnInputKeyPress = () => {
+    this.props.showControls();
+  }
+
+  handleOnVolumeIndicatorMouseDown = (e) => {
+    e.preventDefault();
+    const { offsetWidth } = this.volumeBar;
+    const left = this.getLeft(this.volumeBar);
+    this.setState({
+      dragVolume: true,
+      dragVolumeWidth: (this.computeLeftX(e.clientX, left, offsetWidth) / offsetWidth) * 100,
+    });
+  }
+
+  handleOnVolumeMouseMove = (e) => {
+    e.preventDefault();
+    if (this.state.dragVolume) {
+      const { offsetWidth } = this.volumeBar;
+      const left = this.getLeft(this.volumeBar);
+      this.setState({
+        dragVolumeWidth: (this.computeLeftX(e.clientX, left, offsetWidth) / offsetWidth) * 100,
+      });
+      this.props.setVolume(this.state.dragVolumeWidth);
+    }
+  }
+
+  handleOnVolumeBarClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { offsetWidth } = this.volumeBar;
+    const left = this.getLeft(this.volumeBar);
+    this.props.setVolume((this.computeLeftX(e.clientX, left, offsetWidth) / offsetWidth) * 100);
+  }
+
+  handleOnVolumeIconClick = (e) => {
+    e.preventDefault();
+    let flag;
+    if (this.props.video.muted) {
+      flag = false;
+    } else {
+      flag = true;
+    }
+    this.props.setMuted(flag);
+  }
+
   computeLeftX = (X, offsetLeft, offsetWidth) => {
     let leftX;
     if (X < offsetLeft) {
@@ -142,13 +220,20 @@ export default class Controller extends Component {
 
   render() {
     const { controls, playerAction, show, video } = this.props;
-    const { processMouseLeft, processMouseDispaly } = this.state;
+    const {
+      processMouseLeft,
+      processMouseDispaly,
+      dragProgress,
+      dragProgressWidth,
+      dragVolume,
+      dragVolumeWidth,
+    } = this.state;
     if (!controls) {
       return null;
     }
     const playHtml = '<use class="video-svg-play video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_play" /><use class="video-svg-pause video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_pause" />';
     const settingHtml = '<use class="" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_setting" />';
-    const volumeHtml = '<use class="video-svg-volume video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume" /><use class="video-svg-volume-damping video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume_damping" /><use class="video-svg-volume-mute video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume_damping" />';
+    const volumeHtml = '<use class="video-svg-volume video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume" /><use class="video-svg-volume-damping video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume_damping" /><use class="video-svg-volume-mute video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume_mute" />';
     const fullScreenHtml = '<use class="video-svg-fullscreen video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_fullscreen" /><use class="video-svg-fullscreen-true video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_fullscreen_true" />';
     let playStatus = '';
     if (playerAction === 1 || playerAction === 3) {
@@ -193,7 +278,7 @@ export default class Controller extends Component {
                 data-time={`${processMouseDispaly ? formatTime((processMouseLeft / this.processBar.offsetWidth) * video.duration) : 0}`}
                 style={{ left: `${processMouseLeft}px` }}
               />
-              <div className="video-process-play" style={{ width: `${this.state.dragProcess ? this.state.dragWidth : (video.currentTime / video.duration) * 100}%` }}>
+              <div className="video-process-play" style={{ width: `${dragProgress ? dragProgressWidth : (video.currentTime / video.duration) * 100}%` }}>
                 <button
                   className="video-process-scrubber-indicator"
                   onMouseDown={this.processScrubberMoveDown}
@@ -216,21 +301,45 @@ export default class Controller extends Component {
             <svg className="video-svg" version="1.1" viewBox="0 0 36 36" dangerouslySetInnerHTML={{ __html: playHtml }} />
           </button>
           <div className="video-control-item video-control-input">
-            <input className="video-danmuku-input" type="text" placeholder="发个弹幕吐槽吧..." />
+            <input
+              className="video-danmuku-input"
+              type="text"
+              placeholder="发个弹幕吐槽吧..."
+              onFocus={this.handleOnInputFocus}
+              onBlur={this.handleOnInputBlur}
+              onKeyPress={this.handleOnInputKeyPress}
+            />
           </div>
           <div className="video-control-bar-right">
             <div
               className="video-control-item video-btn-volume"
               aria-label="音量"
               data-status={volumeStatus}
+              onMouseMove={this.handleOnVolumeMouseMove}
+              onMouseLeave={this.setVolume}
+              onMouseUp={this.setVolume}
             >
-              <svg className="video-svg" version="1.1" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: volumeHtml }} />
-              <div className="video-btn-volume-bar">
+              <svg
+                className="video-svg"
+                version="1.1"
+                viewBox="0 0 24 24"
+                dangerouslySetInnerHTML={{ __html: volumeHtml }}
+                onClick={this.handleOnVolumeIconClick}
+              />
+              <div
+                className="video-btn-volume-bar"
+                ref={node => (this.volumeBar = node)}
+                onClick={this.handleOnVolumeBarClick}
+              >
                 <div
                   className="video-btn-volume-bar-level"
-                  style={{ width: `${video.volume * 100}%` }}
+                  style={{ width: `${dragVolume ? dragVolumeWidth : video.volume * 100}%` }}
                 >
-                  <button className="video-btn-volume-bar-indicator" />
+                  <button
+                    className="video-btn-volume-bar-indicator"
+                    onMouseDown={this.handleOnVolumeIndicatorMouseDown}
+                    onMouseUp={this.setVolume}
+                  />
                 </div>
               </div>
             </div>
