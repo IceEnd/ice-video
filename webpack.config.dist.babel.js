@@ -8,8 +8,29 @@ export default {
 
   output: {
     filename: 'ice-video.js',
+    library: 'ice-video',
+    libraryTarget: 'umd',
+    umdNamedDefine: true,
     path: path.join(__dirname, 'dist'),
   },
+  externals: [
+    {
+      react: {
+        root: 'React',
+        commonjs2: 'react',
+        commonjs: 'react',
+        amd: 'react',
+      },
+    },
+    {
+      'react-dom': {
+        root: 'ReactDOM',
+        commonjs2: 'react-dom',
+        commonjs: 'react-dom',
+        amd: 'react-dom',
+      },
+    },
+  ],
   module: {
     rules: [
       {
@@ -19,6 +40,9 @@ export default {
         include: __dirname,
       },
     ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -30,7 +54,4 @@ export default {
       },
     }),
   ],
-  resolve: {
-    extensions: ['.js', '.jsx'],
-  },
 };
