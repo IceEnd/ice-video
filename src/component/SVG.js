@@ -38,6 +38,50 @@ const SVG = () => (
       <path d="M30.5 25.5L35.9 20.5L32.5 20.5L32.5 15.5Q32.5 5.5, 22 5.5L10 5.5L11.5 7Q13 8.5, 14.5 8.5L19 8.5Q28.5 8.5, 28.5 18L28.5 20.5L25.1 20.5 Z" />
       <path d="M5.5 7.7L30.5 31.2L30.5 28.3L5.5 4.2Z" />
     </symbol>
+    <symbol id="video_loading" viewBox="0 0 44 44">
+      <g fill="none" fillRule="evenodd" strokeWidth="2">
+        <circle cx="22" cy="22" r="1">
+          <animate
+            attributeName="r"
+            begin="0s" dur="1.8s"
+            values="1; 20"
+            calcMode="spline"
+            keyTimes="0; 1"
+            keySplines="0.165, 0.84, 0.44, 1"
+            repeatCount="indefinite"
+          />
+          <animate
+            attributeName="stroke-opacity"
+            begin="0s" dur="1.8s"
+            values="1; 0"
+            calcMode="spline"
+            keyTimes="0; 1"
+            keySplines="0.3, 0.61, 0.355, 1"
+            repeatCount="indefinite"
+          />
+        </circle>
+        <circle cx="22" cy="22" r="1">
+          <animate
+            attributeName="r"
+            begin="-0.9s" dur="1.8s"
+            values="1; 20"
+            calcMode="spline"
+            keyTimes="0; 1"
+            keySplines="0.165, 0.84, 0.44, 1"
+            repeatCount="indefinite"
+          />
+          <animate
+            attributeName="stroke-opacity"
+            begin="-0.9s" dur="1.8s"
+            values="1; 0"
+            calcMode="spline"
+            keyTimes="0; 1"
+            keySplines="0.3, 0.61, 0.355, 1"
+            repeatCount="indefinite"
+          />
+        </circle>
+      </g>
+    </symbol>
     <symbol id="loading_start" viewBox="0 0 135 140" width="135" height="140">
       <rect y="10" width="15" height="120" rx="6">
         <animate

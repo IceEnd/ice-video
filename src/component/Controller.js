@@ -77,8 +77,9 @@ export default class Controller extends Component {
 
   processMouseMove = (e) => {
     e.preventDefault();
-    const { offsetLeft, offsetWidth } = this.processBar;
-    const leftX = this.computeLeftX(e.clientX, offsetLeft, offsetWidth);
+    const { offsetWidth } = this.processBar;
+    const left = this.getLeft(this.processBar);
+    const leftX = this.computeLeftX(e.clientX, left, offsetWidth);
     this.setState({
       processMouseLeft: leftX,
       processMouseDispaly: true,
@@ -119,11 +120,12 @@ export default class Controller extends Component {
 
   processScrubberMoveDown = (e) => {
     e.preventDefault();
-    const { offsetLeft, offsetWidth } = this.processBar;
+    const { offsetWidth } = this.processBar;
+    const left = this.getLeft(this.processBar);
     this.setState({
       dragProgress: true,
       dragProgressWidth:
-        (this.computeLeftX(e.clientX, offsetLeft, offsetWidth) / offsetWidth) * 100,
+        (this.computeLeftX(e.clientX, left, offsetWidth) / offsetWidth) * 100,
     });
   }
 
@@ -139,8 +141,9 @@ export default class Controller extends Component {
   processBarClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const { offsetLeft, offsetWidth } = this.processBar;
-    const time = (this.computeLeftX(e.clientX, offsetLeft, offsetWidth) / offsetWidth)
+    const { offsetWidth } = this.processBar;
+    const left = this.getLeft(this.processBar);
+    const time = (this.computeLeftX(e.clientX, left, offsetWidth) / offsetWidth)
     * this.props.video.duration;
     this.props.setCurrentTime(time);
   }
@@ -219,14 +222,14 @@ export default class Controller extends Component {
     this.props.setLoop(flag);
   }
 
-  computeLeftX = (X, offsetLeft, offsetWidth) => {
+  computeLeftX = (X, left, width) => {
     let leftX;
-    if (X < offsetLeft) {
+    if (X < left) {
       leftX = 0;
-    } else if (X > offsetLeft + offsetWidth) {
-      leftX = offsetWidth;
+    } else if (X > left + width) {
+      leftX = width;
     } else {
-      leftX = X - offsetLeft;
+      leftX = X - left;
     }
     return leftX;
   }

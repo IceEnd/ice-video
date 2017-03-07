@@ -332,6 +332,7 @@ export default class IcePlayer extends Component {
       setMuted: this.setMuted,
       setLoop: this.setLoop,
     };
+    const loadingHtml = '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_loading" />';
     return (
       <div
         className="player-container video-react-container"
@@ -340,6 +341,7 @@ export default class IcePlayer extends Component {
         {this.renderStart()}
         {this.renderPlay()}
         <div style={{ display: `${this.state.playerStatus === -1 ? 'block' : 'none'}` }}>Error</div>
+        <svg className="video-loading-svg" style={{ display: `${this.state.playerAction === 3 ? 'block' : 'none'}` }} version="1.1" viewBox="0 0 44 44" stroke="#82bb53" dangerouslySetInnerHTML={{ __html: loadingHtml }} />
         <Video
           key="video"
           {...video}

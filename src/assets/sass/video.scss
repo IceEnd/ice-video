@@ -83,6 +83,17 @@ html, body {
 		-moz-user-select: none;
 		-ms-user-select: none;
 
+		.video-loading-svg {
+			width: 64px;
+			height: 54px;
+			position: absolute;
+			z-index: 998;
+			top: 50%;
+			left: 50%;
+			margin-top: -32px;
+			margin-left: -32px;
+		}
+
 		&:hover {
 			.play-button {
 				background-color: #2b333f;
