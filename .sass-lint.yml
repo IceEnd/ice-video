@@ -1,7 +1,9 @@
 options:
   merge-default-rules: false
 files:
-  include: 'src/assets/**/*.scss'
+  include:
+    - 'src/assets/**/*.scss'
+    - 'test/example.scss'
 rules:
   # Extends
   extends-before-declarations: 2

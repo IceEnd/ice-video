@@ -1,0 +1,95 @@
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	font-family: "Hiragino Sans GB W3", "Hiragino Sans GB", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "SimHei", "ST Heiti", "WenQuanYi Zen Hei Sharp", "Sans";
+	outline: none;
+};
+
+a {
+	text-decoration: none;
+	&:visited {
+		color: #232425;
+  }
+	&:hover {
+		color: #070809;
+  }
+}
+
+i {
+	font-style: normal;
+}
+
+ul, ol, li {
+	list-style-type: none;
+}
+
+input, input:invalid , textarea, textarea:invalid {
+	border-color: #b2e5d5;
+	background: none;
+}
+
+input:hover, textarea:hover, input:focus, textarea:focus, textarea:focus, input[type="submit"]:hover, input[type="reset"]:hover {
+	background: rgba(211, 233, 211, 0.2);
+}
+
+input:active, textarea:active, input[type="submit"], input[type="reset"] {
+	background: rgba(211, 233, 211, 0.4);
+}
+
+input[type="submit"]:active, input[type="reset"]:active {
+	background: rgba(211, 233, 211, 0.9);
+}
+
+*:after, *:before {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.clearfix {
+	clear: both;
+}
+
+html, body {
+	box-sizing: border-box;
+	width: 100%;
+	height: auto;
+}
+
+.jumbotron-header, .palyer-container {
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+	background-color: #fff;
+	max-width: 978px;
+	width: 75%;
+	padding: 1rem;
+	margin: 1rem auto;
+
+	.container {
+		position: relative;
+		margin-left: auto;
+		margin-right: auto;
+		max-width: 1078px;
+
+		.title {
+			font-weight: 300;
+			font-size: 3.5rem;
+			line-height: 1.1;
+		}
+
+		.lead {
+			font-size: 1.25rem;
+			font-weight: 300;
+		}
+	}
+}
+
+.text-center {
+	text-align: center !important;
+}
+
+.mb-3 {
+	margin-bottom: 1rem !important;
+}
