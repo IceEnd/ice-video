@@ -18,6 +18,7 @@ export default class Controller extends Component {
       bufferedTime: PropTypes.number.isRequired,
       volume: PropTypes.number.isRequired,
       muted: PropTypes.bool.isRequired,
+      loop: PropTypes.bool.isRequired,
     }),
 
     handlePause: PropTypes.func.isRequired,
@@ -28,6 +29,7 @@ export default class Controller extends Component {
     hideControls: PropTypes.func.isRequired,
     setVolume: PropTypes.func.isRequired,
     setMuted: PropTypes.func.isRequired,
+    setLoop: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -206,6 +208,17 @@ export default class Controller extends Component {
     this.props.setMuted(flag);
   }
 
+  handleOnRepeatClick = (e) => {
+    e.preventDefault();
+    let flag;
+    if (this.props.video.loop) {
+      flag = false;
+    } else {
+      flag = true;
+    }
+    this.props.setLoop(flag);
+  }
+
   computeLeftX = (X, offsetLeft, offsetWidth) => {
     let leftX;
     if (X < offsetLeft) {
@@ -235,6 +248,7 @@ export default class Controller extends Component {
     const settingHtml = '<use class="" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_setting" />';
     const volumeHtml = '<use class="video-svg-volume video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume" /><use class="video-svg-volume-damping video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume_damping" /><use class="video-svg-volume-mute video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_volume_mute" />';
     const fullScreenHtml = '<use class="video-svg-fullscreen video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_fullscreen" /><use class="video-svg-fullscreen-true video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_fullscreen_true" />';
+    const repeatHtml = '<use class="video-svg-repeat-true video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_repeat_true" /><use class="video-svg-repeat-false video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_repeat_false" />';
     let playStatus = '';
     if (playerAction === 1 || playerAction === 3) {
       playStatus = 'pause';
@@ -348,7 +362,16 @@ export default class Controller extends Component {
               aria-label="设置"
               data-status={playStatus}
             >
-              <svg className="video-svg" version="1.1" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: settingHtml }} />
+              <svg className="video-svg" version="1.1" viewBox="0 0 36 36" dangerouslySetInnerHTML={{ __html: settingHtml }} />
+            </button>
+            <button
+              className="video-control-item video-btn-repeat"
+              aria-label="循环"
+              data-status={video.loop}
+              data-msg={`${video.loop ? '关闭循环' : '洗脑循环'}`}
+              onClick={this.handleOnRepeatClick}
+            >
+              <svg className="video-svg" version="1.1" viweBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: repeatHtml }} />
             </button>
             <button
               className="video-control-item video-btn-fullscreen"

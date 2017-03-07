@@ -12,10 +12,12 @@ export default class Video extends Component {
     poster: PropTypes.string,
     playerAction: PropTypes.number,
     volumeAction: PropTypes.number,
+    loopAction: PropTypes.number,
     timing: PropTypes.number,
     video: PropTypes.shape({
       volume: PropTypes.number,
       muted: PropTypes.bool,
+      loop: PropTypes.bool,
     }),
     // loading: PropTypes.bool,
 
@@ -28,6 +30,8 @@ export default class Video extends Component {
     getBuffered: PropTypes.func.isRequired,
     setCurrentTimeComplete: PropTypes.func.isRequired,
     setVolumeComplete: PropTypes.func.isRequired,
+    setLoopComplete: PropTypes.func.isRequired,
+    handleOnEneded: PropTypes.func.handleOnEneded,
     // handleOnWaiting: PropTypes.func.isRequired,
   };
 
@@ -100,6 +104,12 @@ export default class Video extends Component {
     return end;
   }
 
+  handleOnEnded = () => {
+    if (!this.props.video.loop) {
+      this.props.handleOnEneded();
+    }
+  }
+
   startBufferedTimer = () => {
     if (this.bufferedTimer) {
       return;
@@ -137,7 +147,7 @@ export default class Video extends Component {
   }
 
   videoControll = () => {
-    const { playerAction, volumeAction, timing } = this.props;
+    const { playerAction, volumeAction, loopAction, video, timing } = this.props;
     if (playerAction === 1) {
       this.video.play();
       this.startCurrentTimer();
@@ -148,20 +158,23 @@ export default class Video extends Component {
       this.video.currentTime = timing;
       this.props.setCurrentTimeComplete();
     }
-    const { volume, muted } = this.props.video;
     switch (volumeAction) {
       case 0:
         break;
       case 1:
-        this.video.volume = volume;
+        this.video.volume = video.volume;
         this.props.setVolumeComplete();
         break;
       case 2:
-        this.video.muted = muted;
+        this.video.muted = video.muted;
         this.props.setVolumeComplete();
         break;
       default:
         break;
+    }
+    if (loopAction === 1) {
+      this.video.loop = video.loop;
+      this.props.setLoopComplete();
     }
   }
 
@@ -183,6 +196,7 @@ export default class Video extends Component {
         onWaiting={this.onWaiting}
         onProgress={this.onProgress}
         onPlay={this.onPlay}
+        onEnded={this.handleOnEnded}
       >
         {this.props.children}
         Your browser does not support the video.

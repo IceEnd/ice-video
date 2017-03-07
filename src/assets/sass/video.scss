@@ -348,7 +348,7 @@ html, body {
 
 				.video-control-input {
 					// flex: auto;
-					flex: 10;
+					flex: 7;
 					position: relative;
 					text-align: left;
 
@@ -382,7 +382,7 @@ html, body {
 
 				.video-control-bar-right {
 					// flex: auto;
-					flex: 2;
+					flex: 4;
 					// float: right;
 					position: relative;
 					height: 100%;
@@ -392,14 +392,13 @@ html, body {
 					justify-content: flex-end;
 					align-items: center;
 					box-sizing: border-box;
-					max-width: 200px;
+					max-width: 236px;
 
-					.video-btn-volume, .video-btn-setting, .video-btn-fullscreen {
+					.video-btn-volume, .video-btn-setting, .video-btn-repeat, .video-btn-fullscreen {
 						text-align: center;
 						align-items: center;
 						margin: 0 .5em;
 						height: 100%;
-						overflow: hidden;
 						cursor: pointer;
 
 						.video-svg {
@@ -517,21 +516,63 @@ html, body {
 							.video-svg-fullscreen {
 								visibility: visible;
 								opacity: 1;
-						 }
-					 }
+						 	}
+					 	}
 						&[data-status="true"] {
 							.video-svg-fullscreen-true {
 								visibility: visible;
 								opacity: 1;
-						 }
-					 }
+						 	}
+					 	}
 						&:hover {
 							.video-svg {
 								fill: #ff8e00;
 								animation: video_svg_scale 0.4s ease both;
-						 }
-					 }
-				 }
+						 	}
+					 	}
+				 	}
+
+					.video-btn-repeat {
+						position: relative;
+						transition: all linear 0.2s;
+						-webkit-transition: all linear 0.2s;
+						-ms-transition: all linear 0.2s;
+						&[data-status="false"] {
+							.video-svg-repeat-false {
+								visibility: visible;
+								opacity: 1;
+							}
+						}
+						&[data-status="true"] {
+							.video-svg-repeat-true {
+								visibility: visible;
+								opacity: 1;
+							}
+						}
+						&::before {
+							position: absolute;
+							width: 4em;
+							content: attr(data-msg);
+							font-size: 0.5em;
+							top: -3em;
+							left: -1em;
+							color: #ffffff;
+							visibility: hidden;;
+							opacity: 0;
+							transition: all linear 0.2s;
+							-webkit-transition: all linear 0.2s;
+							-ms-transition: all linear 0.2s;
+						}
+						&:hover {
+							.video-svg {
+								fill: #ff8e00;
+							}
+							&::before {
+								visibility: visible;
+								opacity: 1;
+							}
+						}
+					}
 				}
 			}
 		}
