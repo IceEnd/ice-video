@@ -17,8 +17,8 @@ const render = () => {
     preload: 'auto',
     poster: '',
     volume: 0.2,
-    getBarrageUrl: '',
-    postBarrageUrl: '',
+    getdanmukuUrl: 'http://127.0.0.1:3000/danmuku',
+    postdanmukuUrl: 'http://127.0.0.1:3000/senddanmu',
     controls: true,
     scale: '16:9',
   };

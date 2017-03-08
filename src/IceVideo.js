@@ -44,14 +44,7 @@ export default class IcePlayer extends Component {
         danmuku: 0,
         controller: 0,
       },
-      /**
-      *    -1:  加载失败
-      *    0:   加载中
-      *    1:   加载完成
-      *    2:   运行中
-      *    3:   运行完毕
-      */
-      playerStatus: 0,
+      playerStatus: 0,       // -1:  加载失败 0: 加载中 1: 加载完成 2: 运行中 3: 播放完毕
       playerAction: 0,       // 0: 等待  1: 播放 2: 暂停  3: 拖放前进 4: 播放完毕
       volumeAction: 0,       // 0: 无指令 1: 调整 2: 静音/取消静音
       loopAction: 0,         // 0: 无指令 1: 调整
