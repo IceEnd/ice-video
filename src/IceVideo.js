@@ -1,3 +1,4 @@
+import 'isomorphic-fetch';
 import React, { Component, PropTypes } from 'react';
 import SVG from './component/SVG';
 import Video from './component/Video';
@@ -19,7 +20,7 @@ export default class IcePlayer extends Component {
     volume: PropTypes.number,
     poster: PropTypes.string,
 
-    // getdanmukuUrl: PropTypes.string.isRequired,
+    getDanmukuUrl: PropTypes.string.isRequired,
     // postdanmukuUrl: PropTypes.string.isRequired,
     controls: PropTypes.bool,
     scale: PropTypes.string,
@@ -51,6 +52,7 @@ export default class IcePlayer extends Component {
       controllerShow: false,
       userActivity: true,
       loading: false,
+      danmuku: [],
       video: {
         playTimes: 0,             // 播放次数
         duration: 0,              // 时长
@@ -171,22 +173,7 @@ export default class IcePlayer extends Component {
       this.setState({
         startStatus: Object.assign(this.state.startStatus, { video: 2, danmuku: 1 }),
       });
-      setTimeout(() => {
-        this.setState({
-          startStatus: Object.assign(this.state.startStatus, { danmuku: 2, controller: 1 }),
-        });
-      }, 500);
-      setTimeout(() => {
-        this.setState({
-          startStatus: Object.assign(this.state.startStatus, { controller: 2 }),
-        });
-      }, 1000);
-      setTimeout(() => {
-        this.setState({
-          playerStatus: this.state.startStatus.video === 2 ? 1 : -1,
-          showStart: false,
-        });
-      }, 1500);
+      this.fetchDanmuku();
     }
   }
 
@@ -234,6 +221,55 @@ export default class IcePlayer extends Component {
 
   handleOnMouseMove = () => {
     this.startControlsTimer();
+  }
+
+  fetchDanmuku = () => {
+    fetch(this.props.getDanmukuUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => {
+      if (!response.ok) {
+        return Promise.reject({
+          retCode: -1,
+          retMsg: '弹幕加载失败',
+        });
+      }
+      return response.json();
+    }).then((res) => {
+      if (res.retCode === 0) {
+        this.setState({
+          startStatus: Object.assign(this.state.startStatus, { danmuku: 2, controller: 1 }),
+          danmuku: res.retData.danmuku,
+        });
+      } else {
+        this.setState({
+          startStatus: Object.assign(this.state.startStatus, { danmuku: 3, controller: 1 }),
+        });
+      }
+      this.loadDanmuku();
+    }).catch((error) => {
+      console.error(error);
+      this.setState({
+        startStatus: Object.assign(this.state.startStatus, { danmuku: 3, controller: 1 }),
+      });
+      this.loadDanmuku();
+    });
+  }
+
+  loadDanmuku = () => {
+    setTimeout(() => {
+      this.setState({
+        startStatus: Object.assign(this.state.startStatus, { controller: 2 }),
+      });
+    }, 500);
+    setTimeout(() => {
+      this.setState({
+        playerStatus: this.state.startStatus.video === 2 ? 1 : -1,
+        showStart: false,
+      });
+    }, 1000);
   }
 
   showControls = () => {

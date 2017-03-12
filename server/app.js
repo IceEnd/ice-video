@@ -4,13 +4,14 @@ import bodyParser from 'koa-bodyparser';
 import logger from 'koa-logger';
 import mongo from 'koa-mongo';
 import convert from 'koa-convert';
+import cors from 'koa-cors';
 import Router from 'koa-router';
 
 const app = new Koa();
 const router = new Router();
 
 app.use(convert(logger()));
-
+app.use(convert(cors()));
 app.use(convert(bodyParser()));
 
 app.use(convert(mongo({

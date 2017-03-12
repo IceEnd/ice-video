@@ -361,18 +361,18 @@ html, body {
 					// flex: auto;
 					flex: 7;
 					position: relative;
-					text-align: left;
+					text-align: center;
 
 					.video-danmuku-input {
 						width: 90%;
-						max-width: 500px;
+						// max-width: 500px;
 						min-width: 150px;
 						box-sizing: border-box;
 						height: 24px;
 						margin-top: 4px;
 						box-sizing: border-box;
 						padding: 0.1em 1em;
-						background: rgba(212, 212, 212, 0.5);
+						background: rgba(183, 183, 183, 0.6);
 						border-radius: 5px;
 						color: #fff;
 

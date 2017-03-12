@@ -17,8 +17,8 @@ const render = () => {
     preload: 'auto',
     poster: '',
     volume: 0.2,
-    getdanmukuUrl: 'http://127.0.0.1:3000/danmuku',
-    postdanmukuUrl: 'http://127.0.0.1:3000/senddanmu',
+    getDanmukuUrl: 'http://127.0.0.1:3001/danmuku',
+    postDanmukuUrl: 'http://127.0.0.1:3001/senddanmu',
     controls: true,
     scale: '16:9',
   };
