@@ -21,8 +21,8 @@ export default class Controller extends Component {
       loop: PropTypes.bool.isRequired,
     }),
 
-    handlePause: PropTypes.func.isRequired,
-    handlePlay: PropTypes.func.isRequired,
+    handleOnPause: PropTypes.func.isRequired,
+    handleOnPlay: PropTypes.func.isRequired,
     startControlsTimer: PropTypes.func.isRequired,
     setCurrentTime: PropTypes.func.isRequired,
     showControls: PropTypes.func.isRequired,
@@ -65,13 +65,13 @@ export default class Controller extends Component {
     }
   }
 
-  handlePlayIcon = () => {
+  handleOnPlayIcon = () => {
     const { playerAction, startControlsTimer } = this.props;
     startControlsTimer();
     if (playerAction === 1) {            // 点击暂停
-      this.props.handlePause();
+      this.props.handleOnPause();
     } else {                             // 点击播放
-      this.props.handlePlay(false);
+      this.props.handleOnPlay(false);
     }
   }
 
@@ -313,7 +313,7 @@ export default class Controller extends Component {
             className="video-control-item video-btn-play"
             data-status={playStatus}
             aria-label="播放/暂停"
-            onClick={this.handlePlayIcon}
+            onClick={this.handleOnPlayIcon}
           >
             <svg className="video-svg" version="1.1" viewBox="0 0 36 36" dangerouslySetInnerHTML={{ __html: playHtml }} />
           </button>
@@ -322,6 +322,7 @@ export default class Controller extends Component {
               className="video-danmuku-input"
               type="text"
               placeholder="发个弹幕吐槽吧..."
+              ref={node => (this.input = node)}
               onFocus={this.handleOnInputFocus}
               onBlur={this.handleOnInputBlur}
               onKeyPress={this.handleOnInputKeyPress}

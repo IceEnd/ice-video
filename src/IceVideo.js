@@ -24,6 +24,7 @@ export default class IcePlayer extends Component {
     // postdanmukuUrl: PropTypes.string.isRequired,
     controls: PropTypes.bool,
     scale: PropTypes.string,
+    src: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -47,8 +48,6 @@ export default class IcePlayer extends Component {
       },
       playerStatus: 0,       // -1:  加载失败 0: 加载中 1: 加载完成 2: 运行中 3: 播放完毕
       playerAction: 0,       // 0: 等待  1: 播放 2: 暂停  3: 拖放前进 4: 播放完毕
-      volumeAction: 0,       // 0: 无指令 1: 调整 2: 静音/取消静音
-      loopAction: 0,         // 0: 无指令 1: 调整
       controllerShow: false,
       userActivity: true,
       loading: false,
@@ -64,6 +63,16 @@ export default class IcePlayer extends Component {
         loop: this.props.loop,  // 是否洗脑循环
       },
     };
+  }
+
+  componentDidMount() {
+    this.video.setVolume(this.props.volume);
+    this.startBufferedTimer();
+  }
+
+  componentWillUnmount() {
+    this.clearBufferedTimer();
+    this.clearCurrentTimer();
   }
 
   getStyle = () => {
@@ -98,54 +107,80 @@ export default class IcePlayer extends Component {
       playerAction: 3,
       video: Object.assign(this.state.video, { currentTime: time }),
     });
-  }
-
-  setCurrentTimeComplete = () => {
+    this.video.setCurrentTime(time);
     this.setState({
       playerAction: 1,
-      video: Object.assign(this.state.video, { locationTime: false }),
     });
   }
 
   setVolume = (num) => {
     this.setState({
-      volumeAction: 1,
       video: Object.assign(this.state.video, { volume: num / 100 }),
     });
+    this.video.setVolume(num / 100);
   }
 
   setMuted = (noOff) => {
     this.setState({
-      volumeAction: 2,
       video: Object.assign(this.state.video, { muted: noOff }),
     });
-  }
-
-  setVolumeComplete = () => {
-    this.setState({ volumeAction: 0 });
+    this.video.setMuted(noOff);
   }
 
   setLoop = (noOff) => {
     this.setState({
-      loopAction: 1,
       video: Object.assign(this.state.video, { loop: noOff }),
     });
+    this.video.setLoop(noOff);
   }
 
-  setLoopComplete = () => {
-    this.setState({ loopAction: 0 });
-  }
-
-  getBuffered = (time) => {
+  getBuffered = () => {
     this.setState({
-      video: Object.assign(this.state.video, { bufferedTime: time }),
+      video: Object.assign(this.state.video, { bufferedTime: this.video.getBufferedEnd() }),
     });
+  }
+
+  startBufferedTimer = () => {
+    if (this.bufferedTimer) {
+      return;
+    }
+    this.bufferedTimer = setInterval(() => {
+      const buffered = this.video.getBuffered();
+      this.setState({
+        video: Object.assign(this.state.video, { bufferedTime: buffered }),
+      });
+      if (buffered >= this.state.video.duration) {
+        this.clearBufferedTimer();
+      }
+    }, 1000);
+  }
+
+  clearBufferedTimer = () => {
+    clearInterval(this.bufferedTimer);
+    this.bufferedTimer = null;
+  }
+
+  startCurrentTimer = () => {
+    if (this.currentTimer) {
+      return;
+    }
+    this.currentTimer = setInterval(() => {
+      this.setState({
+        video: Object.assign(this.state.video, { currentTime: this.video.getCurrentTime() }),
+      });
+    }, 1000);
+  }
+
+  clearCurrentTimer = () => {
+    clearInterval(this.currentTimer);
+    this.currentTimer = null;
   }
 
   handleOnLoadStart = () => {
     if (this.state.video.playTimes === 0) {
       this.setState({
         playerStatus: 0,
+        startStatus: Object.assign(this.state.startStatus, { video: 1 }),
       });
     } else {
       this.setState({
@@ -201,7 +236,7 @@ export default class IcePlayer extends Component {
   handleControlSucess = () => {
   }
 
-  handlePlay = (start) => {
+  handleOnPlay = (start) => {
     const { video } = this.state;
     if (start) {
       this.setState({
@@ -209,14 +244,19 @@ export default class IcePlayer extends Component {
         playerStatus: 2,
         playerAction: 1,
         controllerShow: true,
+        loading: false,
       });
     } else {
-      this.setState({ playerAction: 1 });
+      this.setState({ playerAction: 1, loading: false });
     }
+    this.video.play();
+    this.startCurrentTimer();
   }
 
-  handlePause = () => {
+  handleOnPause = () => {
     this.setState({ playerAction: 2 });
+    this.video.pause();
+    this.clearCurrentTimer();
   }
 
   handleOnMouseMove = () => {
@@ -272,6 +312,8 @@ export default class IcePlayer extends Component {
     }, 1000);
   }
 
+  sendDanmu = () => {}
+
   showControls = () => {
     clearTimeout(this.controlsHideTimer);
     this.setState({
@@ -312,7 +354,7 @@ export default class IcePlayer extends Component {
     }
     const svgHtml = '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#play_icon" />';
     return (
-      <button className="play-button" onClick={() => this.handlePlay(true)} >
+      <button className="play-button" onClick={() => this.handleOnPlay(true)} >
         <svg className="play-svg" version="1.1" fill="white" dangerouslySetInnerHTML={{ __html: svgHtml }} />
       </button>
     );
@@ -323,15 +365,8 @@ export default class IcePlayer extends Component {
       loop: this.props.loop,
       autoPlay: this.props.autoPlay,
       preload: this.props.preload,
-      volume: this.state.video.volume,
       poster: this.props.poster,
-      playerAction: this.state.playerAction,
-      volumeAction: this.state.volumeAction,
-      loopAction: this.state.loopAction,
-      palyTimes: this.state.video.playTimes,
-      timing: this.state.video.currentTime,
-      loading: this.state.loading,
-      video: this.state.video,
+      src: this.props.src,
     };
     const videoFunc = {
       handleOnLoadStart: this.handleOnLoadStart,
@@ -339,17 +374,12 @@ export default class IcePlayer extends Component {
       handleOnLoadedData: this.handleOnLoadedData,
       handleOnCanPaly: this.handleOnCanPaly,
       handleOnError: this.handleOnError,
-      getCurrentTime: this.getCurrentTime,
-      getBuffered: this.getBuffered,
-      setCurrentTimeComplete: this.setCurrentTimeComplete,
       handleOnWaiting: this.handleOnWaiting,
-      setVolumeComplete: this.setVolumeComplete,
-      setLoopComplete: this.setLoopComplete,
       handleOnEneded: this.handleOnEneded,
     };
     const controllerFunc = {
-      handlePause: this.handlePause,
-      handlePlay: this.handlePlay,
+      handleOnPause: this.handleOnPause,
+      handleOnPlay: this.handleOnPlay,
       startControlsTimer: this.startControlsTimer,
       handleProcess: this.handleProcess,
       handleStopProcess: this.handleStopProcess,
@@ -370,11 +400,12 @@ export default class IcePlayer extends Component {
         {this.renderStart()}
         {this.renderPlay()}
         <div style={{ display: `${this.state.playerStatus === -1 ? 'block' : 'none'}` }}>Error</div>
-        <svg className="video-loading-svg" style={{ display: `${this.state.playerAction === 3 ? 'block' : 'none'}` }} version="1.1" viewBox="0 0 44 44" stroke="#82bb53" dangerouslySetInnerHTML={{ __html: loadingHtml }} />
+        <svg className="video-loading-svg" style={{ display: `${this.state.loading ? 'block' : 'none'}` }} version="1.1" viewBox="0 0 44 44" stroke="#d09500" dangerouslySetInnerHTML={{ __html: loadingHtml }} />
         <Video
           key="video"
           {...video}
           {...videoFunc}
+          ref={node => (this.video = node)}
         >
           {this.props.children}
         </Video>

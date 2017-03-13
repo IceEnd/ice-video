@@ -21,6 +21,8 @@ const render = () => {
     postDanmukuUrl: 'http://127.0.0.1:3001/senddanmu',
     controls: true,
     scale: '16:9',
+    src: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4',
+    // src: './video.mp4',
   };
   ReactDOM.render(
     <div>
@@ -31,9 +33,7 @@ const render = () => {
         </div>
       </section>
       <div className="palyer-container">
-        <IceVideo {...settings} >
-          <source src="/video.mp4" />
-        </IceVideo>
+        <IceVideo {...settings} />
       </div>
     </div>,
     document.querySelector('#root')
