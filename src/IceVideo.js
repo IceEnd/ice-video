@@ -21,7 +21,7 @@ export default class IcePlayer extends Component {
     poster: PropTypes.string,
 
     getDanmukuUrl: PropTypes.string.isRequired,
-    // postdanmukuUrl: PropTypes.string.isRequired,
+    sendDanmukuUrl: PropTypes.string.isRequired,
     controls: PropTypes.bool,
     scale: PropTypes.string,
     src: PropTypes.string.isRequired,
@@ -298,6 +298,40 @@ export default class IcePlayer extends Component {
     });
   }
 
+  sendDanmu = (msg) => {
+    const danmu = {
+      content: msg,
+      date: new Date(),
+      timePoint: Math.floor(this.state.video.currentTime),
+    };
+    fetch(this.props.sendDanmukuUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(danmu),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return Promise.reject({
+            retCode: -1,
+            retMsg: '弹幕发送失败',
+          });
+        }
+        return response.json();
+      })
+      .then((res) => {
+        if (res.retCode === 0) {
+          console.warn('send success');
+        } else {
+          console.warn(res.retMsg);
+        }
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  }
+
   loadDanmuku = () => {
     setTimeout(() => {
       this.setState({
@@ -311,8 +345,6 @@ export default class IcePlayer extends Component {
       });
     }, 1000);
   }
-
-  sendDanmu = () => {}
 
   showControls = () => {
     clearTimeout(this.controlsHideTimer);
@@ -390,6 +422,7 @@ export default class IcePlayer extends Component {
       setVolume: this.setVolume,
       setMuted: this.setMuted,
       setLoop: this.setLoop,
+      sendDanmu: this.sendDanmu,
     };
     const loadingHtml = '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_loading" />';
     return (

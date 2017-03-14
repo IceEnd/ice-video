@@ -30,6 +30,7 @@ export default class Controller extends Component {
     setVolume: PropTypes.func.isRequired,
     setMuted: PropTypes.func.isRequired,
     setLoop: PropTypes.func.isRequired,
+    sendDanmu: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -166,8 +167,13 @@ export default class Controller extends Component {
     this.props.hideControls();
   }
 
-  handleOnInputKeyPress = () => {
+  handleOnInputKeyUp = (event) => {
     this.props.showControls();
+    if (event.keyCode === 13) {
+      console.warn(event.keyCode);
+      this.props.sendDanmu(this.input.value);
+      this.input.value = '';
+    }
   }
 
   handleOnVolumeIndicatorMouseDown = (e) => {
@@ -325,7 +331,7 @@ export default class Controller extends Component {
               ref={node => (this.input = node)}
               onFocus={this.handleOnInputFocus}
               onBlur={this.handleOnInputBlur}
-              onKeyPress={this.handleOnInputKeyPress}
+              onKeyUp={this.handleOnInputKeyUp}
             />
           </div>
           <div className="video-control-bar-right">

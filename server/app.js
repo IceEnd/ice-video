@@ -47,7 +47,7 @@ router.post('/danmuku', function* () {
 });
 
 router.post('/senddanmu', function* () {
-  const danmu = this.request.body.danmu;
+  const danmu = this.request.body;
   const result = {
     retCode: 0,
     retMsg: '',

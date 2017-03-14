@@ -595,27 +595,27 @@ html, body {
 	}
 }
 
-// .player-user-inactivity {
-// 	.video-control-main {
-// 		visibility: visible;
-// 		opacity: 0;
-// 		-webkit-transition: visibility 1s, opacity 1s;
-// 		-moz-transition: visibility 1s, opacity 1s;
-// 		-o-transition: visibility 1s, opacity 1s;
-// 		transition: visibility 1s, opacity 1s;
-// 	}
-// }
+.player-user-inactivity {
+	.video-control-main {
+		visibility: visible;
+		opacity: 0;
+		-webkit-transition: visibility 1s, opacity 1s;
+		-moz-transition: visibility 1s, opacity 1s;
+		-o-transition: visibility 1s, opacity 1s;
+		transition: visibility 1s, opacity 1s;
+	}
+}
 
-// .player-user-activity {
-// 	.video-control-main {
-// 		visibility: visible;
-// 		opacity: 1;
-// 		-webkit-transition: visibility 0.1s, opacity 0.1s;
-// 		-moz-transition: visibility 0.1s, opacity 0.1s;
-// 		-o-transition: visibility 0.1s, opacity 0.1s;
-// 		transition: visibility 0.1s, opacity 0.1s;
-// 	}
-// }
+.player-user-activity {
+	.video-control-main {
+		visibility: visible;
+		opacity: 1;
+		-webkit-transition: visibility 0.1s, opacity 0.1s;
+		-moz-transition: visibility 0.1s, opacity 0.1s;
+		-o-transition: visibility 0.1s, opacity 0.1s;
+		transition: visibility 0.1s, opacity 0.1s;
+	}
+}
 
 @keyframes video_svg_rotate {
 	0% {
