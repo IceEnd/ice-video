@@ -73,6 +73,7 @@ export default {
       },
     ],
   },
+  devtool: 'eval-source-map',
   resolve: {
     extensions: ['.js', '.jsx'],
   },

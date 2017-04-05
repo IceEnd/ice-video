@@ -16,3 +16,4 @@ rules:
   "import/no-extraneous-dependencies": ["error", { "devDependencies": ["server/*.js", "webpack.*.js", "gulpfile.babel.js"] }]
   "no-console": ["error", { allow: ["warn", "error"] }]
   "func-names": ["error", "never"]
+  "no-param-reassign": ["error", { "props": false }]

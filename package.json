@@ -4,9 +4,9 @@
   "description": "React component, a danmuku video player package.",
   "main": "./lib/index.js",
   "scripts": {
-    "start": "concurrently --raw --kill-others \"webpack-dev-server --port 3000\"",
-    "server": "concurrently \"babel-node ./server/app.js\"",
-    "dev": "concurrently \"babel-watch ./server/app.js\"",
+    "start": "webpack-dev-server --colors --progress --inline --no-info",
+    "server": "babel-node ./server/app.js",
+    "dev": "babel-watch ./server/app.js",
     "prepublish": "cross-env NODE_ENV=production gulp && babel ./src --out-dir ./lib",
     "lint": "concurrently \"eslint src server\" \"sass-lint -v -q\"",
     "test": "echo \"Error: no test specified\" && exit 1"

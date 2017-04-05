@@ -4,6 +4,7 @@ import SVG from './component/SVG';
 import Video from './component/Video';
 import Start from './component/Start';
 import Controller from './component/Controller';
+import Danmuku from './component/Danmuku';
 
 export default class IcePlayer extends Component {
   static displayName = 'IceVideo';
@@ -302,7 +303,7 @@ export default class IcePlayer extends Component {
     const danmu = {
       content: msg,
       date: new Date(),
-      timePoint: Math.floor(this.state.video.currentTime),
+      timePoint: this.state.video.currentTime,
     };
     fetch(this.props.sendDanmukuUrl, {
       method: 'POST',
@@ -434,6 +435,11 @@ export default class IcePlayer extends Component {
         {this.renderPlay()}
         <div style={{ display: `${this.state.playerStatus === -1 ? 'block' : 'none'}` }}>Error</div>
         <svg className="video-loading-svg" style={{ display: `${this.state.loading ? 'block' : 'none'}` }} version="1.1" viewBox="0 0 44 44" stroke="#d09500" dangerouslySetInnerHTML={{ __html: loadingHtml }} />
+        <Danmuku
+          danmuku={this.state.danmuku}
+          playerAction={this.state.playerAction}
+          currentTime={this.state.video.currentTime}
+        />
         <Video
           key="video"
           {...video}
@@ -442,7 +448,6 @@ export default class IcePlayer extends Component {
         >
           {this.props.children}
         </Video>
-        <div>dammuku</div>
         <Controller
           video={this.state.video}
           volume={this.state.volume}
