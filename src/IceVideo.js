@@ -169,7 +169,7 @@ export default class IcePlayer extends Component {
       this.setState({
         video: Object.assign(this.state.video, { currentTime: this.video.getCurrentTime() }),
       });
-    }, 1000);
+    }, 200);
   }
 
   clearCurrentTimer = () => {
@@ -208,9 +208,13 @@ export default class IcePlayer extends Component {
     if (this.state.video.playTimes === 0) {
       this.setState({
         startStatus: Object.assign(this.state.startStatus, { video: 2, danmuku: 1 }),
+        loading: false,
       });
       this.fetchDanmuku();
     }
+    this.setState({
+      loading: false,
+    });
   }
 
   handleOnError = (error) => {
@@ -439,6 +443,7 @@ export default class IcePlayer extends Component {
           danmuku={this.state.danmuku}
           playerAction={this.state.playerAction}
           currentTime={this.state.video.currentTime}
+          loading={this.state.loading}
         />
         <Video
           key="video"

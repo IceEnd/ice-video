@@ -139,7 +139,7 @@ export default class Controller extends Component {
     e.stopPropagation();
   }
 
-  processBarClick = (e) => {
+  processBarClick = (e) => {                      // 进度条
     e.preventDefault();
     e.stopPropagation();
     const { offsetWidth } = this.processBar;
