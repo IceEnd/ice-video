@@ -31,6 +31,10 @@ export default class Video extends Component {
     this.video = null;
   }
 
+  shouldComponentUpdate(nextProps) {
+    return nextProps.src !== this.props.src;
+  }
+
   onLoadStart = () => {
     this.props.handleOnLoadStart();
   }

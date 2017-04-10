@@ -327,6 +327,7 @@ export default class IcePlayer extends Component {
       })
       .then((res) => {
         if (res.retCode === 0) {
+          this.danmuku.insertDanmuku(danmu);
           console.warn('send success');
         } else {
           console.warn(res.retMsg);
@@ -444,6 +445,7 @@ export default class IcePlayer extends Component {
           playerAction={this.state.playerAction}
           currentTime={this.state.video.currentTime}
           loading={this.state.loading}
+          ref={node => (this.danmuku = node)}
         />
         <Video
           key="video"

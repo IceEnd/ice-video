@@ -32,7 +32,7 @@ function DanmukuCanvas() {
     this.interval = 20;
     this.danmukuArr = [];
     this.ctx.font = '20px Arial normal';
-    this.col = Math.floor(canvas.height / 20);
+    this.col = Math.floor(canvas.height / 30);
   };
 
   this.fixCanvas = (t) => {
@@ -67,8 +67,17 @@ function DanmukuCanvas() {
         const { content, x, y } = arr[i];
         this.ctx.fillStyle = 'white';
         this.ctx.fillText(content, x, y);
+        if (arr[i].insert) {
+          this.ctx.strokeStyle = 'white';
+          this.ctx.lineCap = 'square';
+          this.ctx.beginPath();
+          this.ctx.moveTo(x, y + 3);
+          this.ctx.lineTo(x + arr[i].textWidth, y + 3);
+          this.ctx.stroke();
+          this.ctx.closePath();
+        }
         this.danmukuArr[i].x = arr[i].x - arr[i].speed;
-        if (arr[i].x <= -(arr[i].end)) {
+        if (arr[i].x <= -(arr[i].textWidth)) {
           this.danmukuArr.splice(i, 1);
         }
       }
@@ -86,14 +95,32 @@ function DanmukuCanvas() {
         d,
         {
           x: this.canvas.width,
-          y: parseInt((Math.random() * (this.canvasHeight - 30)) + 25, 10),
-          end: this.ctx.measureText(d.content).width,
+          y: (parseInt(((Math.random() * (this.col - 1)) + 1), 10) * 30),
+          textWidth: this.ctx.measureText(d.content).width,
           speed: distance / (4 * 40),
+          insert: false,
         },
       );
       return danmukuData;
     });
     this.danmukuArr = this.danmukuArr.concat(newDanmuku);
+  };
+
+  this.insertDanmuku = (danmu) => {
+    const textWidth = this.ctx.measureText(danmu.content).width;
+    const distance = textWidth + this.canvasWidth;
+    const data = Object.assign(
+      {},
+      danmu,
+      {
+        x: this.canvas.width,
+        y: (parseInt(((Math.random() * (this.col - 1)) + 1), 10) * 30),
+        textWidth: this.ctx.measureText(danmu.content).width,
+        speed: distance / (4 * 40),
+        insert: true,
+      },
+    );
+    this.danmukuArr.push(data);
   };
 
   this.stop = () => {
@@ -116,13 +143,6 @@ export default class Danmuku extends Component {
     loading: PropTypes.bool,
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      time: 0,
-    };
-  }
-
   componentDidMount() {
     const dc = new DanmukuCanvas();
     this.dc = dc;
@@ -130,23 +150,25 @@ export default class Danmuku extends Component {
     this.dc.draw();
   }
 
+  shouldComponentUpdate(nextProps) {
+    return (nextProps.currentTime !== this.props.currentTime) ||
+      (nextProps.playerAction !== this.props.playerAction);
+  }
+
   componentDidUpdate() {
     const { danmuku, playerAction, currentTime, loading } = this.props;
-    if (playerAction === 1 && this.state.time !== currentTime && !loading) {
+    if (playerAction === 1 && !loading) {
       const data =
         danmuku.filter(d => (d.timePoint >= currentTime && d.timePoint < currentTime + 0.2));
       this.dc.addDanmuku(data);
       this.dc.draw();
-      this.updateTime(currentTime);
     } else if (playerAction === 2 || loading) {
       this.dc.stop();
     }
   }
 
-  updateTime = (currentTime) => {
-    this.setState({
-      time: currentTime,
-    });
+  insertDanmuku = (danmu) => {
+    this.dc.insertDanmuku(danmu);
   }
 
   render() {
