@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import SVG from './component/SVG';
 import Video from './component/Video';
 import Start from './component/Start';
-import Controller from './component/Controller';
+import Controller from './component/controller/Controller';
 import Danmuku from './component/Danmuku';
 
 export default class IcePlayer extends Component {
