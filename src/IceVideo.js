@@ -71,6 +71,7 @@ export default class IcePlayer extends Component {
       playerConfig: {
         opacity: 1,
         scale: 'normal',
+        onOff: true,
       },
     };
   }
@@ -325,11 +326,15 @@ export default class IcePlayer extends Component {
   }
 
   sendDanmu = (msg) => {
-    const danmu = {
-      content: msg,
-      date: new Date(),
-      timePoint: this.state.video.currentTime,
-    };
+    const danmu = Object.assign(
+      {},
+      {
+        content: msg,
+        date: new Date(),
+        timePoint: this.state.video.currentTime,
+      },
+      { ...this.state.danmukuConfig },
+    );
     fetch(this.props.sendDanmukuUrl, {
       method: 'POST',
       headers: {
@@ -349,7 +354,6 @@ export default class IcePlayer extends Component {
       .then((res) => {
         if (res.retCode === 0) {
           this.danmuku.insertDanmuku(danmu);
-          console.warn('send success');
         } else {
           console.warn(res.retMsg);
         }
@@ -454,6 +458,8 @@ export default class IcePlayer extends Component {
       sendDanmu: this.sendDanmu,
     };
     const loadingHtml = '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_loading" />';
+    const onOff = this.state.playerConfig.onOff;
+    const opacityValue = this.state.playerConfig.opacity;
     return (
       <div
         className="player-container video-react-container"
@@ -463,13 +469,17 @@ export default class IcePlayer extends Component {
         {this.renderPlay()}
         <div style={{ display: `${this.state.playerStatus === -1 ? 'block' : 'none'}` }}>Error</div>
         <svg className="video-loading-svg" style={{ display: `${this.state.loading ? 'block' : 'none'}` }} version="1.1" viewBox="0 0 44 44" stroke="#d09500" dangerouslySetInnerHTML={{ __html: loadingHtml }} />
-        <Danmuku
-          danmuku={this.state.danmuku}
-          playerAction={this.state.playerAction}
-          currentTime={this.state.video.currentTime}
-          loading={this.state.loading}
-          ref={node => (this.danmuku = node)}
-        />
+        { onOff && (
+          <div className="canvas-container" style={{ opacity: opacityValue }}>
+            <Danmuku
+              danmuku={this.state.danmuku}
+              playerAction={this.state.playerAction}
+              currentTime={this.state.video.currentTime}
+              loading={this.state.loading}
+              ref={node => (this.danmuku = node)}
+            />
+          </div>
+        )}
         <Video
           key="video"
           {...video}

@@ -20,6 +20,7 @@ export default class Controller extends Component {
     playerConfig: PropTypes.shape({
       opacity: PropTypes.number,
       scale: PropTypes.string,
+      onOff: PropTypes.bool,
     }),
 
     setDanmukuConfig: PropTypes.func.isRequired,
@@ -60,6 +61,11 @@ export default class Controller extends Component {
       });
     }
   }
+
+  setOnOff = config =>
+    () => {
+      this.props.setPlayerConfig(config);
+    }
 
   hanldeOnDanmuku = config =>
     () => {
@@ -114,7 +120,7 @@ export default class Controller extends Component {
   render() {
     const { menu, dragOpacity, dragOpacityWidth } = this.state;
     const { model, fontSize, fontColor } = this.props.danmukuConfig;
-    const { opacity } = this.props.playerConfig;
+    const { opacity, onOff } = this.props.playerConfig;
     const rollIcon = '<use class="model-roll-icon" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#danmuku-roll" />';
     const topIcon = '<use class="model-top-icon" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#danmuku-top" />';
     const bottomIcon = '<use class="model-bottom-icon" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#danmuku-bottom" />';
@@ -195,6 +201,13 @@ export default class Controller extends Component {
                       />
                     </div>
                   </div>
+                </div>
+              </div>
+              <div className="config-item player-on-off" data-status={`${onOff ? 'on' : 'off'}`}>
+                <span className="row-title">弹幕</span>
+                <div className="row-selection">
+                  <span className="selection-name on" onClick={this.setOnOff({ onOff: true })}>开</span>
+                  <span className="selection-name off" onClick={this.setOnOff({ onOff: false })}>关</span>
                 </div>
               </div>
               <div className="config-item player-size" data-status="normal">

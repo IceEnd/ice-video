@@ -31,7 +31,6 @@ function DanmukuCanvas() {
     this.colors = ['Olive', 'OliveDrab', 'Orange', 'OrangeRed', 'Orchid', 'PaleGoldenRod', 'PaleGreen', 'PaleTurquoise', 'PaleVioletRed', 'PapayaWhip', 'PeachPuff', 'Peru', 'Pink', 'Plum', 'PowderBlue', 'Purple', 'Red', 'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'Salmon', 'SandyBrown', 'SeaGreen', 'SeaShell', 'Sienna', 'Silver', 'SkyBlue'];
     this.interval = 20;
     this.danmukuArr = [];
-    this.ctx.font = '20px Arial normal';
     this.col = Math.floor(canvas.height / 30);
   };
 
@@ -52,6 +51,19 @@ function DanmukuCanvas() {
     }
   };
 
+  this.getFont = (size) => {
+    switch (size) {
+      case 'small':
+        return '14px Arial lighter';
+      case 'middle':
+        return '20px Arial normal';
+      case 'large':
+        return '26px Arial normal';
+      default:
+        return '14px Arial lighter';
+    }
+  };
+
   this.draw = () => {
     if (!this.isSupport) {
       return;
@@ -65,7 +77,8 @@ function DanmukuCanvas() {
       const arr = this.danmukuArr;
       for (let i = 0, len = arr.length; i < len; i += 1) {
         const { content, x, y } = arr[i];
-        this.ctx.fillStyle = 'white';
+        this.ctx.fillStyle = arr[i].fontColor;
+        this.ctx.font = this.getFont(arr[i].fontSize);
         this.ctx.fillText(content, x, y);
         if (arr[i].insert) {
           this.ctx.strokeStyle = 'white';
@@ -108,6 +121,7 @@ function DanmukuCanvas() {
   };
 
   this.insertDanmuku = (danmu) => {
+    this.ctx.font = this.getFont(danmu.fontSize);
     const textWidth = this.ctx.measureText(danmu.content).width;
     const distance = textWidth + this.canvasWidth;
     const data = Object.assign(
@@ -175,7 +189,10 @@ export default class Danmuku extends Component {
 
   render() {
     return (
-      <canvas className="player-danmuku" ref={node => (this.canvas = node)} />
+      <canvas
+        className="player-danmuku"
+        ref={node => (this.canvas = node)}
+      />
     );
   }
 }

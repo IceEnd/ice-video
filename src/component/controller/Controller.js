@@ -30,6 +30,7 @@ export default class Controller extends Component {
     playerConfig: PropTypes.shape({
       opacity: PropTypes.number,
       scale: PropTypes.string,
+      onOff: PropTypes.bool,
     }),
 
     handleOnPause: PropTypes.func.isRequired,

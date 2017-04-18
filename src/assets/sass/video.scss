@@ -107,13 +107,18 @@ html, body {
 			margin-left: -32px;
 		}
 
-		.player-danmuku {
+		.canvas-container {
 			z-index: 1000;
 			position: absolute;
 			top: 0;
 			left: 0;
 			width: 100%;
 			height: 100%;
+
+			.player-danmuku {
+				width: 100%;
+				height: 100%;
+			}
 		}
 
 		&:hover {
@@ -900,8 +905,40 @@ html, body {
 											}
 										}
 
-										.player-size {
+										.player-on-off {
 											margin: 6px 0;
+											margin-right: 10px;
+
+											.row-selection {
+												.selection-name {
+													cursor: pointer;
+													position: relative;
+													border: 1px solid transparent;
+													padding: 4px 5px;
+													border-radius: 4px;
+													-webkit-transition: color ease-in-out .3s;
+													-moz-transition: color ease-in-out .3s;
+													-ms-transition: color ease-in-out .3s;
+													-o-transition: color ease-in-out .3s;
+													transition: color ease-in-out .3s;
+												}
+											}
+
+											&[data-status="on"] {
+												.on {
+													border-color: #00a1d6 !important;
+													color: #00a1d6 !important;
+												}
+											}
+											&[data-status="off"] {
+												.off {
+													border-color: #00a1d6 !important;
+													color: #00a1d6 !important;
+												}
+											}
+										}
+
+										.player-size {
 											margin-right: 10px;
 
 											.row-selection {
