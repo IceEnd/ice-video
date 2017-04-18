@@ -38,6 +38,25 @@ const SVG = () => (
       <path d="M30.5 25.5L35.9 20.5L32.5 20.5L32.5 15.5Q32.5 5.5, 22 5.5L10 5.5L11.5 7Q13 8.5, 14.5 8.5L19 8.5Q28.5 8.5, 28.5 18L28.5 20.5L25.1 20.5 Z" />
       <path d="M5.5 7.7L30.5 31.2L30.5 28.3L5.5 4.2Z" />
     </symbol>
+    <symbol id="danmuku-roll" viewBox="0 0 48 48">
+      <rect x="12" y="20" width="18" height="2" style={{ fill: 'white' }} />
+      <rect x="32" y="20" width="3" height="2" style={{ fill: 'white' }} />
+      <rect x="3" y="24" width="20" height="2" style={{ fill: 'white' }} />
+      <rect x="25" y="24" width="13" height="2" style={{ fill: 'white' }} />
+      <rect x="40" y="24" width="4" height="2" style={{ fill: 'white' }} />
+      <rect x="10" y="28" width="14" height="2" style={{ fill: 'white' }} />
+      <rect x="26" y="28" width="6" height="2" style={{ fill: 'white' }} />
+    </symbol>
+    <symbol id="danmuku-top" viewBox="0 0 48 48">
+      <rect x="10" y="8" width="28" height="2" style={{ fill: 'white' }} />
+      <rect x="18" y="12" width="12" height="2" style={{ fill: 'white' }} />
+      <rect x="16" y="16" width="16" height="2" style={{ fill: 'white' }} />
+    </symbol>
+    <symbol id="danmuku-bottom" viewBox="0 0 48 48">
+      <rect x="10" y="40" width="28" height="2" style={{ fill: 'white' }} />
+      <rect x="18" y="36" width="12" height="2" style={{ fill: 'white' }} />
+      <rect x="16" y="32" width="16" height="2" style={{ fill: 'white' }} />
+    </symbol>
     <symbol id="video_loading" viewBox="0 0 44 44">
       <g fill="none" fillRule="evenodd" strokeWidth="2">
         <circle cx="22" cy="22" r="1">

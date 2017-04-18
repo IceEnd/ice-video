@@ -63,6 +63,15 @@ export default class IcePlayer extends Component {
         muted: false,             // 是否关闭声音
         loop: this.props.loop,  // 是否洗脑循环
       },
+      danmukuConfig: {
+        fontColor: 'white',
+        fontSize: 'middle',
+        model: 'roll',
+      },
+      playerConfig: {
+        opacity: 1,
+        scale: 'normal',
+      },
     };
   }
 
@@ -99,11 +108,11 @@ export default class IcePlayer extends Component {
     return styles;
   }
 
-  getCurrentTime = (time) => {
+  getCurrentTime = (time) => {        // 获取播放时间
     this.setState({ video: Object.assign(this.state.video, { currentTime: time }) });
   }
 
-  setCurrentTime = (time) => {
+  setCurrentTime = (time) => {       // 当前时间计时器
     this.setState({
       playerAction: 3,
       video: Object.assign(this.state.video, { currentTime: time }),
@@ -114,34 +123,46 @@ export default class IcePlayer extends Component {
     });
   }
 
-  setVolume = (num) => {
+  setVolume = (num) => {    // 设置音量
     this.setState({
-      video: Object.assign(this.state.video, { volume: num / 100 }),
+      video: Object.assign(this.state.video, { volume: num }),
     });
-    this.video.setVolume(num / 100);
+    this.video.setVolume(num);
   }
 
-  setMuted = (noOff) => {
+  setMuted = (noOff) => {   // 设置静音
     this.setState({
       video: Object.assign(this.state.video, { muted: noOff }),
     });
     this.video.setMuted(noOff);
   }
 
-  setLoop = (noOff) => {
+  setLoop = (noOff) => {    // 设置循环
     this.setState({
       video: Object.assign(this.state.video, { loop: noOff }),
     });
     this.video.setLoop(noOff);
   }
 
-  getBuffered = () => {
+  setDanmukuConfig = (config) => {
+    this.setState({
+      danmukuConfig: Object.assign(this.state.danmukuConfig, config),
+    });
+  }
+
+  setPlayerConfig = (config) => {
+    this.setState({
+      playerConfig: Object.assign(this.state.playerConfig, config),
+    });
+  }
+
+  getBuffered = () => {   // 获取缓冲时长
     this.setState({
       video: Object.assign(this.state.video, { bufferedTime: this.video.getBufferedEnd() }),
     });
   }
 
-  startBufferedTimer = () => {
+  startBufferedTimer = () => {    // 缓冲时长计时器
     if (this.bufferedTimer) {
       return;
     }
@@ -156,12 +177,12 @@ export default class IcePlayer extends Component {
     }, 1000);
   }
 
-  clearBufferedTimer = () => {
+  clearBufferedTimer = () => {    // 清除缓冲时长计时器
     clearInterval(this.bufferedTimer);
     this.bufferedTimer = null;
   }
 
-  startCurrentTimer = () => {
+  startCurrentTimer = () => {   // 当前播放时间计时器
     if (this.currentTimer) {
       return;
     }
@@ -169,10 +190,10 @@ export default class IcePlayer extends Component {
       this.setState({
         video: Object.assign(this.state.video, { currentTime: this.video.getCurrentTime() }),
       });
-    }, 200);
+    }, 500);
   }
 
-  clearCurrentTimer = () => {
+  clearCurrentTimer = () => {   // 清除播放时间计时器
     clearInterval(this.currentTimer);
     this.currentTimer = null;
   }
@@ -428,6 +449,8 @@ export default class IcePlayer extends Component {
       setVolume: this.setVolume,
       setMuted: this.setMuted,
       setLoop: this.setLoop,
+      setDanmukuConfig: this.setDanmukuConfig,
+      setPlayerConfig: this.setPlayerConfig,
       sendDanmu: this.sendDanmu,
     };
     const loadingHtml = '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_loading" />';
@@ -461,6 +484,8 @@ export default class IcePlayer extends Component {
           controls={this.props.controls}
           playerAction={this.state.playerAction}
           show={this.state.controllerShow}
+          danmukuConfig={this.state.danmukuConfig}
+          playerConfig={this.state.playerConfig}
           {...controllerFunc}
         />
       </div>

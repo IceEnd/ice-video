@@ -97,7 +97,7 @@ rules:
   empty-args:
     - 2
     -
-      include: true
+      include: false
   hex-length: 0
   hex-notation:
     - 2

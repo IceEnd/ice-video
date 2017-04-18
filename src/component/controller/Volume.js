@@ -44,9 +44,10 @@ export default class Volume extends Component {
     e.preventDefault();
     const { offsetWidth } = this.volumeBar;
     const left = this.getLeft(this.volumeBar);
+    const result = (this.computeLeftX(e.clientX, left, offsetWidth) / offsetWidth);
     this.setState({
       dragVolume: true,
-      dragVolumeWidth: (this.computeLeftX(e.clientX, left, offsetWidth) / offsetWidth) * 100,
+      dragVolumeWidth: result,
     });
   }
 
@@ -55,10 +56,11 @@ export default class Volume extends Component {
     if (this.state.dragVolume) {
       const { offsetWidth } = this.volumeBar;
       const left = this.getLeft(this.volumeBar);
+      const result = (this.computeLeftX(e.clientX, left, offsetWidth) / offsetWidth);
       this.setState({
-        dragVolumeWidth: (this.computeLeftX(e.clientX, left, offsetWidth) / offsetWidth) * 100,
+        dragVolumeWidth: result,
       });
-      this.props.setVolume(this.state.dragVolumeWidth);
+      this.props.setVolume(result);
     }
   }
 
@@ -67,7 +69,7 @@ export default class Volume extends Component {
     e.stopPropagation();
     const { offsetWidth } = this.volumeBar;
     const left = this.getLeft(this.volumeBar);
-    this.props.setVolume((this.computeLeftX(e.clientX, left, offsetWidth) / offsetWidth) * 100);
+    this.props.setVolume((this.computeLeftX(e.clientX, left, offsetWidth) / offsetWidth));
   }
 
   handleOnVolumeIconClick = (e) => {
@@ -134,7 +136,7 @@ export default class Volume extends Component {
         >
           <div
             className="video-btn-volume-bar-level"
-            style={{ width: `${dragVolume ? dragVolumeWidth : volume * 100}%` }}
+            style={{ width: `${dragVolume ? dragVolumeWidth * 100 : volume * 100}%` }}
           >
             <button
               className="video-btn-volume-bar-indicator"

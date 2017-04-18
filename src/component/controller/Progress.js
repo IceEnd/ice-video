@@ -24,11 +24,12 @@ export default class Progress extends Component {
     };
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
     const { duration, currentTime, bufferedTime } = nextProps;
     return duration !== this.props.duration ||
       currentTime !== this.props.currentTime ||
-      bufferedTime !== this.props.bufferedTime;
+      bufferedTime !== this.props.bufferedTime ||
+      nextState !== this.state;
   }
 
   componentWillUnmount() {

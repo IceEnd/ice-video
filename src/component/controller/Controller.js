@@ -22,6 +22,15 @@ export default class Controller extends Component {
       muted: PropTypes.bool.isRequired,
       loop: PropTypes.bool.isRequired,
     }),
+    danmukuConfig: PropTypes.shape({
+      fontColor: PropTypes.string,
+      fontSize: PropTypes.oneOf(['small', 'middle', 'large']),
+      model: PropTypes.oneOf(['roll', 'top', 'bottom']),
+    }),
+    playerConfig: PropTypes.shape({
+      opacity: PropTypes.number,
+      scale: PropTypes.string,
+    }),
 
     handleOnPause: PropTypes.func.isRequired,
     handleOnPlay: PropTypes.func.isRequired,
@@ -32,8 +41,21 @@ export default class Controller extends Component {
     setVolume: PropTypes.func.isRequired,
     setMuted: PropTypes.func.isRequired,
     setLoop: PropTypes.func.isRequired,
+    setDanmukuConfig: PropTypes.func.isRequired,
+    setPlayerConfig: PropTypes.func.isRequired,
     sendDanmu: PropTypes.func.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showConfig: false,
+    };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps !== this.props || nextState !== this.state;
+  }
 
   handleOnPlayIcon = () => {
     const { playerAction, startControlsTimer } = this.props;
@@ -56,6 +78,17 @@ export default class Controller extends Component {
     this.props.setLoop(flag);
   }
 
+  handleOnSetting = () => {
+    const showConfig = this.state.showConfig;
+    let status = false;
+    if (!showConfig) {
+      status = true;
+    }
+    this.setState({
+      showConfig: status,
+    });
+  }
+
   computeLeftX = (X, left, width) => {
     let leftX;
     if (X < left) {
@@ -75,6 +108,7 @@ export default class Controller extends Component {
     }
     const playHtml = '<use class="video-svg-play video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_play" /><use class="video-svg-pause video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_pause" />';
     const fullScreenHtml = '<use class="video-svg-fullscreen video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_fullscreen" /><use class="video-svg-fullscreen-true video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_fullscreen_true" />';
+    const settingHtml = '<use class="" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_setting" />';
     const repeatHtml = '<use class="video-svg-repeat-true video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_repeat_true" /><use class="video-svg-repeat-false video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_repeat_false" />';
     let playStatus = '';
     if (playerAction === 1 || playerAction === 3) {
@@ -82,6 +116,7 @@ export default class Controller extends Component {
     } else if (playerAction === 2) {
       playStatus = 'play';
     }
+    const dataConfig = this.state.showConfig ? 'show' : 'hide';
     return (
       <div className={`video-control-main ${show ? '' : 'video-control-main-hidden'}`}>
         <Progress
@@ -104,7 +139,7 @@ export default class Controller extends Component {
             hideControls={this.props.hideControls}
             sendDanmu={this.props.sendDanmu}
           />
-          <div className="video-control-bar-right">
+          <div className="video-control-bar-right" data-config={dataConfig} >
             <Volume
               video={this.props.video}
               volume={this.props.video.volume}
@@ -112,7 +147,14 @@ export default class Controller extends Component {
               setVolume={this.props.setVolume}
               setMuted={this.props.setMuted}
             />
-            <Config />
+            <button
+              className="video-control-item video-btn-setting"
+              aria-label="设置"
+              data-config={dataConfig}
+              onClick={this.handleOnSetting}
+            >
+              <svg className="video-svg" version="1.1" viewBox="0 0 36 36" dangerouslySetInnerHTML={{ __html: settingHtml }} />
+            </button>
             <button
               className="video-control-item video-btn-repeat"
               aria-label="循环"
@@ -129,6 +171,12 @@ export default class Controller extends Component {
             >
               <svg className="video-svg" version="1.1" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: fullScreenHtml }} />
             </button>
+            <Config
+              danmukuConfig={this.props.danmukuConfig}
+              playerConfig={this.props.playerConfig}
+              setDanmukuConfig={this.props.setDanmukuConfig}
+              setPlayerConfig={this.props.setPlayerConfig}
+            />
           </div>
         </div>
       </div>

@@ -63,7 +63,7 @@ function DanmukuCanvas() {
       this.clearCanvas();
       this.ctx.save();
       const arr = this.danmukuArr;
-      for (let i = 0; i < arr.length; i += 1) {
+      for (let i = 0, len = arr.length; i < len; i += 1) {
         const { content, x, y } = arr[i];
         this.ctx.fillStyle = 'white';
         this.ctx.fillText(content, x, y);
@@ -78,11 +78,11 @@ function DanmukuCanvas() {
         }
         this.danmukuArr[i].x = arr[i].x - arr[i].speed;
         if (arr[i].x <= -(arr[i].textWidth)) {
-          this.danmukuArr.splice(i, 1);
+          this.danmukuArr[i].status = false;
         }
       }
       this.ctx.restore();
-    }, 25);
+    }, 30);
   };
 
   this.addDanmuku = (data) => {
@@ -97,8 +97,9 @@ function DanmukuCanvas() {
           x: this.canvas.width,
           y: (parseInt(((Math.random() * (this.col - 1)) + 1), 10) * 30),
           textWidth: this.ctx.measureText(d.content).width,
-          speed: distance / (4 * 40),
+          speed: distance / (5 * 33),
           insert: false,
+          status: true,
         },
       );
       return danmukuData;
@@ -116,8 +117,9 @@ function DanmukuCanvas() {
         x: this.canvas.width,
         y: (parseInt(((Math.random() * (this.col - 1)) + 1), 10) * 30),
         textWidth: this.ctx.measureText(danmu.content).width,
-        speed: distance / (4 * 40),
+        speed: distance / (5 * 33),
         insert: true,
+        status: true,
       },
     );
     this.danmukuArr.push(data);
@@ -159,7 +161,7 @@ export default class Danmuku extends Component {
     const { danmuku, playerAction, currentTime, loading } = this.props;
     if (playerAction === 1 && !loading) {
       const data =
-        danmuku.filter(d => (d.timePoint >= currentTime && d.timePoint < currentTime + 0.2));
+        danmuku.filter(d => (d.timePoint >= currentTime && d.timePoint < currentTime + 0.5));
       this.dc.addDanmuku(data);
       this.dc.draw();
     } else if (playerAction === 2 || loading) {

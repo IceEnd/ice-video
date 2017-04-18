@@ -16,7 +16,7 @@ const render = () => {
     autoPlay: false,
     preload: 'auto',
     poster: '',
-    volume: 0.2,
+    volume: 0,
     getDanmukuUrl: 'http://127.0.0.1:3001/danmuku',
     sendDanmukuUrl: 'http://127.0.0.1:3001/senddanmu',
     controls: true,

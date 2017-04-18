@@ -1,44 +1,16 @@
-<!-- <svg width="200" height="200" version="1.1"
-xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
-  <rect width="100" height="100" style="fill:rgb(0,0,255);stroke-width:1;"/>
-  <path d="M5.5 10.5
-    L0.1 15.5
-    L3.5 15.5
-    L3.5 18.5
-    Q3.5 30.5, 13.5 30.5
-    L26 30.5
-    L24.5 29
-    Q23 27.5, 21.5 27.5
-    L17 27.5
-    Q7.5 27.5, 7.5 18
-    L7.5 15.5
-    L10.9 15.5 Z"/>
-  <path d="M30.5 25.5
-    L35.9 20.5
-    L32.5 20.5
-    L32.5 15.5
-    Q32.5 5.5, 22 5.5
-    L10 5.5
-    L11.5 7
-    Q13 8.5, 14.5 8.5
-    L19 8.5
-    Q28.5 8.5, 28.5 18
-    L28.5 20.5
-    L25.1 20.5 Z"/>
-  <path d="M5.5 7.7
-    L30.5 31.2
-    L30.5 28.3
-    L5.5 4.2
-    Z"/>
-</svg> -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 14 32 18" width="32" height="4" fill="#f20" preserveAspectRatio="none">
-  <path opacity="0.8" transform="translate(0 0)" d="M2 14 V18 H6 V14z">
-    <animateTransform attributeName="transform" type="translate" values="0 0; 24 0; 0 0" dur="2s" begin="0" repeatCount="indefinite" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" calcMode="spline" />
-  </path>
-  <path opacity="0.5" transform="translate(0 0)" d="M0 14 V18 H8 V14z">
-    <animateTransform attributeName="transform" type="translate" values="0 0; 24 0; 0 0" dur="2s" begin="0.1s" repeatCount="indefinite" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" calcMode="spline" />
-  </path>
-  <path opacity="0.25" transform="translate(0 0)" d="M0 14 V18 H8 V14z">
-    <animateTransform attributeName="transform" type="translate" values="0 0; 24 0; 0 0" dur="2s" begin="0.2s" repeatCount="indefinite" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" calcMode="spline" />
-  </path>
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <ellipse transform="matrix(-0.668966, 0.743292, -0.743297, -0.668962, 95.419452, -26.297253)" cx="83.09" cy="45.255" rx="4.991" ry="4.991" style="fill: rgb(153, 162, 170);"/>
+  <ellipse transform="matrix(-0.668969, 0.74329, -0.743296, -0.668962, 131.477823, -26.30306)" cx="83.09" cy="45.255" rx="4.991" ry="4.991" style="fill: rgb(153, 162, 170);"/>
+  <ellipse transform="matrix(-0.668971, 0.743288, -0.743297, -0.668962, 95.360891, 11.343805)" cx="83.09" cy="45.255" rx="4.991" ry="4.991" style="fill: rgb(153, 162, 170);"/>
+  <ellipse transform="matrix(-0.668968, 0.74329, -0.743298, -0.668962, 131.498889, 11.412992)" cx="83.09" cy="45.255" rx="4.991" ry="4.991" style="fill: rgb(153, 162, 170);"/>
+  <rect x="6.579" y="0.217" width="35.239" height="47.621" style="fill: rgb(153, 162, 170)"/>
+  <rect x="1.245" y="4.925" width="46.023" height="38.206" style="fill: rgb(153, 162, 170)"/>
+  <rect x="12" y="20" width="18" height="2" style="fill: rgb(253, 253, 253);"/>
+  <rect x="32" y="20" width="3" height="2" style="fill: rgb(253, 253, 253);"/>
+  <rect x="3" y="24" width="20" height="2" style="fill: rgb(253, 253, 253);"/>
+  <rect x="25" y="24" width="13" height="2" style="fill: rgb(253, 253, 253);" />
+  <rect x="40" y="24" width="4" height="2" style="fill: rgb(253, 253, 253);"/>
+  <rect x="10" y="28" width="14" height="2" style="fill: rgb(253, 253, 253);"/>
+  <rect x="26" y="28" width="6" height="2" style="fill: rgb(253, 253, 253);"/>
 </svg>
