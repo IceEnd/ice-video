@@ -5,6 +5,7 @@ import Video from './component/Video';
 import Start from './component/Start';
 import Controller from './component/controller/Controller';
 import Danmuku from './component/Danmuku';
+import fScreen from './util/fullScreen';
 
 export default class IcePlayer extends Component {
   static displayName = 'IceVideo';
@@ -51,13 +52,14 @@ export default class IcePlayer extends Component {
       playerAction: 0,       // 0: 等待  1: 播放 2: 暂停  3: 拖放前进 4: 播放完毕
       controllerShow: false,
       userActivity: true,
+      cursorShow: true,
       loading: false,
       danmuku: [],
+      fullScreen: false,        // 全屏幕
       video: {
         playTimes: 0,             // 播放次数
         duration: 0,              // 时长
         currentTime: 0,           // 当前播放时间(s)
-        fullScreen: false,        // 全屏幕
         bufferedTime: 0,        // 缓冲状态
         volume: this.props.volume,
         muted: false,             // 是否关闭声音
@@ -78,6 +80,7 @@ export default class IcePlayer extends Component {
 
   componentDidMount() {
     this.video.setVolume(this.props.volume);
+    fScreen.addEventListener(this.fullScreenChange);
     this.startBufferedTimer();
   }
 
@@ -161,42 +164,6 @@ export default class IcePlayer extends Component {
     this.setState({
       video: Object.assign(this.state.video, { bufferedTime: this.video.getBufferedEnd() }),
     });
-  }
-
-  startBufferedTimer = () => {    // 缓冲时长计时器
-    if (this.bufferedTimer) {
-      return;
-    }
-    this.bufferedTimer = setInterval(() => {
-      const buffered = this.video.getBuffered();
-      this.setState({
-        video: Object.assign(this.state.video, { bufferedTime: buffered }),
-      });
-      if (buffered >= this.state.video.duration) {
-        this.clearBufferedTimer();
-      }
-    }, 1000);
-  }
-
-  clearBufferedTimer = () => {    // 清除缓冲时长计时器
-    clearInterval(this.bufferedTimer);
-    this.bufferedTimer = null;
-  }
-
-  startCurrentTimer = () => {   // 当前播放时间计时器
-    if (this.currentTimer) {
-      return;
-    }
-    this.currentTimer = setInterval(() => {
-      this.setState({
-        video: Object.assign(this.state.video, { currentTime: this.video.getCurrentTime() }),
-      });
-    }, 500);
-  }
-
-  clearCurrentTimer = () => {   // 清除播放时间计时器
-    clearInterval(this.currentTimer);
-    this.currentTimer = null;
   }
 
   handleOnLoadStart = () => {
@@ -288,6 +255,23 @@ export default class IcePlayer extends Component {
 
   handleOnMouseMove = () => {
     this.startControlsTimer();
+  }
+
+  fullScreenChange = () => {
+    if (fScreen.isFullscreen()) {
+      this.setState({ fullScreen: true });
+    } else {
+      this.setState({ fullScreen: false });
+      this.danmuku.onWindowResize();
+    }
+  }
+
+  handleOnFullScreen = () => {
+    if (fScreen.isFullscreen()) {
+      fScreen.exit();
+    } else {
+      fScreen.request(this.player);
+    }
   }
 
   fetchDanmuku = () => {
@@ -391,13 +375,55 @@ export default class IcePlayer extends Component {
   startControlsTimer = () => {
     this.setState({
       userActivity: true,
+      cursorShow: true,
     });
     clearTimeout(this.controlsHideTimer);
     this.controlsHideTimer = setTimeout(() => {
+      let cursor = true;
+      if (fScreen.isFullscreen()) {
+        cursor = false;
+      }
       this.setState({
         userActivity: false,
+        cursorShow: cursor,
       });
     }, 3000);
+  }
+
+  startBufferedTimer = () => {    // 缓冲时长计时器
+    if (this.bufferedTimer) {
+      return;
+    }
+    this.bufferedTimer = setInterval(() => {
+      const buffered = this.video.getBuffered();
+      this.setState({
+        video: Object.assign(this.state.video, { bufferedTime: buffered }),
+      });
+      if (buffered >= this.state.video.duration) {
+        this.clearBufferedTimer();
+      }
+    }, 1000);
+  }
+
+  clearBufferedTimer = () => {    // 清除缓冲时长计时器
+    clearInterval(this.bufferedTimer);
+    this.bufferedTimer = null;
+  }
+
+  startCurrentTimer = () => {   // 当前播放时间计时器
+    if (this.currentTimer) {
+      return;
+    }
+    this.currentTimer = setInterval(() => {
+      this.setState({
+        video: Object.assign(this.state.video, { currentTime: this.video.getCurrentTime() }),
+      });
+    }, 250);
+  }
+
+  clearCurrentTimer = () => {   // 清除播放时间计时器
+    clearInterval(this.currentTimer);
+    this.currentTimer = null;
   }
 
   renderStart = () => {
@@ -456,14 +482,18 @@ export default class IcePlayer extends Component {
       setDanmukuConfig: this.setDanmukuConfig,
       setPlayerConfig: this.setPlayerConfig,
       sendDanmu: this.sendDanmu,
+      handleOnFullScreen: this.handleOnFullScreen,
     };
     const loadingHtml = '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#video_loading" />';
     const onOff = this.state.playerConfig.onOff;
     const opacityValue = this.state.playerConfig.opacity;
+    const { userActivity, cursorShow, fullScreen } = this.state;
     return (
       <div
-        className="player-container video-react-container"
+        className={`player-container video-react-container ${fullScreen ? 'full-screen' : ''} ${userActivity ? 'player-user-activity' : 'player-user-inactivity'} ${cursorShow ? '' : 'cursor-hide'}`}
         style={{ paddingTop: styles.paddingTop }}
+        ref={node => (this.player = node)}
+        onMouseMove={this.handleOnMouseMove}
       >
         {this.renderStart()}
         {this.renderPlay()}
@@ -496,6 +526,7 @@ export default class IcePlayer extends Component {
           show={this.state.controllerShow}
           danmukuConfig={this.state.danmukuConfig}
           playerConfig={this.state.playerConfig}
+          fullScreen={this.state.fullScreen}
           {...controllerFunc}
         />
       </div>
@@ -506,9 +537,7 @@ export default class IcePlayer extends Component {
     const styles = this.getStyle();
     return (
       <div
-        className={`ice-player-container ${this.state.userActivity ? 'player-user-activity' : 'player-user-inactivity'}`}
-        width={styles.width}
-        onMouseMove={this.handleOnMouseMove}
+        className="ice-player-container"
       >
         <SVG />
         {this.renderPalyer(styles)}

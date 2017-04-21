@@ -22,6 +22,7 @@ export default class Controller extends Component {
       muted: PropTypes.bool.isRequired,
       loop: PropTypes.bool.isRequired,
     }),
+    fullScreen: PropTypes.bool,
     danmukuConfig: PropTypes.shape({
       fontColor: PropTypes.string,
       fontSize: PropTypes.oneOf(['small', 'middle', 'large']),
@@ -45,6 +46,7 @@ export default class Controller extends Component {
     setDanmukuConfig: PropTypes.func.isRequired,
     setPlayerConfig: PropTypes.func.isRequired,
     sendDanmu: PropTypes.func.isRequired,
+    handleOnFullScreen: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -90,6 +92,10 @@ export default class Controller extends Component {
     });
   }
 
+  handleOnFullScreenClick = () => {
+    this.props.handleOnFullScreen();
+  }
+
   computeLeftX = (X, left, width) => {
     let leftX;
     if (X < left) {
@@ -118,6 +124,7 @@ export default class Controller extends Component {
       playStatus = 'play';
     }
     const dataConfig = this.state.showConfig ? 'show' : 'hide';
+    const fullScreen = this.props.fullScreen;
     return (
       <div className={`video-control-main ${show ? '' : 'video-control-main-hidden'}`}>
         <Progress
@@ -168,7 +175,8 @@ export default class Controller extends Component {
             <button
               className="video-control-item video-btn-fullscreen"
               aria-label="全屏"
-              data-status={video.fullScreen}
+              data-status={fullScreen}
+              onClick={this.handleOnFullScreenClick}
             >
               <svg className="video-svg" version="1.1" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: fullScreenHtml }} />
             </button>

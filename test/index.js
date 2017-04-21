@@ -16,13 +16,13 @@ const render = () => {
     autoPlay: false,
     preload: 'auto',
     poster: '',
-    volume: 0,
+    volume: 0.5,
     getDanmukuUrl: 'http://127.0.0.1:3001/danmuku',
     sendDanmukuUrl: 'http://127.0.0.1:3001/senddanmu',
     controls: true,
     scale: '16:9',
-    // src: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4',
-    src: './video.mp4',
+    src: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4',
+    // src: './video.mp4',
   };
   ReactDOM.render(
     <div>
