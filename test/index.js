@@ -2,7 +2,6 @@ import 'babel-polyfill';
 import path from 'path';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, Link } from 'react-router';
 import IceVideo from '../src/index';
 
 import '../src/assets/sass/video.scss';

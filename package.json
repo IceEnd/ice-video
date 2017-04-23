@@ -1,6 +1,6 @@
 {
   "name": "ice-video",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "React component, a danmuku video player package.",
   "main": "./lib/index.js",
   "scripts": {
@@ -67,7 +67,6 @@
     "koa-router": "^7.1.1",
     "node-sass": "^4.1.1",
     "pre-commit": "1.2.2",
-    "react-router": "^3.0.2",
     "react-hot-loader": "^3.0.0-beta.6",
     "sass-lint": "^1.10.2",
     "sass-loader": "^4.1.1",
