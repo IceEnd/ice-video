@@ -33,3 +33,4 @@ node_modules
 .DS_Store
 lib
 test/video.mp4
+test/video1.mp4

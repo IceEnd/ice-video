@@ -30,6 +30,14 @@ export default {
         amd: 'react-dom',
       },
     },
+    {
+      'isomorphic-fetch': {
+        root: 'isomorphic-fetch',
+        commonjs2: 'isomorphic-fetch',
+        commonjs: 'isomorphic-fetch',
+        amd: 'isomorphic-fetch',
+      },
+    },
   ],
   module: {
     rules: [

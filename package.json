@@ -1,6 +1,6 @@
 {
   "name": "ice-video",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "React component, a danmuku video player package.",
   "main": "./lib/index.js",
   "scripts": {
@@ -20,8 +20,11 @@
     "React",
     "html5"
   ],
-  "author": "cononico",
+  "author": "CNO",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IceEnd/ice-video/issues"
+  },
   "dependencies": {
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
