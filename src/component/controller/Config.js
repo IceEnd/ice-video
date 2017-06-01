@@ -5,7 +5,7 @@ const colorGrups = ['white', 'black', 'ghostwhite', 'snow', 'whitesmoke', 'silve
   'lightpink', 'pink', 'hotpink', 'peachpuff', 'deeppink', 'mediumvioletred', 'red', 'crimson', 'firebrick', 'darkred',
   'aquamarine', 'mediumaquamarine', 'cyan', 'springgreen', 'lightgreen', 'seagreen', 'forestgreen', 'limegreen', 'green', 'darkgreen',
   'ivory', 'wheat', 'lemonchiffon', 'khaki', 'bisque', 'lightgoldenrodyellow', 'Yellow', 'gold', 'goldenrod', 'orange',
-  'tan', 'lightcoral', 'peru', 'olivedrab', 'chocolate', 'sienna', 'brown', 'saddlebrown', 'dimgray', 'maroon',
+  'tan', 'lightcoral', 'peru', 'olivedrab', 'chocolate', 'sienna', 'brown', 'saddlebrown', 'maroon',
 ];
 
 export default class Controller extends Component {

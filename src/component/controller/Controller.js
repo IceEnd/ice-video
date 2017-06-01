@@ -16,7 +16,6 @@ export default class Controller extends Component {
       playTimes: PropTypes.number.isRequired,
       duration: PropTypes.number.isRequired,
       currentTime: PropTypes.number.isRequired,
-      fullScreen: PropTypes.number.isRequired,
       bufferedTime: PropTypes.number.isRequired,
       volume: PropTypes.number.isRequired,
       muted: PropTypes.bool.isRequired,

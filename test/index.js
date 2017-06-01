@@ -20,8 +20,8 @@ const render = () => {
     sendDanmukuUrl: 'http://127.0.0.1:3001/senddanmu',
     controls: true,
     scale: '16:9',
-    // src: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4',
-    src: './video1.mp4',
+    src: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4',
+    // src: './video1.mp4',
   };
   ReactDOM.render(
     <div>
