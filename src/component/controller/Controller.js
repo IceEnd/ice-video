@@ -139,7 +139,7 @@ export default class Controller extends Component {
             aria-label="播放/暂停"
             onClick={this.handleOnPlayIcon}
           >
-            <svg className="video-svg" version="1.1" viewBox="0 0 36 36" dangerouslySetInnerHTML={{ __html: playHtml }} />
+            <svg className="video-svg" version="1.1" dangerouslySetInnerHTML={{ __html: playHtml }} />
           </button>
           <DanmukuInput
             showControls={this.props.showControls}
@@ -160,7 +160,7 @@ export default class Controller extends Component {
               data-config={dataConfig}
               onClick={this.handleOnSetting}
             >
-              <svg className="video-svg" version="1.1" viewBox="0 0 36 36" dangerouslySetInnerHTML={{ __html: settingHtml }} />
+              <svg className="video-svg" version="1.1" dangerouslySetInnerHTML={{ __html: settingHtml }} />
             </button>
             <button
               className="video-control-item video-btn-repeat"
@@ -169,7 +169,7 @@ export default class Controller extends Component {
               data-msg={`${video.loop ? '关闭循环' : '洗脑循环'}`}
               onClick={this.handleOnRepeatClick}
             >
-              <svg className="video-svg" version="1.1" viweBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: repeatHtml }} />
+              <svg className="video-svg" version="1.1" dangerouslySetInnerHTML={{ __html: repeatHtml }} />
             </button>
             <button
               className="video-control-item video-btn-fullscreen"
@@ -177,7 +177,7 @@ export default class Controller extends Component {
               data-status={fullScreen}
               onClick={this.handleOnFullScreenClick}
             >
-              <svg className="video-svg" version="1.1" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: fullScreenHtml }} />
+              <svg className="video-svg" version="1.1" dangerouslySetInnerHTML={{ __html: fullScreenHtml }} />
             </button>
             <Config
               danmukuConfig={this.props.danmukuConfig}
