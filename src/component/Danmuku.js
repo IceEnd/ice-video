@@ -38,6 +38,10 @@ export default class Danmuku extends Component {
     }
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onWindowResize);
+  }
+
   onWindowResize = () => {
     this.dc.resize(this.canvas);
   }
