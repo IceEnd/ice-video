@@ -87,6 +87,7 @@ export default class IcePlayer extends Component {
   componentWillUnmount() {
     this.clearBufferedTimer();
     this.clearCurrentTimer();
+    this.clearControlsTimer();
   }
 
   getStyle = () => {
@@ -388,6 +389,11 @@ export default class IcePlayer extends Component {
         cursorShow: cursor,
       });
     }, 3000);
+  }
+
+  clearControlsTimer = () => {
+    clearTimeout(this.controlsHideTimer);
+    this.controlsHideTimer = null;
   }
 
   startBufferedTimer = () => {    // 缓冲时长计时器
