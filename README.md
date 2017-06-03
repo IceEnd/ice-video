@@ -6,7 +6,7 @@ The web danmuku video player built from the ground up for an HTML5 world using R
 ![build](https://img.shields.io/badge/build-passing-green.svg)
 [![MIT License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/IceEnd/icePlayer/blob/master/LICENSE)
 
-[website](http://ice-video.coolecho.net/start)
+[website](http://ice-video.coolecho.net)
 
 # ScreenShot
 ![ScreenShot](./screenShot.jpeg)
