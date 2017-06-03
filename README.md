@@ -2,9 +2,11 @@
 
 The web danmuku video player built from the ground up for an HTML5 world using React library.
 
-[![npm](https://img.shields.io/badge/npm-v0.0.6-brightgreen.svg)](https://www.npmjs.com/package/ice-video)
+[![npm](https://img.shields.io/badge/npm-v0.0.11-brightgreen.svg)](https://www.npmjs.com/package/ice-video)
 ![build](https://img.shields.io/badge/build-passing-green.svg)
 [![MIT License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/IceEnd/icePlayer/blob/master/LICENSE)
+
+[website](http://ice-video.coolecho.net/start)
 
 # ScreenShot
 ![ScreenShot](./screenShot.jpeg)
@@ -19,8 +21,8 @@ npm install --save ice-video react react-dom isomorphic-fetch
 
 import stylesheet
 
-```shell
-import "node_modules/ice-video/dist/video.css";
+```javascript
+import "http://ice-video.coolecho.net/static/video.min.css";
 ```
 
 or import scss
@@ -57,6 +59,46 @@ const Player = () => {
 
 export default Player;
 
+```
+
+# Config
+
+## Options
+
+|field|type|default|note|
+|-----|----|-------|----|
+|autoPlay|boolean|false|whether to automatically play|
+|preload|string|'auto'||
+|poster|string|''||
+|loop|boolean|false|loop for video|
+|volume|number|0.8|palyer's volume|
+|controls|boolean|true|control player|
+|scale|string|'16:9'|scale of player|
+
+## Danmuku
+
+Server danmuku format conventions
+
+|field|type|note|
+|-----|----|----|
+|content|string|the content of a danmuku|
+|date|Date|the time when send a danmuku|
+|fontColor|string|color of danmuku|
+|fontSize|string|fontSize of danmuku:```'middle'```,```'small'```,```'large'```|
+|model|string|model of danmuku:```'roll'```,```'top'```,```'buttom'```|
+|timepoint|number|video playback position|
+
+for example:
+
+```javascript
+{
+  content: "233",
+  date: "2017-06-03T05:40:26.616Z",
+  fontColor: "white",
+  fontSize: "middle",
+  model: "roll",
+  timePoint: 3.014076
+}
 ```
 
 # LICENSE
