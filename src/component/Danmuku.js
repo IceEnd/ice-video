@@ -40,6 +40,7 @@ export default class Danmuku extends Component {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.onWindowResize);
+    this.dc.stop();
   }
 
   onWindowResize = () => {
