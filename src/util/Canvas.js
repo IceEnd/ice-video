@@ -25,6 +25,9 @@ export default class DanmukuCanvas {
     this.danmukuArr = [];
     this.col = Math.floor(canvas.height / 30);
     this.colTop = parseInt((this.col * 2) / 3, 10);
+    this.cols = new Array(this.col).fill(true);
+    this.topCols = new Array(this.col).fill(true);
+    this.bottomCols = new Array(this.col).fill(true);
   }
 
   clearCanvas = () => {
@@ -61,6 +64,9 @@ export default class DanmukuCanvas {
     this.fixCanvas(canvas);
     this.col = Math.floor(canvas.height / 30);
     this.colTop = parseInt((this.col * 2) / 3, 10);
+    this.cols = new Array(this.col).fill(true);
+    this.topCols = new Array(this.col).fill(true);
+    this.bottomCols = new Array(this.col).fill(true);
   }
 
   getFont = (size) => {
@@ -114,12 +120,22 @@ export default class DanmukuCanvas {
               if (arr[i].x <= -(arr[i].textWidth)) {
                 this.danmukuArr[i].status = false;
               }
+              if (arr[i].x + arr[i].textWidth < this.canvasWidth - 33 && arr[i].status) {
+                this.cols[arr[i].col - 1] = true;
+              }
               break;
             case 'top':
+              this.danmukuArr[i].current = this.danmukuArr[i].current + 30;
+              if (arr[i].current >= 6000) {
+                this.danmukuArr[i].status = false;
+                this.topCols[arr[i].col - 1] = true;
+              }
+              break;
             case 'bottom':
               this.danmukuArr[i].current = this.danmukuArr[i].current + 30;
               if (arr[i].current >= 6000) {
                 this.danmukuArr[i].status = false;
+                this.bottomCols[this.bottomCols.length - arr[i].col] = true;
               }
               break;
             default:
@@ -127,52 +143,78 @@ export default class DanmukuCanvas {
               if (arr[i].x <= -(arr[i].textWidth)) {
                 this.danmukuArr[i].status = false;
               }
+              if (arr[i].x + arr[i].textWidth < this.canvasWidth - 33 && arr[i].status) {
+                this.cols[arr[i].col - 1] = true;
+              }
               break;
           }
         }
       }
       this.ctx.restore();
+      this.refreshDanmuku();
     }, 30);
   }
 
-  formatData = (data, insertFlag, index) => {
-    let positionX;
-    let positionY;
-    let randomCol;
-    if (index) {
-      if (index > this.col) {
-        randomCol = index % this.col;
-      } else {
-        randomCol = index;
+  refreshDanmuku = () => {
+    for (let i = 0; i < this.danmukuArr.length; i += 1) {
+      if (!this.danmukuArr[i].status) {
+        this.danmukuArr.splice(i, 1);
       }
-    } else {
-      randomCol = parseInt(((Math.random() * (this.col - 1)) + 1), 10);
     }
-    // const randomCol = parseInt(((Math.random() * (this.col - 1)) + 1), 10);
+  }
+
+  formatData = (data, insertFlag) => {
+    let positionX;
+    let randomCol;
+    const cols = this.cols;
+    const topCols = this.topCols;
+    const bottomCols = this.bottomCols;
     this.ctx.font = this.getFont(data.fontSize);
     const tw = this.ctx.measureText(data.content).width;
     const distance = tw + this.canvasWidth;
-    switch (data.model) {
-      case 'roll':
-        positionX = this.canvas.width;
-        positionY = randomCol * 30;
-        break;
-      case 'top':
-        positionX = (this.canvas.width / 2) - (tw / 2);
-        positionY = randomCol * 30;
-        break;
-      case 'bottom':
-        positionX = (this.canvas.width / 2) - (tw / 2);
-        if (randomCol > this.colTop) {
-          positionY = randomCol * 30;
-        } else {
-          positionY = ((randomCol % this.colTop) + this.colTop) * 30;
+    if (data.model === 'roll') {
+      for (let i = 0; i < cols.length; i += 1) {
+        if (cols[i]) {
+          randomCol = i + 1;
+          this.cols[i] = false;
+          break;
         }
-        break;
-      default:
-        positionX = this.canvas.width;
-        positionY = (parseInt(((Math.random() * (this.col - 1)) + 1), 10) * 30);
-        break;
+        if (i === cols.length - 1) {
+          const random = parseInt(((Math.random() * (this.col - 1)) + 1), 10);
+          randomCol = random;
+          this.cols[random - 1] = false;
+        }
+      }
+      positionX = this.canvas.width;
+    } else if (data.model === 'top') {
+      for (let i = 0; i < topCols.length; i += 1) {
+        if (topCols[i]) {
+          randomCol = i + 1;
+          this.topCols[i] = false;
+          break;
+        }
+        if (i === topCols.length - 1) {
+          const random = parseInt(((Math.random() * (this.col - 1)) + 1), 10);
+          randomCol = random;
+          this.topCols[random - 1] = false;
+        }
+      }
+      positionX = (this.canvas.width / 2) - (tw / 2);
+    } else if (data.model === 'bottom') {
+      const len = bottomCols.length;
+      for (let i = 0; i < len; i += 1) {
+        if (bottomCols[i]) {
+          randomCol = len - i;
+          this.bottomCols[i] = false;
+          break;
+        }
+        if (i === topCols.length - 1) {
+          const random = parseInt(((Math.random() * (this.col - 1)) + 1), 10);
+          randomCol = random;
+          this.bottomCols[random - 1] = false;
+        }
+      }
+      positionX = (this.canvas.width / 2) - (tw / 2);
     }
     const danmukuData =
     Object.assign(
@@ -180,27 +222,28 @@ export default class DanmukuCanvas {
       data,
       {
         x: positionX,
-        y: positionY,
+        y: randomCol * 30,
         textWidth: tw,
         speed: distance / (6 * 33),
         insert: insertFlag,
         current: 0,
         status: true,
+        col: randomCol,
       },
     );
     return danmukuData;
   };
 
   addDanmuku = (data) => {
-    const newDanmuku = data.map((d, index) => {
-      const danmukuData = this.formatData(d, false, index + 1);
+    const newDanmuku = data.map((d) => {
+      const danmukuData = this.formatData(d, false);
       return danmukuData;
     });
     this.danmukuArr = this.danmukuArr.concat(newDanmuku);
   }
 
   insertDanmuku = (danmu) => {
-    const data = this.formatData(danmu, true, 0);
+    const data = this.formatData(danmu, true);
     this.danmukuArr.push(data);
   }
 
