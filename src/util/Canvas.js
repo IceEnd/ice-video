@@ -118,7 +118,7 @@ export default class DanmukuCanvas {
             case 'top':
             case 'bottom':
               this.danmukuArr[i].current = this.danmukuArr[i].current + 30;
-              if (arr[i].current >= 5000) {
+              if (arr[i].current >= 6000) {
                 this.danmukuArr[i].status = false;
               }
               break;
@@ -182,7 +182,7 @@ export default class DanmukuCanvas {
         x: positionX,
         y: positionY,
         textWidth: tw,
-        speed: distance / (5 * 33),
+        speed: distance / (6 * 33),
         insert: insertFlag,
         current: 0,
         status: true,

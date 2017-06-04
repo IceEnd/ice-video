@@ -85,9 +85,7 @@ export default class IcePlayer extends Component {
   }
 
   componentWillUnmount() {
-    this.clearBufferedTimer();
-    this.clearCurrentTimer();
-    this.clearControlsTimer();
+    this.clearAllTimer();
   }
 
   getStyle = () => {
@@ -349,17 +347,23 @@ export default class IcePlayer extends Component {
   }
 
   loadDanmuku = () => {
-    setTimeout(() => {
+    this.controlsSetStateTimer = setTimeout(() => {
       this.setState({
         startStatus: Object.assign(this.state.startStatus, { controller: 2 }),
       });
     }, 500);
-    setTimeout(() => {
+    this.videoSetStateTimer = setTimeout(() => {
       this.setState({
         playerStatus: this.state.startStatus.video === 2 ? 1 : -1,
         showStart: false,
       });
     }, 1000);
+    if (this.props.autoPlay && this.state.startStatus.video === 2) {
+      this.autoPlayTimer = setTimeout(() => {
+        this.playIcon.click();
+        this.startControlsTimer();
+      }, 1200);
+    }
   }
 
   showControls = () => {
@@ -394,6 +398,18 @@ export default class IcePlayer extends Component {
   clearControlsTimer = () => {
     clearTimeout(this.controlsHideTimer);
     this.controlsHideTimer = null;
+  }
+
+  clearAllTimer = () => {
+    clearTimeout(this.controlsSetStateTimer);
+    this.controlsSetStateTimer = null;
+    clearTimeout(this.videoSetStateTimer);
+    this.videoSetStateTimer = null;
+    clearTimeout(this.autoPlayTimer);
+    this.autoPlayTimer = null;
+    this.clearBufferedTimer();
+    this.clearCurrentTimer();
+    this.clearControlsTimer();
   }
 
   startBufferedTimer = () => {    // 缓冲时长计时器
@@ -449,7 +465,7 @@ export default class IcePlayer extends Component {
     }
     const svgHtml = '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#play_icon" />';
     return (
-      <button className="play-button" onClick={() => this.handleOnPlay(true)} >
+      <button className="play-button" onClick={() => this.handleOnPlay(true)} ref={node => (this.playIcon = node)}>
         <svg className="play-svg" version="1.1" fill="white" dangerouslySetInnerHTML={{ __html: svgHtml }} />
       </button>
     );

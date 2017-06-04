@@ -6,7 +6,6 @@ export default class Video extends Component {
   static propTypes = {
     src: PropTypes.string,
     loop: PropTypes.bool,
-    autoPlay: PropTypes.bool,
     preload: PropTypes.string,
     poster: PropTypes.string,
 
@@ -105,7 +104,6 @@ export default class Video extends Component {
         className="react-video"
         src={this.props.src}
         loop={this.props.loop}
-        autoPlay={this.props.autoPlay}
         preload={this.props.preload}
         poster={this.props.poster}
         ref={node => (this.video = node)}
