@@ -30,7 +30,7 @@ export default class Danmuku extends Component {
     const { danmuku, playerAction, currentTime, loading } = this.props;
     if (playerAction === 1 && !loading) {
       const data =
-        danmuku.filter(d => (d.timePoint >= currentTime && d.timePoint < currentTime + 0.25));
+        danmuku.filter(d => (d.timePoint >= currentTime && d.timePoint < currentTime + 0.5));
       this.dc.addDanmuku(data);
       this.dc.draw();
     } else if (playerAction === 2 || loading) {

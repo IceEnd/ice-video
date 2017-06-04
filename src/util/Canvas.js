@@ -24,6 +24,7 @@ export default class DanmukuCanvas {
     this.clearCanvas();
     this.danmukuArr = [];
     this.col = Math.floor(canvas.height / 30);
+    this.colTop = parseInt((this.col * 2) / 3, 10);
   }
 
   clearCanvas = () => {
@@ -59,6 +60,7 @@ export default class DanmukuCanvas {
     canvas.style.height = h;
     this.fixCanvas(canvas);
     this.col = Math.floor(canvas.height / 30);
+    this.colTop = parseInt((this.col * 2) / 3, 10);
   }
 
   getFont = (size) => {
@@ -133,10 +135,20 @@ export default class DanmukuCanvas {
     }, 30);
   }
 
-  formatData = (data, insertFlag) => {
+  formatData = (data, insertFlag, index) => {
     let positionX;
     let positionY;
-    const randomCol = parseInt(((Math.random() * (this.col - 1)) + 1), 10);
+    let randomCol;
+    if (index) {
+      if (index > this.col) {
+        randomCol = index % this.col;
+      } else {
+        randomCol = index;
+      }
+    } else {
+      randomCol = parseInt(((Math.random() * (this.col - 1)) + 1), 10);
+    }
+    // const randomCol = parseInt(((Math.random() * (this.col - 1)) + 1), 10);
     this.ctx.font = this.getFont(data.fontSize);
     const tw = this.ctx.measureText(data.content).width;
     const distance = tw + this.canvasWidth;
@@ -147,11 +159,15 @@ export default class DanmukuCanvas {
         break;
       case 'top':
         positionX = (this.canvas.width / 2) - (tw / 2);
-        positionY = randomCol * 20;
+        positionY = randomCol * 30;
         break;
       case 'bottom':
         positionX = (this.canvas.width / 2) - (tw / 2);
-        positionY = (this.col * 30) - (randomCol * 10);
+        if (randomCol > this.colTop) {
+          positionY = randomCol * 30;
+        } else {
+          positionY = ((randomCol % this.colTop) + this.colTop) * 30;
+        }
         break;
       default:
         positionX = this.canvas.width;
@@ -176,15 +192,15 @@ export default class DanmukuCanvas {
   };
 
   addDanmuku = (data) => {
-    const newDanmuku = data.map((d) => {
-      const danmukuData = this.formatData(d, false);
+    const newDanmuku = data.map((d, index) => {
+      const danmukuData = this.formatData(d, false, index + 1);
       return danmukuData;
     });
     this.danmukuArr = this.danmukuArr.concat(newDanmuku);
   }
 
   insertDanmuku = (danmu) => {
-    const data = this.formatData(danmu, true);
+    const data = this.formatData(danmu, true, 0);
     this.danmukuArr.push(data);
   }
 

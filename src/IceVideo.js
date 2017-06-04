@@ -424,7 +424,7 @@ export default class IcePlayer extends Component {
       this.setState({
         video: Object.assign(this.state.video, { currentTime: this.video.getCurrentTime() }),
       });
-    }, 250);
+    }, 500);
   }
 
   clearCurrentTimer = () => {   // 清除播放时间计时器

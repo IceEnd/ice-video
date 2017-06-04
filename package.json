@@ -1,6 +1,6 @@
 {
   "name": "ice-video",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "React component, a danmuku video player package.",
   "main": "./lib/index.js",
   "scripts": {
