@@ -13,10 +13,11 @@ export default class Danmuku extends Component {
     playerAction: PropTypes.number,
     currentTime: PropTypes.number,
     loading: PropTypes.bool,
+    duration: PropTypes.number,
   }
 
   componentDidMount() {
-    this.dc = new DanmukuCanvas(this.canvas);
+    this.dc = new DanmukuCanvas(this.canvas, this.props.duration);
     this.dc.draw();
     window.addEventListener('resize', this.onWindowResize);
   }
