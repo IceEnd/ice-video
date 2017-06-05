@@ -1,5 +1,5 @@
 export default class DanmukuCanvas {
-  constructor(canvas) {
+  constructor(canvas, duration) {
     this.isSupport = true;
     if (!canvas.getContext) {
       this.isSupport = false;
@@ -21,6 +21,7 @@ export default class DanmukuCanvas {
     this.fixCanvas(canvas);
     this.ctx = ctx;
     this.canvas = canvas;
+    this.duration = duration;
     this.clearCanvas();
     this.danmukuArr = [];
     this.col = Math.floor(canvas.height / 30);
@@ -126,14 +127,14 @@ export default class DanmukuCanvas {
               break;
             case 'top':
               this.danmukuArr[i].current = this.danmukuArr[i].current + 30;
-              if (arr[i].current >= 6000) {
+              if (arr[i].current >= this.duration) {
                 this.danmukuArr[i].status = false;
                 this.topCols[arr[i].col - 1] = true;
               }
               break;
             case 'bottom':
               this.danmukuArr[i].current = this.danmukuArr[i].current + 30;
-              if (arr[i].current >= 6000) {
+              if (arr[i].current >= this.duration) {
                 this.danmukuArr[i].status = false;
                 this.bottomCols[this.bottomCols.length - arr[i].col] = true;
               }
@@ -224,7 +225,7 @@ export default class DanmukuCanvas {
         x: positionX,
         y: randomCol * 30,
         textWidth: tw,
-        speed: distance / (6 * 33),
+        speed: distance / ((this.duration / 1000) * 33),
         insert: insertFlag,
         current: 0,
         status: true,

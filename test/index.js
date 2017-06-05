@@ -16,12 +16,15 @@ const render = () => {
     preload: 'auto',
     poster: '',
     volume: 0.2,
-    getDanmukuUrl: 'http://127.0.0.1:3001/danmuku',
-    sendDanmukuUrl: 'http://127.0.0.1:3001/senddanmu',
+    // getDanmukuUrl: 'http://127.0.0.1:3001/danmuku',
+    // sendDanmukuUrl: 'http://127.0.0.1:3001/senddanmu',
+    getDanmukuUrl: 'https://api.coolecho.net/dmk/danmuku',
+    sendDanmukuUrl: 'https://api.coolecho.net/dmk/senddanmu',
     controls: true,
     scale: '16:9',
     // src: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4',
     src: './video.mp4',
+    duration: 6000,
   };
   ReactDOM.render(
     <div>

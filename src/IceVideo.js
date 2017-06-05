@@ -21,6 +21,7 @@ export default class IcePlayer extends Component {
     preload: PropTypes.oneOf(['auto', 'metadata', 'none']),
     volume: PropTypes.number,
     poster: PropTypes.string,
+    duration: PropTypes.number,
 
     getDanmukuUrl: PropTypes.string.isRequired,
     sendDanmukuUrl: PropTypes.string.isRequired,
@@ -37,6 +38,7 @@ export default class IcePlayer extends Component {
     volume: 0.8,
     controls: true,
     scale: '16:9',
+    duration: 6000,
   };
 
   constructor(props) {
@@ -528,6 +530,7 @@ export default class IcePlayer extends Component {
               playerAction={this.state.playerAction}
               currentTime={this.state.video.currentTime}
               loading={this.state.loading}
+              duration={this.props.duration}
               ref={node => (this.danmuku = node)}
             />
           </div>
