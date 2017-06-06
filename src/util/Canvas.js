@@ -121,7 +121,7 @@ export default class DanmukuCanvas {
               if (arr[i].x <= -(arr[i].textWidth)) {
                 this.danmukuArr[i].status = false;
               }
-              if (arr[i].x + arr[i].textWidth < (this.canvas.width * (3 / 4)) && arr[i].status) {
+              if (arr[i].x + arr[i].textWidth < (this.canvas.width * (4 / 5)) && arr[i].status) {
                 this.cols[arr[i].col - 1] = true;
               }
               break;
