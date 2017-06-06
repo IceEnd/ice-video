@@ -23,21 +23,32 @@ export default class Danmuku extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return (nextProps.currentTime !== this.props.currentTime) ||
-      (nextProps.playerAction !== this.props.playerAction);
+    if (nextProps.currentTime !== this.props.currentTime) {
+      this.runDanmuku();
+      return true;
+    }
+    if (nextProps.playerAction !== this.props.playerAction) {
+      if (nextProps.playerAction === 1) {
+        this.drawDanmuku();
+      } else if (nextProps.playerAction === 2) {
+        this.stopDanmuku();
+      }
+      return true;
+    }
+    return false;
   }
 
-  componentDidUpdate() {
-    const { danmuku, playerAction, currentTime, loading } = this.props;
-    if (playerAction === 1 && !loading) {
-      const data =
-        danmuku.filter(d => (d.timePoint >= currentTime && d.timePoint < currentTime + 0.5));
-      this.dc.addDanmuku(data);
-      this.dc.draw();
-    } else if (playerAction === 2 || loading) {
-      this.dc.stop();
-    }
-  }
+  // componentDidUpdate() {
+  //   const { danmuku, playerAction, currentTime, loading } = this.props;
+  //   if (playerAction === 1 && !loading) {
+  //     const data =
+  //       danmuku.filter(d => (d.timePoint >= currentTime && d.timePoint < currentTime + 0.5));
+  //     this.dc.addDanmuku(data);
+  //     this.dc.draw();
+  //   } else if (playerAction === 2 || loading) {
+  //     this.dc.stop();
+  //   }
+  // }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.onWindowResize);
@@ -50,6 +61,27 @@ export default class Danmuku extends Component {
 
   insertDanmuku = (danmu) => {
     this.dc.insertDanmuku(danmu);
+  }
+
+  runDanmuku = () => {
+    const { danmuku, playerAction, currentTime, loading } = this.props;
+    if (playerAction === 1 && !loading) {
+      const data =
+        danmuku.filter(d => (Math.round(d.timePoint) === Math.round(currentTime)));
+      this.dc.addDanmuku(data);
+      this.dc.draw();
+    }
+  }
+
+  drawDanmuku = () => {
+    const { playerAction, loading } = this.props;
+    if (playerAction === 1 && !loading) {
+      this.dc.draw();
+    }
+  }
+
+  stopDanmuku = () => {
+    this.dc.stop();
   }
 
   render() {

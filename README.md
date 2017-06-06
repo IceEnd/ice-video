@@ -74,7 +74,7 @@ export default Player;
 |volume|number|0.8|palyer's volume|
 |controls|boolean|true|control player|
 |scale|string|'16:9'|scale of player|
-|duration|number|6000|danmuku display duration，unit```ms```|
+|duration|number|6000|danmuku display duration，unit ```ms```|
 
 ## Danmuku
 
@@ -85,8 +85,8 @@ Server danmuku format conventions
 |content|string|the content of a danmuku|
 |date|Date|the time when send a danmuku|
 |fontColor|string|color of danmuku|
-|fontSize|string|fontSize of danmuku:```'middle'```,```'small'```,```'large'```|
-|model|string|model of danmuku:```'roll'```,```'top'```,```'buttom'```|
+|fontSize|string|fontSize of danmuku: ```'middle'``` , ```'small'``` , ```'large'``` |
+|model|string|model of danmuku:  ```'roll'``` , ```'top'``` , ```'buttom'``` |
 |timepoint|number|video playback position|
 
 for example:
