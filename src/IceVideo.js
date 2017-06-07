@@ -22,6 +22,7 @@ export default class IcePlayer extends Component {
     volume: PropTypes.number,
     poster: PropTypes.string,
     duration: PropTypes.number,
+    opacity: PropTypes.number,
 
     getDanmukuUrl: PropTypes.string.isRequired,
     sendDanmukuUrl: PropTypes.string.isRequired,
@@ -39,6 +40,7 @@ export default class IcePlayer extends Component {
     controls: true,
     scale: '16:9',
     duration: 6000,
+    opacity: 1,
   };
 
   constructor(props) {
@@ -73,7 +75,7 @@ export default class IcePlayer extends Component {
         model: 'roll',
       },
       playerConfig: {
-        opacity: 1,
+        opacity: this.props.opacity,
         scale: 'normal',
         onOff: true,
       },

@@ -46,10 +46,13 @@ export default class DanmukuCanvas {
       const r = t.height;
       t.width = o * a;
       t.height = r * a;
+      this.canvasWidth = o * a;
+      this.canvasHeight = o * a;
       t.style.width = `${o}px`;
       t.style.height = `${r}px`;
       i.scale(a, a);
     }
+    this.scale = a;
   }
 
   resize = (canvas) => {
@@ -111,7 +114,7 @@ export default class DanmukuCanvas {
             this.ctx.lineCap = 'square';
             this.ctx.beginPath();
             this.ctx.moveTo(x, y + 3);
-            this.ctx.lineTo(x + arr[i].textWidth, y + 3);
+            this.ctx.lineTo(x + (arr[i].textWidth / this.scale), y + 3);
             this.ctx.stroke();
             this.ctx.closePath();
           }
@@ -171,8 +174,9 @@ export default class DanmukuCanvas {
     const topCols = this.topCols;
     const bottomCols = this.bottomCols;
     this.ctx.font = this.getFont(data.fontSize);
-    const tw = this.ctx.measureText(data.content).width;
-    const distance = tw + this.canvasWidth;
+    const scale = this.scale;
+    const tw = this.ctx.measureText(data.content).width * scale;
+    const distance = tw + this.canvas.width;
     if (data.model === 'roll') {
       for (let i = 0; i < cols.length; i += 1) {
         if (cols[i]) {
@@ -186,7 +190,7 @@ export default class DanmukuCanvas {
           this.cols[random - 1] = false;
         }
       }
-      positionX = this.canvas.width;
+      positionX = this.canvas.width / scale;
     } else if (data.model === 'top') {
       for (let i = 0; i < topCols.length; i += 1) {
         if (topCols[i]) {
@@ -200,7 +204,7 @@ export default class DanmukuCanvas {
           this.topCols[random - 1] = false;
         }
       }
-      positionX = (this.canvas.width / 2) - (tw / 2);
+      positionX = ((this.canvas.width - tw) / 2) / scale;
     } else if (data.model === 'bottom') {
       const len = bottomCols.length;
       for (let i = 0; i < len; i += 1) {
@@ -215,7 +219,7 @@ export default class DanmukuCanvas {
           this.bottomCols[random - 1] = false;
         }
       }
-      positionX = (this.canvas.width / 2) - (tw / 2);
+      positionX = ((this.canvas.width - tw) / 2) / scale;
     }
     const danmukuData =
     Object.assign(
@@ -225,7 +229,7 @@ export default class DanmukuCanvas {
         x: positionX,
         y: randomCol * 30,
         textWidth: tw,
-        speed: distance / ((this.duration / 1000) * 33),
+        speed: (distance / scale) / ((this.duration / 1000) * 33),
         insert: insertFlag,
         current: 0,
         status: true,

@@ -2,7 +2,7 @@
 
 The web danmuku video player built from the ground up for an HTML5 world using React library.
 
-[![npm](https://img.shields.io/badge/npm-v0.1.3-brightgreen.svg)](https://www.npmjs.com/package/ice-video)
+[![npm](https://img.shields.io/badge/npm-v0.1.4-brightgreen.svg)](https://www.npmjs.com/package/ice-video)
 ![build](https://img.shields.io/badge/build-passing-green.svg)
 [![MIT License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/IceEnd/icePlayer/blob/master/LICENSE)
 
@@ -75,6 +75,7 @@ export default Player;
 |controls|boolean|true|control player|
 |scale|string|'16:9'|scale of player|
 |duration|number|6000|danmuku display duration，unit ```ms```|
+|opacity|number|1|the transparency of danmuku|
 
 ## Danmuku
 
