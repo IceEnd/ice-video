@@ -2,7 +2,13 @@ webpack.config.babel.js
 webpack.config.dist.babel.js
 gulpfile.babel.js
 npm-debug.log
+.sass-lint.yml
+.eslintignore
+.eslintrc.yml
+.babelrc
+yarn.lock
 test
 server
 example
 dist
+src

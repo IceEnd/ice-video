@@ -2,6 +2,7 @@ import 'babel-polyfill';
 import path from 'path';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {AppContainer} from 'react-hot-loader';
 import IceVideo from '../src/index';
 
 import '../src/assets/sass/video.scss';
@@ -26,17 +27,19 @@ const render = () => {
     duration: 6000,
   };
   ReactDOM.render(
-    <div>
-      <section className="jumbotron-header text-center mb-3 jumbotron">
-        <div className="container">
-          <h1 className="title">Ice-Video</h1>
-          <p className="lead">The web danmuku video player built from the ground up for an HTML5 world using React library.</p>
+    <AppContainer>
+      <div>
+        <section className="jumbotron-header text-center mb-3 jumbotron">
+          <div className="container">
+            <h1 className="title">Ice-Video</h1>
+            <p className="lead">The web danmuku video player built from the ground up for an HTML5 world using React library.</p>
+          </div>
+        </section>
+        <div className="palyer-container">
+          <IceVideo {...settings} />
         </div>
-      </section>
-      <div className="palyer-container">
-        <IceVideo {...settings} />
       </div>
-    </div>,
+    </AppContainer>,
     document.querySelector('#root')
   );
 };
