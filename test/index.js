@@ -8,7 +8,7 @@ import IceVideo from '../src/index';
 import '../src/assets/sass/video.scss';
 import './example.scss';
 
-const render = () => {
+const render = (Component) => {
   const settings = {
     // width: 800,
     // height: 600,
@@ -36,7 +36,7 @@ const render = () => {
           </div>
         </section>
         <div className="palyer-container">
-          <IceVideo {...settings} />
+          <Component {...settings} />
         </div>
       </div>
     </AppContainer>,
