@@ -105,4 +105,4 @@ for example:
 
 # LICENSE
 
-[MIT @ CNO](./LICENSE)
+[MIT @ Alchemy](./LICENSE)
