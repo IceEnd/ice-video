@@ -7,7 +7,7 @@ const renderLoadingInfo = (startStatus) => {
     <div className="loading-tips-container">
       <ul>
         <li style={{ visibility: `${video === 0 ? 'hidden' : 'visible'}` }}>
-          视屏核动力注入...<i>{tips[video]}</i>
+          视频核动力注入...<i>{tips[video]}</i>
         </li>
         <li style={{ visibility: `${danmuku === 0 ? 'hidden' : 'visible'}` }}>
           主武器弹幕装填...<i>{tips[danmuku]}</i>
