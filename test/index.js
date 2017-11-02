@@ -13,7 +13,7 @@ const render = (Component) => {
     // width: 800,
     // height: 600,
     loop: true,
-    autoPlay: true,
+    autoPlay: false,
     preload: 'auto',
     poster: '',
     volume: 0,
@@ -23,7 +23,7 @@ const render = (Component) => {
     sendDanmukuUrl: 'https://api.coolecho.net/dmk/senddanmu',
     controls: true,
     scale: '16:9',
-    src: './video.mp4',
+    src: 'http://obukb5fdy.bkt.clouddn.com/icevideo/video.mp4video.mp4',
     duration: 6000,
   };
   ReactDOM.render(
