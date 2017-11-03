@@ -30,6 +30,7 @@ export default class DanmukuInput extends Component {
   }
 
   render() {
+    const sendHtml = '<use class="video-svg-send-btn video-svg-symbol-hidden" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#send_icon" />';
     return (
       <div className="video-control-item video-control-input">
         <input
@@ -41,6 +42,19 @@ export default class DanmukuInput extends Component {
           onBlur={this.handleOnInputBlur}
           onKeyUp={this.handleOnInputKeyUp}
         />
+        <span className="video-control-item video-div-send">
+          <button
+            className="video-btn-send"
+            aria-label="发送弹幕"
+            data-msg="发送弹幕"
+          >
+            <svg
+              className="video-svg"
+              version="1.1"
+              dangerouslySetInnerHTML={{ __html: sendHtml }}
+            />
+          </button>
+        </span>
       </div>
     );
   }

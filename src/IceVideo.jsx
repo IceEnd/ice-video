@@ -268,6 +268,11 @@ export default class IcePlayer extends Component {
     this.clearCurrentTimer();
   }
 
+  /**
+   * 视频框hover事件
+   * 
+   * @memberof IcePlayer
+   */
   handleOnMouseMove = () => {
     this.startControlsTimer();
   }
@@ -393,22 +398,27 @@ export default class IcePlayer extends Component {
     this.startControlsTimer();
   }
 
+  /**
+   * 视频hover控制器
+   * 
+   * @memberof IcePlayer
+   */
   startControlsTimer = () => {
     this.setState({
       userActivity: true,
       cursorShow: true,
     });
-    clearTimeout(this.controlsHideTimer);
-    this.controlsHideTimer = setTimeout(() => {
-      let cursor = true;
-      if (fScreen.isFullscreen()) {
-        cursor = false;
-      }
-      this.setState({
-        userActivity: false,
-        cursorShow: cursor,
-      });
-    }, 3000);
+    // clearTimeout(this.controlsHideTimer);
+    // this.controlsHideTimer = setTimeout(() => {
+    //   let cursor = true;
+    //   if (fScreen.isFullscreen()) {
+    //     cursor = false;
+    //   }
+    //   this.setState({
+    //     userActivity: false,
+    //     cursorShow: cursor,
+    //   });
+    // }, 3000);
   }
 
   clearControlsTimer = () => {

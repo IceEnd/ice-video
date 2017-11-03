@@ -13,6 +13,11 @@
 	-o-transition: color ease-in-out .3s;
 	transition: color ease-in-out .3s;
 }
+@mixin all-linear-2 {
+	transition: all linear 0.2s;
+	-webkit-transition: all linear 0.2s;
+	-ms-transition: all linear 0.2s;
+}
 * {
 	margin: 0;
 	padding: 0;
@@ -233,9 +238,7 @@ html, body {
 
 				.video-time-display {
 					flex: 1;
-					transition: all linear 0.2s;
-					-webkit-transition: all linear 0.2s;
-					-ms-transition: all linear 0.2s;
+					@include all-linear-2;
 
 					.video-time {
 						display: block;
@@ -318,7 +321,7 @@ html, body {
 							&::before {
 								position: absolute;
 								content: attr(data-time);
-								font-size: 0.5em;
+								font-size: 0.8em;
 								top: -2em;
 								left: -1em;
 							}
@@ -355,7 +358,7 @@ html, body {
 
 				.video-btn-play {
 					// flex: auto;
-					flex: 1;
+					flex: 1 0 10%;
 					max-width: 60px;
 					cursor: pointer;
 
@@ -367,9 +370,7 @@ html, body {
 						height: 36px;
 						margin: auto;
 						fill: white;
-						transition: all linear 0.2s;
-						-webkit-transition: all linear 0.2s;
-						-ms-transition: all linear 0.2s;
+						@include all-linear-2;
 			    }
 
 					.video-svg-symbol-hidden {
@@ -406,17 +407,18 @@ html, body {
 
 				.video-control-input {
 					// flex: auto;
-					flex: 7;
+					flex: 1 10 65%;
 					position: relative;
 					text-align: center;
 
 					.video-danmuku-input {
-						width: 90%;
+						width: 80%;
+						vertical-align: top;
 						// max-width: 500px;
 						min-width: 150px;
 						box-sizing: border-box;
 						height: 24px;
-						margin-top: 4px;
+						margin-top: 6px;
 						box-sizing: border-box;
 						padding: 0.1em 1em;
 						background: rgba(183, 183, 183, 0.6);
@@ -436,11 +438,52 @@ html, body {
 							text-align: center;
 						}
 					}
+
+					.video-div-send {
+						width: 20%;
+						text-align: left;
+						height: 100%;
+						.video-btn-send {
+							position: relative;
+							display: inline-block;
+							margin-left: 1em;
+							height: 100%;
+							&::before {
+								position: absolute;
+								width: 4em;
+								content: attr(data-msg);
+								font-size: 1em;
+								top: -3em;
+								left: -1em;
+								color: #ffffff;
+								visibility: hidden;
+								opacity: 0;
+								@include all-linear-2;
+							}
+							&:hover {
+								.video-svg {
+									fill: #ff8e00;
+								}
+								&::before {
+									visibility: visible;
+									opacity: 1;
+								}
+							}
+						}
+						.video-svg {
+							display: block;
+							width: 24px;
+							height: 24px;
+							fill: white;
+							cursor: pointer;
+							@include all-linear-2;
+						}
+					}
 				}
 
 				.video-control-bar-right {
 					// flex: auto;
-					flex: 4;
+					flex: 1 0 25%;
 					// float: right;
 					position: relative;
 					height: 100%;
@@ -619,7 +662,7 @@ html, body {
 							position: absolute;
 							width: 4em;
 							content: attr(data-msg);
-							font-size: 0.5em;
+							font-size: 1em;
 							top: -3em;
 							left: -1em;
 							color: #ffffff;
