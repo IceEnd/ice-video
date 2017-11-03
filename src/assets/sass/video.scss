@@ -74,7 +74,7 @@ html, body {
 }
 
 .ice-player-container {
-	display: block;;
+	display: block;
 	position: relative;
 	height: auto;
 
@@ -102,7 +102,7 @@ html, body {
 
 	.video-react-container {
 		display: block;
-		vertical-align: top;
+		// vertical-align: top;
 		color: #fff;
 		box-sizing: border-box;
 		background-color: #000;
@@ -300,7 +300,7 @@ html, body {
 								transition: all .2s cubic-bezier(0.0, .0, .2, 1);
 								-webkit-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
 								-ms-transition: all .2s cubic-bezier(0.0, .0, .2, 1);
-								visibility: hidden;;
+								visibility: hidden;
 								opacity: 0;
 								box-shadow: 0 0 5px #017cc3;
 							}
@@ -532,7 +532,7 @@ html, body {
 
 						&[data-status="normal"] {
 							.video-svg-volume {
-								visibility: visible;;
+								visibility: visible;
 								opacity: 1;
 			        }
 			      }
@@ -546,7 +546,7 @@ html, body {
 
 						&[data-status="mute"] {
 							.video-svg-volume-mute {
-								visibility: visible;;
+								visibility: visible;
 								opacity: 1;
 			        }
 			      }
@@ -623,7 +623,7 @@ html, body {
 							top: -3em;
 							left: -1em;
 							color: #ffffff;
-							visibility: hidden;;
+							visibility: hidden;
 							opacity: 0;
 							transition: all linear 0.2s;
 							-webkit-transition: all linear 0.2s;
@@ -854,14 +854,15 @@ html, body {
 												position: relative;
 
 												.color-item {
+													display: block;
+													float: left;
+													display: block;
 													width: 12px;
 													height: 12px;
 													box-sizing: border-box;
 													border: 1px solid #000;
 													margin: -1px 0 0 -1px;
-													display: inline-block;
 													position: relative;
-													float: left;
 													z-index: 1;
 
 													&:hover {

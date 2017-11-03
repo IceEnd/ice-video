@@ -1,13 +1,13 @@
 export default class DanmukuCanvas {
   constructor(canvas, duration) {
     this.isSupport = true;
-    if (!canvas.getContext) {
+    if (!canvas.getContext) { // 浏览器不支持canvas
       this.isSupport = false;
       console.warn('浏览器不支持canvas');
       return;
     }
     const container = canvas.parentNode;
-    if (!this.canvasWidth) {                // 父容器大小
+    if (!this.canvasWidth) { // 父容器大小
       const w = container.clientWidth;
       const h = container.clientHeight;
       this.canvasWidth = w;
